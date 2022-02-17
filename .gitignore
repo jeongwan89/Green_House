@@ -1,2 +1,4 @@
-.build/
-esp01_RS485/RS485_HM-100_Rev2/.build/
+.build
+esp01_RS485/RS485_HM-100_Rev2/.build
+esp01_RS485/RS485_HM-100_Rev2/.build/build.options.json
+esp01_RS485/RS485_HM-100_Rev2/.build/sketch/RS485_HM-100_Rev2.ino.cpp
