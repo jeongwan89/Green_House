@@ -1,2 +1,6 @@
 .build
 esp01_RS485/RS485_HM-100_Rev2/.build
+esp01_RS485/esp_Serial/.build
+esp01_RS485/esp_Serial/.vscode
+RS485_HM-100_Rev2/.build
+RS485_HM-100_Rev2/.vscode
