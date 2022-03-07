@@ -43,7 +43,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -57,9 +57,15 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#original code
+#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#my modification
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+#original code
+#    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+#my modification
+    PS1='${debian_chroot:+($debian_chroot)}\u@:\w\$ '
 fi
 unset color_prompt force_color_prompt
 
@@ -121,5 +127,6 @@ alias mqtt_restart='sudo systemctl restart mosquitto.service'
 alias mqtt_sub='mosquitto_sub -h 172.30.1.28 -u farmmain -P eerrtt'
 alias mqtt_pub='mosquitto_pub -h 172.30.1.28 -u farmmain -P eerrtt'
 alias mqtt_log='sudo cat /var/log/mosquitto/mosquitto.log'
-alias xx='sudo iptables -A INPUT -p tcp --tcp-flags RST RST --sport 443 -j DROP'
+alias cdgwork='cd ~/Git/Green_House/esp01_RS485/esp_Serial'
+alias cdghome='cd ~/Git/Green_House'
 
