@@ -53,7 +53,21 @@
                 "C:\\Arduino\\hardware\\arduino\\avr\\libraries\\SoftwareSerial\\src",
                 "c:\\arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\7.3.0\\include",
                 "c:\\arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\7.3.0\\include-fixed",
-                "c:\\arduino\\hardware\\tools\\avr\\avr\\include"
+                "c:\\arduino\\hardware\\tools\\avr\\avr\\include",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\**",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.0.2\\libraries\\**",
+                "C:\\Users\\jeong\\OneDrive\\Arduino\\libraries\\**",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\**",
+                "C:\\Arduino\\hardware\\tools\\**",
+                "C:\\Arduino\\hardware\\arduino\\avr\\**",
+                "C:\\Arduino\\tools\\**",
+                "C:\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\**",
+                "C:\\Arduino\\hardware\\arduino\\avr\\libraries\\EEPROM\\**",
+                "C:\\Users\\jeong\\OneDrive\\Arduino\\libraries\\blynk-library-master\\src\\**",
+                "C:\\Arduino\\hardware\\arduino\\avr\\libraries\\**",
+                "C:\\Arduino\\libraries\\**",
+                "${workspaceFolder}/**"
             ],
             "forcedInclude": [
                 "C:\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"

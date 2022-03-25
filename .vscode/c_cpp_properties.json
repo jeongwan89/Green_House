@@ -53,7 +53,10 @@
                 "C:\\Arduino\\hardware\\arduino\\avr\\libraries\\SoftwareSerial\\src",
                 "c:\\arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\7.3.0\\include",
                 "c:\\arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\7.3.0\\include-fixed",
-                "c:\\arduino\\hardware\\tools\\avr\\avr\\include"
+                "c:\\arduino\\hardware\\tools\\avr\\avr\\include",
+                "C:\\Arduino@win\\**",
+                "C:\\Arduino\\libraries\\**",
+                "${workspaceFolder}/**"
             ],
             "forcedInclude": [
                 "C:\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
