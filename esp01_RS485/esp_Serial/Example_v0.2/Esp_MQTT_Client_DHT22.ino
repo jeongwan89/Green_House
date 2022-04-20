@@ -9,11 +9,20 @@
   이 코드의 목적은 DHT22에서 온도를 읽고
   그 온도 값을 MQTT서버에 올리는 일이다.
 */
+/*
+  아래에서 MQTT Topic의 구조를 유지한다.
+  Sensor/Topos1/Topos2/Name/Stat
+  Actuator/Topos1/Topos2/Name/Act
+ */
 
 #include <EspMQTTClient.h>
 #include <DHT.h>
 
-#define DHTPIN 2
+// RelayPin 정의
+#define RELAY1  0
+#define RELAY2  1 //LED & TX와 같은 핀
+
+#define DHTPIN  2
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
 // Connect pin 1 (on the left) of the sensor to +5V
 // NOTE: If using a board with 3.3V logic like an Arduino Due connect pin 1
@@ -30,10 +39,15 @@ EspMQTTClient client(
   "192.168.0.26",  // MQTT Broker server ip
   "farmmain",   // Can be omitted if not needed
   "eerrtt",   // Can be omitted if not needed
-  "TempClient_v1",     // Client name that uniquely identify your device
+  "HeaterControl_H1F",     // Client name that uniquely identify your device
   1883              // The MQTT port, default to 1883. this line can be omitted
 );
-
+\
+/* ESP-01의 모든 핀을 사용하여야 한다.
+  DHTPin  GPIO2
+  Relay1  GPIO0
+  Relay2  GPIO1
+*/
 //DHT 정의
 DHT dht(DHTPIN, DHTTYPE); // Pin GPIO_2, Type DHT22
 
@@ -41,17 +55,20 @@ DHT dht(DHTPIN, DHTTYPE); // Pin GPIO_2, Type DHT22
 int chk;
 float hum;  //Stores humidity value
 float temp; //Stores temperature value
+volatile boolean state = true;
 
 //loop()에서 시간 간격당 실행시키기 위한 변수선언
 unsigned long last_refreshed_time;
 
 void setup()
 {
+  pinMode(RELAY1, OUTPUT);
+  pinMode(RELAY2, OUTPUT);
   dht.begin();
-  Serial.begin(115200);
+  // Serial.begin(115200);
 
   // Optional functionalities of EspMQTTClient
-  client.enableDebuggingMessages(); // Enable debugging messages sent to serial output
+  // client.enableDebuggingMessages(); // Enable debugging messages sent to serial output
   client.enableHTTPWebUpdater(); // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. These can be overridded with enableHTTPWebUpdater("user", "password").
   client.enableOTA(); // Enable OTA (Over The Air) updates. Password defaults to MQTTPassword. Port is the default OTA port. Can be overridden with enableOTA("password", port).
   client.enableLastWillMessage("home/lastwill", "I am going offline");  // You can activate the retain flag by setting the third parameter to true
@@ -64,6 +81,8 @@ void setup()
 // WARNING : YOU MUST IMPLEMENT IT IF YOU USE EspMQTTClient
 void onConnectionEstablished()
 {
+  /* Serial 통신을 포기하였기 때문에 아래 code는 수정이 많이 필요하여 주석차리하고 
+    주석 아래에다 새로운 코드를 작성한다.
   // Subscribe to "monitor/temp" and display received message to Serial
   client.subscribe("monitor/temp", [](const String & payload) {
     Serial.println(payload);
@@ -76,7 +95,21 @@ void onConnectionEstablished()
   client.subscribe("monitor/hum", [](const String & payload) {
     Serial.println(payload);
   }); // You can activate the retain flag by setting the third parameter to true
-
+  */
+  client.subscribe("Actuator/HM/Center/Heater",[](const String & payload){
+    if(payload == "1"){
+      digitalWrite(RELAY1, HIGH); 
+    } else {
+      digitalWrite(RELAY1, LOW);
+    }
+  });
+  client.subscribe("Actuator/HM/Center/Fuel",[](const String & payload){
+    if(payload == "1"){
+      digitalWrite(RELAY2, HIGH);
+    } else {
+      digitalWrite(RELAY2, LOW);
+    }
+  });
 /*
   // Execute delayed instructions
   client.executeDelayed(5 * 1000, []() {
@@ -92,7 +125,12 @@ void loop()
     //Read data and store it to variables hum and temp
     hum = dht.readHumidity();
     temp= dht.readTemperature();
-    //Print temp and humidity values to serial monitor
+    
+    client.publish("Sensor/HM/Center/Temp", (String) temp);
+    client.publish("Sensor/HM/Center/Hum", (String) hum);
+
+    //아래 코드는 Serial통신을 포기하고 TX를 GPIO 0으로 쓰기 위함
+    /* //Print temp and humidity values to serial monitor
     Serial.print("Humidity: ");
     Serial.print(hum);
     Serial.println(" %");
@@ -102,6 +140,10 @@ void loop()
     Serial.print(temp);
     Serial.println(" Celsius");
     client.publish("monitor/temp", (String) temp);
+    */
+    client.publish("Actuator/HM/Center/Heater", (String) state);
+    client.publish("Actuator/HM/Center/Fuel", (String) state);
+    state = !state;
 
     last_refreshed_time = millis(); 
   }
