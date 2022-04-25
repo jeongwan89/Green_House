@@ -20,7 +20,7 @@
 // See the Device Info tab, or Template settings
 #define BLYNK_TEMPLATE_ID           "TMPLxxxxxx"
 #define BLYNK_DEVICE_NAME           "Device"
-#define BLYNK_AUTH_TOKEN            "YourAuthToken"
+#define BLYNK_AUTH_TOKEN            "zM3g35YO8NtLM5S03VYnMLkRd3BNynQZ"
 
 
 // Comment this out to disable prints and save space
@@ -42,7 +42,7 @@ char pass[] = "wweerrtt";
 
 // or Software Serial on Uno, Nano...
 #include <SoftwareSerial.h>
-SoftwareSerial EspSerial(2, 3); // RX, TX
+SoftwareSerial EspSerial(2,3); // RX, TX
 
 // Your ESP8266 baud rate:
 #define ESP8266_BAUD 9600
@@ -56,12 +56,15 @@ void setup()
 
   // Set ESP8266 baud rate
   EspSerial.begin(ESP8266_BAUD);
-  delay(10);
+  delay(50);
 
-  Blynk.begin(auth, wifi, ssid, pass);
+  //Blynk.begin(auth, wifi, ssid, pass);
   // You can also specify server:
-  //Blynk.begin(auth, wifi, ssid, pass, "blynk.cloud", 80);
+  //Blynk.begin(auth, wifi, ssid, pass, "cloud.blynk.cc", 80);
+  Blynk.begin(auth, wifi, ssid, pass, "blynk-cloud.com");
   //Blynk.begin(auth, wifi, ssid, pass, IPAddress(192,168,1,100), 8080);
+  pinMode(8,OUTPUT);
+  Blynk.syncVirtual();
 }
 
 void loop()
@@ -70,4 +73,29 @@ void loop()
   // You can inject your own code or combine it with other sketches.
   // Check other examples on how to communicate with Blynk. Remember
   // to avoid delay() function!
+}
+
+BLYNK_WRITE(V2) //펌프기동 스위치
+{
+    int value = param.asInt(); // Get value as integer
+    //debug code
+    /*Serial.print("State of V2 = ");
+    Serial.println(value);*/
+    if(value == 1) {
+      digitalWrite(8, HIGH);
+    }
+    else{
+      digitalWrite(8, LOW);
+    }
+}
+BLYNK_WRITE(V0) //펌프기동 타이머
+{
+  int value = param.asInt();
+  if(value = 1) {
+    Blynk.virtualWrite(V2, 1);
+  }
+  else {
+    Blynk.virtualWrite(V2, 0);
+  }
+  Blynk.syncVirtual();
 }
