@@ -42,7 +42,7 @@ char pass[] = "wweerrtt";
 
 // or Software Serial on Uno, Nano...
 #include <SoftwareSerial.h>
-SoftwareSerial EspSerial(2,3); // RX, TX
+SoftwareSerial EspSerial(2, 3); // RX, TX
 
 // Your ESP8266 baud rate:
 #define ESP8266_BAUD 9600
@@ -63,7 +63,7 @@ void setup()
   //Blynk.begin(auth, wifi, ssid, pass, "cloud.blynk.cc", 80);
   Blynk.begin(auth, wifi, ssid, pass, "blynk-cloud.com");
   //Blynk.begin(auth, wifi, ssid, pass, IPAddress(192,168,1,100), 8080);
-  pinMode(8,OUTPUT);
+  pinMode(4,OUTPUT);
   Blynk.syncVirtual();
 }
 
@@ -82,10 +82,10 @@ BLYNK_WRITE(V2) //펌프기동 스위치
     /*Serial.print("State of V2 = ");
     Serial.println(value);*/
     if(value == 1) {
-      digitalWrite(8, HIGH);
+      digitalWrite(4, HIGH);
     }
     else{
-      digitalWrite(8, LOW);
+      digitalWrite(4, LOW);
     }
 }
 BLYNK_WRITE(V0) //펌프기동 타이머
