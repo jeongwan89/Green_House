@@ -232,7 +232,10 @@ void loop()
       return;
     }
     // (자동모드이며) 관수 주기, 개별관수 시간 그리고 관수 동수가 조건에 일치할 때만 다음의 조건식 안으로 들어간다.
-    if((millis()-wateringStart) <= (unsigned long) (periodMin * 60 * 1000)){
+    if((unsigned long)(millis()-wateringStart) <= (unsigned long)(periodMin * 60000)){
+      //debug
+      //Serial.print("millis()-wateringStart : periodMin\t"); Serial.print (millis()-wateringStart); 
+      //Serial.print (" :-> compared value "); Serial.println( (unsigned long)(periodMin * 60000));
       //whatGH[]와 (int)NoGH를 이용해서 루프 관수를 시작하는 process. 이 배열과 변수는 BLYNK_WRITE(V7)에 정의되어 있다.
       int argWhatGH;
       argWhatGH = (int)((millis()-wateringStart)/(wateringTimeSec*1000))+1;
@@ -240,16 +243,23 @@ void loop()
       if(argWhatGH <= NoGH) { 
         wateringThisGH(whatGH[argWhatGH]);
         MotorOn();
+        //debug
+        //Serial.print("now watering : "); Serial.println(whatGH[argWhatGH]);
       }
       else{ // 관수를 종료하고 관수주기만큼 기다린다.
         wateringThisGH(0);
         MotorOff();
+        //debug
+        //Serial.print("now watering : "); Serial.print("stop"); Serial.print("\t\twateringStart millisecond: "); Serial.println(wateringStart);
       }   
       //관수 주기를 초과하면 다시 wateringStart를 초기화하고 loop()를 다시 시작한다.
       
     } 
-    else { // 관수주기와 관수회수의 합을 비교. 클때 생기는 조건이다.
+    else { // 관수주기와 관수회수의 합을 비교. 클때 생기는 조건이다. == 새로운 초기화 조건실행
       wateringStart = millis();
+      //debug 
+      //Serial.print("wateringStart = "); Serial.print(wateringStart); Serial.print("millis() : "); Serial.println(wateringStart);
+      wateringCount_th++;
     }
  }
 }
