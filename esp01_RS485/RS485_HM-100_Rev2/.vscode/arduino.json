@@ -1,7 +1,0 @@
-{
-    "sketch": "RS485_HM-100_Rev2.ino",
-    "configuration": "cpu=16MHzatmega328",
-    "board": "arduino:avr:pro",
-    "port": "COM5",
-    "output": "./.build"
-}

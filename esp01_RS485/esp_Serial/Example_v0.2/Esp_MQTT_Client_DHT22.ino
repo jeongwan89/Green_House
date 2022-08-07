@@ -42,7 +42,7 @@ EspMQTTClient client(
   "HeaterControl_H1F",     // Client name that uniquely identify your device
   1883              // The MQTT port, default to 1883. this line can be omitted
 );
-\
+
 /* ESP-01의 모든 핀을 사용하여야 한다.
   DHTPin  GPIO2
   Relay1  GPIO0
