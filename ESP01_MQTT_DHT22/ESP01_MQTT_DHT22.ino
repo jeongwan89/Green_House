@@ -18,7 +18,15 @@
 #include <EspMQTTClient.h>
 #include <DHT.h>
 
-// RelayPin 정의
+/* ESP-01의 모든 핀을 사용하여야 한다.
+  DHTPin  GPIO2
+  Relay1  GPIO0
+  Relay2  GPIO1
+*/
+/*위의 정책을 포기하고 DHTPin=GPIO2만 쓰는 것으로 회귀한다.
+그 이유로는 전원회로가 복잡하고 오로지 DHT22만으로도 충분하기 때문이다.
+*/
+// RelayPin 정의 -> 사용하지 않음
 #define RELAY1  0
 #define RELAY2  1 //LED & TX와 같은 핀
 
@@ -39,15 +47,10 @@ EspMQTTClient client(
   "192.168.0.26",  // MQTT Broker server ip
   "farmmain",   // Can be omitted if not needed
   "eerrtt",   // Can be omitted if not needed
-  "Green_House_Temp_RH_Monitor",     // Client name that uniquely identify your device
+  "Green_House_Temp_RH_Monitor_01",     // Client name that uniquely identify your device
   1883              // The MQTT port, default to 1883. this line can be omitted
 );
 
-/* ESP-01의 모든 핀을 사용하여야 한다.
-  DHTPin  GPIO2
-  Relay1  GPIO0
-  Relay2  GPIO1
-*/
 //DHT 정의
 DHT dht(DHTPIN, DHTTYPE); // Pin GPIO_2, Type DHT22
 
@@ -62,10 +65,13 @@ unsigned long last_refreshed_time;
 
 void setup()
 {
+  /* 이 프로젝트는 릴레이를 쓰지 않겠다.
   pinMode(RELAY1, OUTPUT);
   pinMode(RELAY2, OUTPUT);
+  */
+
   dht.begin();
-  // Serial.begin(115200);
+  Serial.begin(115200);
 
   // Optional functionalities of EspMQTTClient
   // client.enableDebuggingMessages(); // Enable debugging messages sent to serial output
@@ -81,8 +87,7 @@ void setup()
 // WARNING : YOU MUST IMPLEMENT IT IF YOU USE EspMQTTClient
 void onConnectionEstablished()
 {
-  /* Serial 통신을 포기하였기 때문에 아래 code는 수정이 많이 필요하여 주석차리하고 
-    주석 아래에다 새로운 코드를 작성한다.
+
   // Subscribe to "monitor/temp" and display received message to Serial
   client.subscribe("monitor/temp", [](const String & payload) {
     Serial.println(payload);
@@ -95,7 +100,11 @@ void onConnectionEstablished()
   client.subscribe("monitor/hum", [](const String & payload) {
     Serial.println(payload);
   }); // You can activate the retain flag by setting the third parameter to true
-  */
+
+  //아래 코드는 그 이전 프로젝트에서 받은 코드이다.
+  //Relay 작동을 하지 않는 프로그램이어서, MQTT 서브스크라이브를 하지 않게 되었다.
+  //그래서 남은 코드의 흔적을 아래에 둔다.
+  /*
   client.subscribe("Actuator/HM/Center/Heater",[](const String & payload){
     if(payload == "1"){
       digitalWrite(RELAY1, HIGH); 
@@ -110,6 +119,7 @@ void onConnectionEstablished()
       digitalWrite(RELAY2, LOW);
     }
   });
+  */
 /*
   // Execute delayed instructions
   client.executeDelayed(5 * 1000, []() {
@@ -129,8 +139,7 @@ void loop()
     client.publish("Sensor/HM/Center/Temp", (String) temp);
     client.publish("Sensor/HM/Center/Hum", (String) hum);
 
-    //아래 코드는 Serial통신을 포기하고 TX를 GPIO 0으로 쓰기 위함
-    /* //Print temp and humidity values to serial monitor
+    //Print temp and humidity values to serial monitor
     Serial.print("Humidity: ");
     Serial.print(hum);
     Serial.println(" %");
@@ -140,11 +149,7 @@ void loop()
     Serial.print(temp);
     Serial.println(" Celsius");
     client.publish("monitor/temp", (String) temp);
-    */
-    client.publish("Actuator/HM/Center/Heater", (String) state);
-    client.publish("Actuator/HM/Center/Fuel", (String) state);
-    state = !state;
-
+    
     last_refreshed_time = millis(); 
   }
 }
