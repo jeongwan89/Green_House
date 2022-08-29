@@ -74,10 +74,20 @@ void setup()
   Serial.begin(115200);
 
   // Optional functionalities of EspMQTTClient
-  // client.enableDebuggingMessages(); // Enable debugging messages sent to serial output
-  client.enableHTTPWebUpdater(); // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. These can be overridded with enableHTTPWebUpdater("user", "password").
-  client.enableOTA(); // Enable OTA (Over The Air) updates. Password defaults to MQTTPassword. Port is the default OTA port. Can be overridden with enableOTA("password", port).
-  client.enableLastWillMessage("home/lastwill", "I am going offline");  // You can activate the retain flag by setting the third parameter to true
+  // Enable debugging messages sent to serial output
+  client.enableDebuggingMessages(); 
+  
+  // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. 
+  //These can be overridded with enableHTTPWebUpdater("user", "password").
+  client.enableHTTPWebUpdater(); 
+  
+  // Enable OTA (Over The Air) updates. 
+  //Password defaults to MQTTPassword. Port is the default OTA port. 
+  //Can be overridden with enableOTA("password", port).
+  client.enableOTA(); 
+
+  // You can activate the retain flag by setting the third parameter to true
+  client.enableLastWillMessage("home/lastwill", "I am going offline");  
 
   // DHT센서를 refresh_time마다 읽기 위한 초기화 작업
   last_refreshed_time = millis();
@@ -122,6 +132,7 @@ void onConnectionEstablished()
   */
 /*
   // Execute delayed instructions
+  // 아래 코드는 예제에서 소개된 코드로 지정된 시간뒤에 어떤 동작을 하는 코드이다.
   client.executeDelayed(5 * 1000, []() {
     client.publish("mytopic/wildcardtest/test123", "This is a message sent 5 seconds later");
   });
@@ -143,12 +154,12 @@ void loop()
     Serial.print("Humidity: ");
     Serial.print(hum);
     Serial.println(" %");
-    client.publish("monitor/hum", (String) hum);
+    client.publish("Sensor/GH1/monitor/hum", (String) hum);
 
     Serial.print("Temp: ");
     Serial.print(temp);
     Serial.println(" Celsius");
-    client.publish("monitor/temp", (String) temp);
+    client.publish("Sensor/GH1/monitor/temp", (String) temp);
     
     last_refreshed_time = millis(); 
   }
