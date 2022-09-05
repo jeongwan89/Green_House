@@ -1,3 +1,19 @@
+//test 환경을 설정한다.
+#define TEST
+
+#ifdef TEST
+  #define MQTT_SERVER "192.168.0.24"
+#elif
+  #define MQTT_SERVER "192.168.0.33"
+#endif
+
+//온실 4동과 육묘장을 통합하여 컴파일하기 위한 define 구문처리문단
+#define GH2
+
+#ifdef GH2
+  #define THING_SPEAK_WRITE_KEY "SGE75DH6HSE2LRRJ"
+#endif
+
 //ESP8266과 Arduino통신을 소프트시리얼로 이루어짐
 #include <SoftwareSerial.h>
 SoftwareSerial ESPSerial(6, 7); //(RX,TX)
@@ -7,47 +23,33 @@ SoftwareSerial ESPSerial(6, 7); //(RX,TX)
 #define ssid "FarmMain5G"
 #define password "wweerrtt"
 
-// Thingspeak------------------------------------------------------------------
-String statusChWriteKey = "SGE75DH6HSE2LRRJ";  // Status Channel id: 908037
+//MQTT에 올릴 생각
+#include <WiFiEsp.h>
+#include <PubSubClient.h>
+WiFiEspClient ethClient;
+PubSubClient client;
 
-// Blynk-----------------------------------------------------------------------
-//#include <BlynkSimpleStream.h>
-//#define BLYNK_PRINT Serial
-/* You should get Auth Token in the Blynk App.
-   Go to the Project Settings (nut icon).*/
-//char auth[] = "nUuT4bvqJiIDhVWKCm7wBI0u1a7I8UBZ";
+
+
+// Thingspeak------------------------------------------------------------------
+String statusChWriteKey = THING_SPEAK_WRITE_KEY;  // Status Channel id: 908037
 
 // LCD 1602A-------------------------------------------------------------------
 #include <LiquidCrystal.h>
 const int rs = 16, en = 9, d4 = 10, d5 =11, d6 =12, d7 = 13;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 byte customChar[] = {
-  B11000,
-  B11000,
-  B00110,
-  B01001,
-  B01000,
-  B01000,
-  B01001,
-  B00110
+  B11000, B11000, B00110, B01001, B01000, B01000, B01001, B00110
 };
 byte HD[] = {
-  B10100,
-  
-  B10100,
-  B11101,
-  B10101,
-  B10101,
-  B00011,
-  B00101,
-  B00111
+  B10100, B10100, B11101, B10101, B10101, B00011, B00101, B00111
 };
 
 //수분부족분 계산
 String HD_VPD;
 
 //DHT--------------------------------------------------------------------------
-#include "DHT.h"
+#include <DHT.h>
 #include <stdlib.h>
 int pinoDHT = 5;
 int tipoDHT =  DHT11;
@@ -115,8 +117,11 @@ void setup() {
   lcd.createChar(0, customChar);
   lcd.createChar(1, HD);
   
-  Serial.begin(9600);
+  Serial.begin(115200);
   ESPSerial.begin(speed8266); //ESP-01모듈과 UART 시리얼 연결
+  WiFi.init(&ESPSerial);      //MQTT에 연결하기 위한 정의, ESPSerial은 두번 할당되었다. 이 초기화는 WiFiESP.h에 선언되어 있는 것 같다.
+  client.setClient(ethClient);//예제에서 받아 왔다.
+  client.setServer(MQTT_SERVER, 1883); //MQTT_SERVER는 TEST환경에 의해서 정의된다. preprocessor 부분
   DS18B20.begin();
   dht.begin();
   
