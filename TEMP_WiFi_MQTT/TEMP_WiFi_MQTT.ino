@@ -1,3 +1,14 @@
+//ESP01_MQTT_DHT22 프로젝트 개발 후 이 프로젝트 손보았음
+//
+//사용가능한 메모리가 부족해서, 안정성에 문세가 생길 수 있음.
+//내 처방 : 보드를 바꾸거나 그냥 ThingSpeak 하나만으로 만족해야할 것 같음
+//대안, 온도 습도는 따로 설치하여 MQTT로 올리고
+//CO2도 따로 설치하여 MQTT로 올리고
+//문제의 수분센서도 표면장력 텐시오미터로 자작하여 MQTT에 올리도록 하자.
+// (1) 온습도 (2) CO2 (3)조도 (4) 표면장력 : 다른 곳에 추가할 장치들
+//
+// 이 프로젝트 이후는 -> 
+
 //test 환경을 설정한다.
 #define TEST
 
@@ -18,10 +29,10 @@
 #include <SoftwareSerial.h>
 SoftwareSerial ESPSerial(6, 7); //(RX,TX)
 
-#define speed8266 9600
-#define HARDWARE_RESET 8 //아두이노를 통한 ESP8266리셋 - 하드웨어 와이어링해야 한다.
-#define ssid "FarmMain5G"
-#define password "wweerrtt"
+#define SPEED8266       9600
+#define HARDWARE_RESET  8 //아두이노를 통한 ESP8266리셋 - 하드웨어 와이어링해야 한다.
+#define SSID__          "FarmMain5G"
+#define PASSWORD        "wweerrtt"
 
 //MQTT에 올릴 생각
 #include <WiFiEsp.h>
@@ -118,7 +129,7 @@ void setup() {
   lcd.createChar(1, HD);
   
   Serial.begin(115200);
-  ESPSerial.begin(speed8266); //ESP-01모듈과 UART 시리얼 연결
+  ESPSerial.begin(SPEED8266); //ESP-01모듈과 UART 시리얼 연결
   WiFi.init(&ESPSerial);      //MQTT에 연결하기 위한 정의, ESPSerial은 두번 할당되었다. 이 초기화는 WiFiESP.h에 선언되어 있는 것 같다.
   client.setClient(ethClient);//예제에서 받아 왔다.
   client.setServer(MQTT_SERVER, 1883); //MQTT_SERVER는 TEST환경에 의해서 정의된다. preprocessor 부분
@@ -270,9 +281,9 @@ boolean sendATcommand(char * command, char * response, int second) {
 boolean connectWifi(){
   ESPSerial.setTimeout(10*1000);
   String cmd="AT+CWJAP=\"";
-         cmd+=ssid;
+         cmd+=SSID__;
          cmd+="\",\"";
-         cmd+=password;
+         cmd+=PASSWORD;
          cmd+="\"";
   ESPSerial.println(cmd);       
   Serial.println(cmd);
