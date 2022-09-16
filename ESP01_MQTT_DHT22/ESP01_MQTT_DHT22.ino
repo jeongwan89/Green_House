@@ -23,37 +23,51 @@
   define의 정의를 고쳐서 컴파일하는 일을 컴파일 인자를 고쳐 컴파일한다고 하겠다.
   #define구문의 정의는 Esp01_DHT22_MQTT_01 ~ xx (100개)로 하고 각 define의 인자를 정의하는 것으로 한다.
 */
-#define Esp01_DHT22_MQTT_01
+#define Esp01_DHT22_MQTT_02
 
 #ifdef Esp01_DHT22_MQTT_01
 #define CLIENT_NAME   "Green_House_Temp_RH_Monitor_01"
 #define MQTT_PUB_TEMP "Sensor/GH1/Center/Temp"        //GH1 = Green House (온실) 1동
 #define MQTT_PUB_HUM  "Sensor/GH1/Center/Hum"
 #define SENSOR_STATUS "Sensor/GH1/Center/Stat"
+#define TEMP_CAL  0
+#define HUM_CAL   0
 #endif
+
 #ifdef Esp01_DHT22_MQTT_02
 #define CLIENT_NAME   "Green_House_Temp_RH_Monitor_02"
 #define MQTT_PUB_TEMP "Sensor/GH2/Center/Temp"
 #define MQTT_PUB_HUM  "Sensor/GH2/Center/Hum"
 #define SENSOR_STATUS "Sensor/GH2/Center/Stat"
+#define TEMP_CAL  0
+#define HUM_CAL   0
 #endif
+
 #ifdef Esp01_DHT22_MQTT_03
 #define CLIENT_NAME   "Green_House_Temp_RH_Monitor_03"
 #define MQTT_PUB_TEMP "Sensor/GH3/Center/Temp"
 #define MQTT_PUB_HUM  "Sensor/GH3/Center/Hum"
 #define SENSOR_STATUS "Sensor/GH3/Center/Stat"
+#define TEMP_CAL  0
+#define HUM_CAL   0
 #endif
+
 #ifdef Esp01_DHT22_MQTT_04
 #define CLIENT_NAME   "Green_House_Temp_RH_Monitor_04"
 #define MQTT_PUB_TEMP "Sensor/GH4/Center/Temp"
 #define MQTT_PUB_HUM  "Sensor/GH4/Center/Hum"
 #define SENSOR_STATUS "Sensor/GH4/Center/Stat"
+#define TEMP_CAL  0
+#define HUM_CAL   0
 #endif
+
 #ifdef Esp01_DHT22_MQTT_05
 #define CLIENT_NAME   "NR_House_Temp_RH_Monitor_01"
 #define MQTT_PUB_TEMP "Sensor/NR1/Center/Temp"          //NR1 = Nursery Green House (육묘장) 1동
 #define MQTT_PUB_HUM  "Sensor/NR1/Center/Hum"
 #define SENSOR_STATUS "Sensor/NR1/Center/Stat"
+#define TEMP_CAL  0
+#define HUM_CAL   0
 #endif
 
 #include <EspMQTTClient.h>
@@ -82,8 +96,6 @@
 // Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor (PULL-UP Resistor)
 #define REFRESH_TIME 10  //sec REFRESH_TIME 마다 온도/습도를 읽어서 MQTT에 올리기 위한 인터벌 시간
 
-#define TEMP_CAL  0
-#define HUM_CAL   0
 //wifi연결 환경이 달라짐에 따른 compile변수의 교정
 #define TEST  //작업실 환경에서 TEST를 염두에 두고 농장 환경에서는 #ifndef TEST를 사용한다.
 
