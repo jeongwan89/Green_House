@@ -66,8 +66,8 @@ void setup(){
 }
 
 void loop(){
-  //DemandData();
-  //delay(1000);
+  DemandData();
+  delay(1000);
   ReadData();
   delay(1000);
 }
