@@ -121,8 +121,8 @@ byte  requestData[9]={
         0x68,   //Address low byte
         0x00,   //Data high byte
         0x03,   //Data low byte
-        0x17,   //CRC high byte
-        0x84    //CRC low byte
+        0x84,   //CRC low byte
+        0x17    //CRC high byte
       }; 
       
 void DemandData(void)
@@ -134,16 +134,16 @@ void DemandData(void)
     //rs485.write(requestData,8);
     //한 바이트씩 보내기
     for (int i=0; i<8; i++){
-    rs485.write(requestData[i]);
+        rs485.write(requestData[i]);
     }
 
-    Serial.print("Demand Data to HM-100 sending:");
-    for(int i=0; i<8; i++){
-        sprintf(mP, "0x%02x ", requestData[i]);
+        // Serial.print("Demand Data to HM-100 sending:");
+    // for(int i=0; i<8; i++){
+        // sprintf(mP, "0x%02x ", requestData[i]);
         //Serial로 출력하는 대신에 MQTT로 pub해야한다.
         //Serial.print(mP);
-    }
-    Serial.println();
+    // }
+    // Serial.println();
 
     CHIP485_SEL_RX;
 }
@@ -158,8 +158,8 @@ int ReadData(void){
         //아래는 이전 code. RS485에서부터 data를 받았다는 표시이다. 필요없어서 주석처리.
         //Serial.print("Received Data:");
         for(int i=0; i<index; i++){
-        Data[i] = rs485.read();
-        sprintf(mP, "0x%02x ", Data[i]);
+            Data[i] = rs485.read();
+            //sprintf(mP, "0x%02x ", Data[i]);
             //Serial로 출력하는 대신에 MQTT로 pub해야한다.
             //Serial.print(mP);
         }
@@ -179,7 +179,7 @@ void Parsing(void)
     temp_HM100 = (float)((int)Data[7]*256+(int)Data[8])/10;
 
     for(int i=0; i<16; i++){
-    Data[i] = 0x00;
+        Data[i] = 0x00;
     }
     //참고로 pH, temp, EC는 hm-100의 단위 select에 따라 달라진다.
     //Serial.print("pH = "); Serial.println(pH);
