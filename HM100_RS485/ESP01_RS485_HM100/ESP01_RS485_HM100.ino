@@ -14,8 +14,8 @@ byte  requestData[9]={
         0x68,   //Address low byte
         0x00,   //Data high byte
         0x03,   //Data low byte
-        0x17,   //CRC high byte
-        0x84    //CRC low byte
+        0x84,   //CRC low byte
+        0x17    //CRC high byte
       };     
 void DemandData(void)
 {
@@ -57,6 +57,23 @@ int ReadData(void){
   CHIP485_SEL_RX;
   return index;
 }
+void Parsing(void){
+  float EC;
+  float pH;
+  float temp;
+
+  EC = (float)((int)Data[3]*256+(int)Data[4])/100;
+  pH = (float)((int)Data[5]*256+(int)Data[6])/100;
+  temp = (float)((int)Data[7]*256+(int)Data[8])/10;
+
+  for(int i=0; i<16; i++){
+      Data[i] = 0x00;
+  }
+  //참고로 pH, temp, EC는 hm-100의 단위 select에 따라 달라진다.
+  Serial.print("pH = "); Serial.print(pH); Serial.print('\t');
+  Serial.print("tp = "); Serial.print(temp); Serial.print('\t');
+  Serial.print("EC = "); Serial.println(EC);
+  }
 
 void setup(){
   pinMode(SSerialTxControl, OUTPUT);
@@ -69,5 +86,6 @@ void loop(){
   DemandData();
   delay(1000);
   ReadData();
+  Parsing();
   delay(1000);
 }
