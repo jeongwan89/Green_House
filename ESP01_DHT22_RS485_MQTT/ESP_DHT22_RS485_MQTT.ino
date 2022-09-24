@@ -1,6 +1,6 @@
-#define Esp01_DHT22_RS485_MQTT_02
+#define ESP01_DHT22_RS485_MQTT_02
 
-#ifdef Esp01_DHT22_RS485_MQTT_01
+#ifdef ESP01_DHT22_RS485_MQTT_01
 #define CLIENT_NAME         "Green_House_HM100_Temp_RH_Monitor_01"
 #define MQTT_PUB_PH         "Sensor/GH1/Rear/pH"
 #define MQTT_PUB_HM100_TEMP "Sensor/GH1/Rear/HM_TEMP"
@@ -12,7 +12,7 @@
 #define HUM_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_RS485_MQTT_02
+#ifdef ESP01_DHT22_RS485_MQTT_02
 #define CLIENT_NAME         "Green_House_HM100_Temp_RH_Monitor_02"
 #define MQTT_PUB_PH         "Sensor/GH2/Rear/pH"
 #define MQTT_PUB_HM100_TEMP "Sensor/GH2/Rear/HM_TEMP"
@@ -24,7 +24,7 @@
 #define HUM_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_RS485_MQTT_03
+#ifdef ESP01_DHT22_RS485_MQTT_03
 #define CLIENT_NAME         "Green_House_HM100_Temp_RH_Monitor_03"
 #define MQTT_PUB_PH         "Sensor/GH3/Rear/pH"
 #define MQTT_PUB_HM100_TEMP "Sensor/GH3/Rear/HM_TEMP"
@@ -36,7 +36,7 @@
 #define HUM_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_RS485_MQTT_04
+#ifdef ESP01_DHT22_RS485_MQTT_04
 #define CLIENT_NAME         "Green_House_HM100_Temp_RH_Monitor_04"
 #define MQTT_PUB_PH         "Sensor/GH4/Rear/pH"
 #define MQTT_PUB_HM100_TEMP "Sensor/GH4/Rear/HM_TEMP"
@@ -48,7 +48,7 @@
 #define HUM_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_RS485_MQTT_05
+#ifdef ESP01_DHT22_RS485_MQTT_05
 #define CLIENT_NAME         "NR_House_HM100_Temp_RH_Moitor_01"
 #define MQTT_PUB_PH         "Sensor/NR1/Rear/pH"
 #define MQTT_PUB_HM100_TEMP "Sensor/NR1/Rear/HM_TEMP"
@@ -63,7 +63,7 @@
 #include <EspMQTTClient.h>
 #include <DHT.h>
 
-#define SSerialTxControl 0                                  // GPIO00로 RS485방향을 제어한다.
+#define SSerialTxControl 0                                  // GPIO_00로 RS485방향을 제어한다.
 
 #define CHIP485_SEL_TX digitalWrite(SSerialTxControl,HIGH)  //Transmission  - Driver Out
 #define CHIP485_SEL_RX digitalWrite(SSerialTxControl,LOW)   //Receive       - Receiver Out
