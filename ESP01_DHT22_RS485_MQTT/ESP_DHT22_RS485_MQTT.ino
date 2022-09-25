@@ -20,6 +20,7 @@
 #define MQTT_PUB_TEMP       "Sensor/GH2/Rear/Temp"
 #define MQTT_PUB_HUM        "Sensor/GH2/Rear/Hum"
 #define SENSOR_STATUS       "Sensor/GH2/Rear/Stat"
+#define DEBUG               "Sensor/GH2/Rear/Debug"
 #define TEMP_CAL  0
 #define HUM_CAL   0
 #endif
@@ -69,7 +70,7 @@
 #define CHIP485_SEL_RX digitalWrite(SSerialTxControl,LOW)   //Receive       - Receiver Out
 
 // rs485가 softwareSerial로 할당 되어 있어서 지웠다. Serial로 재 할당하여 coding해야 하겠다.
-#define rs485 Serial
+// #define rs485 Serial
 
 #define DHTPIN  2
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
@@ -133,17 +134,19 @@ void DemandData(void)
     //이후에 SoftwareSerial rs485에 byte requestData 써 넣는 루틴
     //rs485.write(requestData,8);
     //한 바이트씩 보내기
+    String request;
     for (int i=0; i<8; i++){
-        rs485.write(requestData[i]);
+        Serial.write(requestData[i]);
     }
 
         // Serial.print("Demand Data to HM-100 sending:");
-    // for(int i=0; i<8; i++){
-        // sprintf(mP, "0x%02x ", requestData[i]);
+    client.publish(DEBUG, "Demand Data to HM-100 :");
+    for(int i=0; i<8; i++){
+        sprintf(mP, "0x%02x ", requestData[i]);
         //Serial로 출력하는 대신에 MQTT로 pub해야한다.
-        //Serial.print(mP);
-    // }
-    // Serial.println();
+        request += ((String) mP + " ");
+    }
+    client.publish(DEBUG, request);
 
     CHIP485_SEL_RX;
 }
@@ -153,17 +156,20 @@ int ReadData(void){
     char mP[5];
     CHIP485_SEL_RX;
 
-    index = rs485.available();
+    index = Serial.available();
     if(index >0){
         //아래는 이전 code. RS485에서부터 data를 받았다는 표시이다. 필요없어서 주석처리.
         //Serial.print("Received Data:");
+        client.publish(DEBUG, "Received Data -> index :" + (String) index);
+        String respond;
         for(int i=0; i<index; i++){
-            Data[i] = rs485.read();
-            //sprintf(mP, "0x%02x ", Data[i]);
+            Data[i] = Serial.read();
+            sprintf(mP, "0x%02x ", Data[i]);
+            respond += ((String) mP + " ");
             //Serial로 출력하는 대신에 MQTT로 pub해야한다.
-            //Serial.print(mP);
         }
-            //Serial.print("\t"); Serial.println(index);
+        //client.publish(DEBUG, "index : " + (String) index);
+            client.publish(DEBUG, respond);
     }
     CHIP485_SEL_RX;
     return index;
@@ -182,23 +188,24 @@ void Parsing(void)
         Data[i] = 0x00;
     }
     //참고로 pH, temp, EC는 hm-100의 단위 select에 따라 달라진다.
-    //Serial.print("pH = "); Serial.println(pH);
+    //client.publish(DEBUG, (String) pH);
     //Serial.print("tp = "); Serial.println(temp);
     //Serial.print("EC = "); Serial.println(EC);
 }
 
 
 void setup(){
+
+    //Serial.begin(115200);
+    Serial.begin(19200);
+    CHIP485_SEL_RX;
+
     pinMode(SSerialTxControl, OUTPUT);
     dht.begin();
 
-    //Serial.begin(115200);
-    rs485.begin(19200);
-    CHIP485_SEL_RX;
-
     // Optional functionalities of EspMQTTClient
     // Enable debugging messages sent to serial output
-    client.enableDebuggingMessages(); 
+    // client.enableDebuggingMessages(); 
     
     // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. 
     //These can be overridded with enableHTTPWebUpdater("user", "password").
@@ -225,7 +232,7 @@ void loop()
     client.loop();
     if((millis()-last_refreshed_time) > REFRESH_TIME*1000) {
         DemandData();
-        delay(500);
+        // delay(500);
         ReadData();
         Parsing();
         //Read data and store it to variables hum and temp
