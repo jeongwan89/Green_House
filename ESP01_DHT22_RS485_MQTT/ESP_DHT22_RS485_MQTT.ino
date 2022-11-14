@@ -140,13 +140,13 @@ void DemandData(void)
     }
 
         // Serial.print("Demand Data to HM-100 sending:");
-    client.publish(DEBUG, "Demand Data to HM-100 :");
+    // client.publish(DEBUG, "Demand Data to HM-100 :");
     for(int i=0; i<8; i++){
-        sprintf(mP, "0x%02x ", requestData[i]);
+        sprintf(mP, " 0x%02x", requestData[i]);
         //Serial로 출력하는 대신에 MQTT로 pub해야한다.
-        request += ((String) mP + " ");
+        request += ((String) mP);
     }
-    client.publish(DEBUG, request);
+    client.publish(DEBUG, "Demand Data to HM-100 : " + request);
 
     CHIP485_SEL_RX;
 }
@@ -155,23 +155,26 @@ int ReadData(void){
     int index =0;
     char mP[5];
     CHIP485_SEL_RX;
-
+    // Serial.available()이 너무 빨라서 뒤에 오는 data를 수신하지 못하는 것 같아서 다 들어올 때까지 기다리는 시간을 만든다.
+    // delay (500); 
     index = Serial.available();
     if(index >0){
         //아래는 이전 code. RS485에서부터 data를 받았다는 표시이다. 필요없어서 주석처리.
         //Serial.print("Received Data:");
-        client.publish(DEBUG, "Received Data -> index :" + (String) index);
+        // client.publish(DEBUG, "Received Data -> index :" + (String) index);
         String respond;
         for(int i=0; i<index; i++){
             Data[i] = Serial.read();
-            sprintf(mP, "0x%02x ", Data[i]);
-            respond += ((String) mP + " ");
+            sprintf(mP, " 0x%02x", Data[i]);
+            respond += ((String) mP);
             //Serial로 출력하는 대신에 MQTT로 pub해야한다.
         }
-        //client.publish(DEBUG, "index : " + (String) index);
-            client.publish(DEBUG, respond);
+        client.publish(DEBUG, "Received Data : " + (String) index + "\t" + respond);
+        // client.publish(DEBUG, respond);
     }
-    CHIP485_SEL_RX;
+    // Serial에서 입력이 계속 남아 있는 것 같아서 flush()함수를 사용하여 청소
+    Serial.flush();
+    // CHIP485_SEL_RX;
     return index;
 }
 
@@ -209,12 +212,12 @@ void setup(){
     
     // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. 
     //These can be overridded with enableHTTPWebUpdater("user", "password").
-    client.enableHTTPWebUpdater(); 
+    // client.enableHTTPWebUpdater(); 
     
     // Enable OTA (Over The Air) updates. 
     //Password defaults to MQTTPassword. Port is the default OTA port. 
     //Can be overridden with enableOTA("password", port).
-    client.enableOTA(); 
+    // client.enableOTA(); 
 
     // You can activate the retain flag by setting the third parameter to true
     client.enableLastWillMessage(SENSOR_STATUS, "Fail",true);  
@@ -230,22 +233,24 @@ void onConnectionEstablished()
 void loop()
 {
     client.loop();
-    if((millis()-last_refreshed_time) > REFRESH_TIME*1000) {
-        DemandData();
-        // delay(500);
-        ReadData();
-        Parsing();
-        //Read data and store it to variables hum and temp
-        hum = dht.readHumidity() + HUM_CAL;
-        temp= dht.readTemperature() + TEMP_CAL;
-        
-        //Print temp and humidity values to serial monitor
-        client.publish(MQTT_PUB_HUM, (String) hum, true);
-        client.publish(MQTT_PUB_TEMP, (String) temp, true);
-        client.publish(MQTT_PUB_HM100_TEMP, (String) temp_HM100, true);
-        client.publish(MQTT_PUB_EC, (String) EC, true);
-        client.publish(MQTT_PUB_PH, (String) pH, true);
-        
-        last_refreshed_time = millis(); 
+    if(client.isConnected()) {  //client가 wifi와 MQTT에 동시에 연결되어 있을 때, 아래 내용을 publish
+        if((millis()-last_refreshed_time) > REFRESH_TIME*1000) {
+            DemandData();
+            // delay(500);
+            ReadData();
+            Parsing();
+            //Read data and store it to variables hum and temp
+            hum = dht.readHumidity() + HUM_CAL;
+            temp= dht.readTemperature() + TEMP_CAL;
+            
+            //Print temp and humidity values to serial monitor
+            client.publish(MQTT_PUB_HUM, (String) hum, true);
+            client.publish(MQTT_PUB_TEMP, (String) temp, true);
+            client.publish(MQTT_PUB_HM100_TEMP, (String) temp_HM100, true);
+            client.publish(MQTT_PUB_EC, (String) EC, true);
+            client.publish(MQTT_PUB_PH, (String) pH, true);
+            
+            last_refreshed_time = millis(); 
+        }
     }
 }

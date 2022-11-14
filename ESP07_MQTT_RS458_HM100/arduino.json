@@ -1,0 +1,7 @@
+{
+    "sketch": "ProMini_with_Esp01Modem/ProMini_RS485_ESP01modem_MQTT/ProMini_RS485_ESP01modem_MQTT.ino",
+    "configuration": "cpu=16MHzatmega328",
+    "board": "arduino:avr:pro",
+    "output": "../.build",
+    "port": "/dev/tty.usbserial-D309C9NJ"
+}
