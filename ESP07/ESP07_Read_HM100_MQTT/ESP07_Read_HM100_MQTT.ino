@@ -4,9 +4,8 @@
   Once it connects successfully to a Wifi network and a MQTT broker, it subscribe to a topic and send a message to it.
   It will also send a message delayed 5 seconds later.
 
-  Esp_MQTT_Client_DHT22.ino
-  (simpleMQTTClient.ino에서 코드를 승계하였음)
-  이 코드의 목적은 DHT22에서 온도를 읽고
+  ESP07 -> ESO07_Example.ino -> ESP07_Read_HM100.ino -> ESP07_Read_HM100_MQTT.ino
+  이 코드의 목적은 HM100에서 EC pH Temp_drain를 RS485에서 읽고
   그 온도 값을 MQTT서버에 올리는 일이다.
 */
 /*
@@ -21,57 +20,57 @@
   장점으로는 파일을 여러개 만들지 않아도 된다.
   단점으로는 컴파일할 때 define의 정의를 명백히 고쳐서 컴파일 해야한다.
   define의 정의를 고쳐서 컴파일하는 일을 컴파일 인자를 고쳐 컴파일한다고 하겠다.
-  #define구문의 정의는 Esp01_DHT22_MQTT_01 ~ xx (100개)로 하고 각 define의 인자를 정의하는 것으로 한다.
+  #define구문의 정의는 Esp07_HM100_MQTT_01 ~ xx (100개)로 하고 각 define의 인자를 정의하는 것으로 한다.
 */
-#define Esp01_DHT22_MQTT_02
+#define Esp07_HM100_MQTT_02
 
-#ifdef Esp01_DHT22_MQTT_01
+#ifdef Esp07_HM100_MQTT_01
 #define CLIENT_NAME   "Green_House_HM100_Monitor_01"
-#define MQTT_PUB_TEMP_MEDIA "Sensor/GH1/Rear/Temp_Media"        //GH1 = Green House (온실) 1동
+#define MQTT_PUB_TEMP_DRAIN "Sensor/GH1/Rear/Temp_Drain"        //GH1 = Green House (온실) 1동
 #define MQTT_PUB_EC  "Sensor/GH1/Rear/EC"
 #define MQTT_PUB_PH  "Sensor/GH1/Rear/PH"
 #define SENSOR_STATUS "Sensor/GH1/Rear/Stat"
-#define TEMP_CAL  0
+#define TEMP_DRAIN_CAL  0
 #define EC_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_MQTT_02
+#ifdef Esp07_HM100_MQTT_02
 #define CLIENT_NAME   "Green_House_HM100_Monitor_02"
-#define MQTT_PUB_TEMP_MEDIA "Sensor/GH2/Rear/Temp_Media"
+#define MQTT_PUB_TEMP_DRAIN "Sensor/GH2/Rear/Temp_Drain"
 #define MQTT_PUB_EC  "Sensor/GH2/Rear/EC"
 #define MQTT_PUB_PH  "Sensor/GH2/Rear/PH"
 #define SENSOR_STATUS "Sensor/GH2/Rear/Stat"
-#define TEMP_MEDIA_CAL  0
+#define TEMP_DRAIN_CAL  0
 #define EC_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_MQTT_03
+#ifdef Esp07_HM100_MQTT_03
 #define CLIENT_NAME   "Green_House_HM100_Monitor_03"
-#define MQTT_PUB_TEMP_MEDIA "Sensor/GH3/Rear/Temp_Media"
+#define MQTT_PUB_TEMP_DRAIN "Sensor/GH3/Rear/Temp_Drain"
 #define MQTT_PUB_EC  "Sensor/GH3/Rear/EC"
 #define MQTT_PUB_PH  "Sensor/GH3/Rear/PH"
 #define SENSOR_STATUS "Sensor/GH3/Rear/Stat"
-#define TEMP_MEDIA_CAL  0
+#define TEMP_DRAIN_CAL  0
 #define EC_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_MQTT_04
+#ifdef Esp07_HM100_MQTT_04
 #define CLIENT_NAME   "Green_House_HM100_Monitor_04"
-#define MQTT_PUB_TEMP_MEDIA "Sensor/GH4/Rear/Temp_Media"
+#define MQTT_PUB_TEMP_DRAIN "Sensor/GH4/Rear/Temp_Drain"
 #define MQTT_PUB_EC  "Sensor/GH4/Rear/EC"
 #define MQTT_PUB_PH  "Sensor/GH4/Rear/PH"
 #define SENSOR_STATUS "Sensor/GH4/Rear/Stat"
-#define TEMP_MEDIA_CAL  0
+#define TEMP_DRAIN_CAL  0
 #define EC_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_MQTT_05
+#ifdef Esp07_HM100_MQTT_05
 #define CLIENT_NAME   "NR_House_HM100_Monitor_05"
-#define MQTT_PUB_TEMP_MEDIA "Sensor/NR1/Rear/Temp_Media"          //NR1 = Nursery Green House (육묘장) 1동
+#define MQTT_PUB_TEMP_DRAIN "Sensor/NR1/Rear/Temp_Drain"          //NR1 = Nursery Green House (육묘장) 1동
 #define MQTT_PUB_EC  "Sensor/NR1/Rear/EC"
 #define MQTT_PUB_PH  "Sensor/NR1/Rear/PH"
 #define SENSOR_STATUS "Sensor/NR1/Rear/Stat"
-#define TEMP_MEDIA_CAL  0
+#define TEMP_DRAIN_CAL  0
 #define EC_CAL   0
 #endif
 
@@ -114,7 +113,7 @@ EspMQTTClient client(
 int chk;
 float EC;
 float pH;
-float temp_media;
+float temp_drain;
 
 volatile boolean state = true;
 
@@ -214,14 +213,14 @@ void Parsing(void){
 
   EC = (float)((int)Data[3]*256+(int)Data[4])/100;
   pH = (float)((int)Data[5]*256+(int)Data[6])/100;
-  temp_media = (float)((int)Data[7]*256+(int)Data[8])/10;
+  temp_drain = (float)((int)Data[7]*256+(int)Data[8])/10;
 
   for(int i=0; i<16; i++){
       Data[i] = 0x00;
   }
   //참고로 pH, temp, EC는 hm-100의 단위 select에 따라 달라진다.
   Serial.print("pH = "); Serial.print(pH); Serial.print('\t');
-  Serial.print("tp = "); Serial.print(temp_media); Serial.print('\t');
+  Serial.print("tp = "); Serial.print(temp_drain); Serial.print('\t');
   Serial.print("EC = "); Serial.println(EC);
   }
 
@@ -276,10 +275,10 @@ void loop()
     // Serial.println(" %");
     // client.publish(MQTT_PUB_EC, (String) EC, true);
 
-    Serial.print("temp_media: ");
-    Serial.print(temp_media);
+    Serial.print("temp_drain: ");
+    Serial.print(temp_drain);
     Serial.println(" Celsius");
-    client.publish(MQTT_PUB_TEMP_MEDIA, (String) temp_media, true);
+    client.publish(MQTT_PUB_TEMP_DRAIN, (String) temp_drain, true);
     
     last_refreshed_time = millis(); 
   }
