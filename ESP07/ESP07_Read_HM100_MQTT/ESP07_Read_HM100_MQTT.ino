@@ -258,12 +258,10 @@ void loop()
 {
   client.loop();
   if((millis()-last_refreshed_time) > REFRESH_TIME*1000) {
-    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
     DemandData();
     delay(100);
     if(ReadData()!=15) return;
     Parsing();
-    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
     delay(100);        
 
     //Read data and store it to variables hum and temp
