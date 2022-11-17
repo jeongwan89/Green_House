@@ -260,11 +260,11 @@ void loop()
   if((millis()-last_refreshed_time) > REFRESH_TIME*1000) {
     digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
     DemandData();
-    delay(1000);
+    delay(100);
     if(ReadData()!=15) return;
     Parsing();
     digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-    delay(1000);        
+    delay(100);        
 
     //Read data and store it to variables hum and temp
     // hum = dht.readHumidity() + HUM_CAL;
@@ -275,11 +275,10 @@ void loop()
     // Serial.println(" %");
     // client.publish(MQTT_PUB_EC, (String) EC, true);
 
-    Serial.print("temp_drain: ");
-    Serial.print(temp_drain);
-    Serial.println(" Celsius");
+    client.publish(MQTT_PUB_PH, (String) pH, true);
     client.publish(MQTT_PUB_TEMP_DRAIN, (String) temp_drain, true);
-    
+    client.publish(MQTT_PUB_EC, (String) EC, true);
+
     last_refreshed_time = millis(); 
   }
 }
