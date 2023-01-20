@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "MQTT_Nursery_Monitor_Code_from_TEMP_WiFi_05", "MQTT_Nursery_Monitor_Code_from_TEMP_WiFi_05.cppproj", "{91F7DCFA-50B3-4E43-930E-4F0557A4B263}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91F7DCFA-50B3-4E43-930E-4F0557A4B263}.Debug|AVR.ActiveCfg = Debug|AVR
+		{91F7DCFA-50B3-4E43-930E-4F0557A4B263}.Debug|AVR.Build.0 = Debug|AVR
+		{91F7DCFA-50B3-4E43-930E-4F0557A4B263}.Release|AVR.ActiveCfg = Release|AVR
+		{91F7DCFA-50B3-4E43-930E-4F0557A4B263}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

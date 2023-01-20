@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "TEMP_WiFi_03", "TEMP_WiFi_03.cppproj", "{4FA59D5E-1F17-4DEF-A5C2-2A57568F2B7A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FA59D5E-1F17-4DEF-A5C2-2A57568F2B7A}.Debug|AVR.ActiveCfg = Debug|AVR
+		{4FA59D5E-1F17-4DEF-A5C2-2A57568F2B7A}.Debug|AVR.Build.0 = Debug|AVR
+		{4FA59D5E-1F17-4DEF-A5C2-2A57568F2B7A}.Release|AVR.ActiveCfg = Release|AVR
+		{4FA59D5E-1F17-4DEF-A5C2-2A57568F2B7A}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

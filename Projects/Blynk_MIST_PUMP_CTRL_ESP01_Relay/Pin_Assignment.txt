@@ -1,0 +1,16 @@
+                <-1     raw->   
+                <-0     Gnd->
+                <-Reset Reset->
+DS1302 Gnd      <-Gnd   Vcc->       DS1302 Vcc
+interrupt0      <-2     17/A3->     DS1302 RST/CE
+interrupt1      <-3     16/A2->     DS1302 DAT/IO
+DS1302 CLK/SCLK <-4     15/A1->     WC_schedule
+Mist 1          <-5     14/A0->     Motor
+Mist 2          <-6     13->
+Mist 3          <-7     12->        EM_srply
+Mist 4          <-8     11->        WC4
+WC1             <-9     10->        WC2
+19/A5-> LCD1602 SDA
+18/A4-> LCD1602 SCLK
+A7->
+A6->

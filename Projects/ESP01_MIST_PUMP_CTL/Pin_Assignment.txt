@@ -1,0 +1,26 @@
+                <-1     raw->   
+                <-0     Gnd->
+                <-Reset Reset->
+                <-Gnd   Vcc->      
+interrupt0      <-2     17/A3->    
+interrupt1      <-3     16/A2->    
+SftSerial RX    <-4     15/A1->     WC_schedule
+Mist 1          <-5     14/A0->     Motor
+Mist 2          <-6     13->        SftSerial TX
+Mist 3          <-7     12->        EM_srply
+Mist 4          <-8     11->        WC4
+WC1             <-9     10->        WC2
+19/A5-> LCD1602 SDA
+18/A4-> LCD1602 SCLK
+A7->
+A6->
+
+외부 연결선
+수막밸브 1동
+수막밸브 2동
+수박밸브 4동
+미스트밸브 1동
+미스트밸브 2동
+미스트밸브 3동
+미스트밸브 4동
+모터1

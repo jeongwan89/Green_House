@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\..\\Codes"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"editor.suggest.showStatusBar": true,
+		"editor.suggest.shareSuggestSelections": true,
+		"C_Cpp.default.intelliSenseMode": "windows-msvc-x64",
+		"C_Cpp.intelliSenseEngineFallback": "Enabled",
+		"emmet.showSuggestionsAsSnippets": true,
+		"typescript.enablePromptUseWorkspaceTsdk": true
+	}
+}
