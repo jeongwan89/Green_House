@@ -93,6 +93,16 @@ for i in range(0,4):
                               subtext=label, wedgesize=10, bootstyle='default', interactive=True)
                       ) 
 
+METER_GAUGE = [] 
+#meter1~4 초기화한다.
+for i in range(0,4):
+    label = "%d동 온도" %i
+    METER_GAUGE.append(
+                    ttk.Meter(app, metersize=180, padding=20, amounttotal=70, 
+                              arcrange=270, arcoffset=-180, amountused=0, textleft='°C',
+                              subtext=label, wedgesize=10, bootstyle='default', interactive=True)
+                      ) 
+
 METER_GAUGE[0].grid(row=0, column=0)
 METER_GAUGE[1].grid(row=0, column=1)
 METER_GAUGE[2].grid(row=1, column=0)
