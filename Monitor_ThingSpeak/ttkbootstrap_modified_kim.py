@@ -114,8 +114,6 @@ for i in range(0, 4):
 for m in METER_GAUGE:
     m.amountusedvar.trace("w", meter_change)
 
-#meter2.amountusedvar.trace("w", meter_change)
-
 for i in range(0,4):
     METER_GAUGE[i].configure(amountused = GREEN_HOUSE[i]['feeds'][-1]['field3'])
 app.after(GAP_SEC, update_state)
