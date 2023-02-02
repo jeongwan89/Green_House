@@ -55,13 +55,13 @@ def read_thing_speak() :
         TS.close()
         i = i + 1
 
-def meter_change(*args):
+def heat_change(*args):
     '''
     이 함수는 meter의 값, 곧 amountusedvar 값이 바뀔 때 호출되는 함수이다.
     함수는 if -elif -else 구조로 유지된다.
     amountusedvar의 값이 조건부 구조로 판별되면, bootstyle을 조절한다.
     meter1.amountused.trace함수에 연결되어 있다. 
-    아마 이 함수에 연결된 파라메터가 meter_change(*args)에 전달 되는 것 같다.
+    아마 이 함수에 연결된 파라메터가 heat_change(*args)에 전달 되는 것 같다.
     '''
     global HEAT_GAUGE
 
@@ -88,7 +88,7 @@ def hum_change(*args):
     함수는 if -elif -else 구조로 유지된다.
     amountusedvar의 값이 조건부 구조로 판별되면, bootstyle을 조절한다.
     meter1.amountused.trace함수에 연결되어 있다. 
-    아마 이 함수에 연결된 파라메터가 meter_change(*args)에 전달 되는 것 같다.
+    아마 이 함수에 연결된 파라메터가 heat_change(*args)에 전달 되는 것 같다.
     '''
     global HUM_GAUGE
 
@@ -109,6 +109,33 @@ def hum_change(*args):
         else :
             m['bootstyle'] = DARK
 
+def soil_temp_change(*args):
+    '''
+    이 함수는 meter의 값, 곧 amountusedvar 값이 바뀔 때 호출되는 함수이다.
+    함수는 if -elif -else 구조로 유지된다.
+    amountusedvar의 값이 조건부 구조로 판별되면, bootstyle을 조절한다.
+    meter1.amountused.trace함수에 연결되어 있다. 
+    아마 이 함수에 연결된 파라메터가 heat_change(*args)에 전달 되는 것 같다.
+    '''
+    global SOIL_TEMP_GAUGE
+
+    for m in SOIL_TEMP_GAUGE:
+
+        if m['amountused'] <= 5:
+            m['bootstyle'] = DARK
+        elif m['amountused'] <= 7 :
+            m['bootstyle'] = DANGER
+        elif m['amountused'] <= 13 :
+            m['bootstyle'] = WARNING
+        elif m['amountused'] <= 21 :
+            m['bootstyle'] = SUCCESS
+        elif m['amountused'] <= 24 :
+            m['bootstyle'] = WARNING
+        elif m['amountused'] <= 28 :
+            m['bootstyle'] = DANGER
+        else :
+            m['bootstyle'] = DARK
+
 def update_state():
     '''
     ttk.after함수에 바인딩된 함수. ttk.after에 정의된 시간마다 (이 모듈에서는 gap_sec에 정의된
@@ -116,42 +143,55 @@ def update_state():
     '''
     global GREEN_HOUSE
     global HEAT_GAUGE
+    global SOIL_TEMP_GAUGE
 
     read_thing_speak()
 
     for i in range(0,4) :
         HEAT_GAUGE[i]['amountused'] = GREEN_HOUSE[i]['feeds'][-1]['field3']
         HUM_GAUGE[i]['amountused'] = GREEN_HOUSE[i]['feeds'][-1]['field4']
-
+        SOIL_TEMP_GAUGE[i]['amountused'] = GREEN_HOUSE[i]['feeds'][-1]['field5']
     app.after(GAP_SEC, update_state)
 
 
 HEAT_GAUGE = []
 HUM_GAUGE = []
+SOIL_TEMP_GAUGE = []
+
 #meter1~4 초기화한다.
 for i in range(0,4):
     label_heat = "%d동 온도" %(i+1)
     label_hum = "%d동 습도" %(i+1)
-    HEAT_GAUGE.append(ttk.Meter(app, metersize=160, padding=0, amounttotal=70, 
-                                 arcrange=270, arcoffset=-180, amountused=0, textright='°C',
-                                 subtext=label_heat, wedgesize=10, bootstyle='default', interactive=True)
+    label_soil_temp = "%d동 배지온도" %(i+1)
+    HEAT_GAUGE.append(ttk.Meter(app, metersize=160, padding=0, amounttotal=90, 
+                                 arcrange=315, arcoffset=-225, amountused=0, textright='°C',
+                                 subtext=label_heat, wedgesize=0, bootstyle='default', interactive=True)
                       ) 
     HUM_GAUGE.append(ttk.Meter(app, metersize=160, padding=0, amounttotal=100, 
                                  arcrange=180, arcoffset=-180, amountused=0, textright='%',
                                  subtext=label_hum, wedgesize=0, bootstyle='default', interactive=True)
                       )
+    SOIL_TEMP_GAUGE.append(ttk.Meter(app, metersize=160, padding=0, amountused=0, amounttotal=70, 
+                                 metertype='semi', textright='°C', stripethickness=10,
+                                 subtext=label_soil_temp, wedgesize=0, bootstyle='default', interactive=True)
+                          )
 for i in range(0, 4):
     HEAT_GAUGE[i].grid(row=0, column=i)
     HUM_GAUGE[i].grid(row=1, column=i)
+    SOIL_TEMP_GAUGE[i].grid(row=2, column=i)
 
 
 for m in HEAT_GAUGE:
-    m.amountusedvar.trace("w", meter_change)
+    m.amountusedvar.trace("w", heat_change)
 for n in HUM_GAUGE:
     n.amountusedvar.trace("w", hum_change)
+for l in SOIL_TEMP_GAUGE:
+    l.amountusedvar.trace("w", soil_temp_change)
 
 for i in range(0,4):
     HEAT_GAUGE[i].configure(amountused = GREEN_HOUSE[i]['feeds'][-1]['field3'])
     HUM_GAUGE[i].configure(amountused = GREEN_HOUSE[i]['feeds'][-1]['field4'])
+    SOIL_TEMP_GAUGE[i].configure(amountused = GREEN_HOUSE[i]['feeds'][-1]['field5'])
+    
 app.after(GAP_SEC, update_state)
 app.mainloop()
