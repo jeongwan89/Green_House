@@ -7,7 +7,7 @@
     ---------------------------------------------------------------------------------------
 */
 
-#define GH1
+#define GH3
 #ifdef GH1
     #define WRITEKEY    "TT36OUSUL4MCBWZG"
     #define CORRECTION_AIRTEMP  0

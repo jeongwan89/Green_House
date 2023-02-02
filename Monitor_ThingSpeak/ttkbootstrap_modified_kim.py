@@ -17,6 +17,7 @@ MY_URL = ["https://api.thingspeak.com/channels/846408/feeds.json?results=1&timez
             "https://api.thingspeak.com/channels/1468405/feeds.json?results=1&timezone=Asia%2FSeoul"]
 
 GREEN_HOUSE = []
+
 for my_url_str in MY_URL:
     TS = urllib.request.urlopen(my_url_str)
     GREEN_HOUSE.append(json.loads(TS.read()))
@@ -62,9 +63,9 @@ def meter_change(*args):
     meter1.amountused.trace함수에 연결되어 있다. 
     아마 이 함수에 연결된 파라메터가 meter_change(*args)에 전달 되는 것 같다.
     '''
-    global METER_GAUGE
+    global HEAT_GAUGE
 
-    for m in METER_GAUGE:
+    for m in HEAT_GAUGE:
 
         if m['amountused'] <= 5:
             m['bootstyle'] = DARK
@@ -81,6 +82,32 @@ def meter_change(*args):
         else :
             m['bootstyle'] = DARK
 
+def hum_change(*args):
+    '''
+    이 함수는 meter의 값, 곧 amountusedvar 값이 바뀔 때 호출되는 함수이다.
+    함수는 if -elif -else 구조로 유지된다.
+    amountusedvar의 값이 조건부 구조로 판별되면, bootstyle을 조절한다.
+    meter1.amountused.trace함수에 연결되어 있다. 
+    아마 이 함수에 연결된 파라메터가 meter_change(*args)에 전달 되는 것 같다.
+    '''
+    global HUM_GAUGE
+
+    for m in HUM_GAUGE:
+
+        if m['amountused'] <= 50:
+            m['bootstyle'] = DARK
+        elif m['amountused'] <= 60 :
+            m['bootstyle'] = DANGER
+        elif m['amountused'] <= 70 :
+            m['bootstyle'] = WARNING
+        elif m['amountused'] <= 80 :
+            m['bootstyle'] = SUCCESS
+        elif m['amountused'] <=90 :
+            m['bootstyle'] = WARNING
+        elif m['amountused'] <= 95 :
+            m['bootstyle'] = DANGER
+        else :
+            m['bootstyle'] = DARK
 
 def update_state():
     '''
@@ -88,33 +115,43 @@ def update_state():
     15,000 millisec) thingspeak의 자료를 읽고 이것을 meter widget에 반영하는 함수
     '''
     global GREEN_HOUSE
-    global METER_GAUGE
+    global HEAT_GAUGE
 
     read_thing_speak()
 
     for i in range(0,4) :
-        METER_GAUGE[i]['amountused'] = GREEN_HOUSE[i]['feeds'][-1]['field3']
+        HEAT_GAUGE[i]['amountused'] = GREEN_HOUSE[i]['feeds'][-1]['field3']
+        HUM_GAUGE[i]['amountused'] = GREEN_HOUSE[i]['feeds'][-1]['field4']
 
     app.after(GAP_SEC, update_state)
 
 
-METER_GAUGE = []
+HEAT_GAUGE = []
+HUM_GAUGE = []
 #meter1~4 초기화한다.
 for i in range(0,4):
-    label = "%d동 온도" %(i+1)
-    METER_GAUGE.append(ttk.Meter(app, metersize=180, padding=20, amounttotal=70, 
-                                 arcrange=270, arcoffset=-180, amountused=0, textleft='°C',
-                                 subtext=label, wedgesize=10, bootstyle='default', interactive=True)
+    label_heat = "%d동 온도" %(i+1)
+    label_hum = "%d동 습도" %(i+1)
+    HEAT_GAUGE.append(ttk.Meter(app, metersize=160, padding=0, amounttotal=70, 
+                                 arcrange=270, arcoffset=-180, amountused=0, textright='°C',
+                                 subtext=label_heat, wedgesize=10, bootstyle='default', interactive=True)
                       ) 
-
+    HUM_GAUGE.append(ttk.Meter(app, metersize=160, padding=0, amounttotal=100, 
+                                 arcrange=180, arcoffset=-180, amountused=0, textright='%',
+                                 subtext=label_hum, wedgesize=0, bootstyle='default', interactive=True)
+                      )
 for i in range(0, 4):
-    METER_GAUGE[i].grid(row=0, column=i)
+    HEAT_GAUGE[i].grid(row=0, column=i)
+    HUM_GAUGE[i].grid(row=1, column=i)
 
 
-for m in METER_GAUGE:
+for m in HEAT_GAUGE:
     m.amountusedvar.trace("w", meter_change)
+for n in HUM_GAUGE:
+    n.amountusedvar.trace("w", hum_change)
 
 for i in range(0,4):
-    METER_GAUGE[i].configure(amountused = GREEN_HOUSE[i]['feeds'][-1]['field3'])
+    HEAT_GAUGE[i].configure(amountused = GREEN_HOUSE[i]['feeds'][-1]['field3'])
+    HUM_GAUGE[i].configure(amountused = GREEN_HOUSE[i]['feeds'][-1]['field4'])
 app.after(GAP_SEC, update_state)
 app.mainloop()
