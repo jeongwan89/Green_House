@@ -10,6 +10,7 @@ sys.setrecursionlimit = 2500
 
 GAP_SEC = 15000 # time delay in millisecond
 app = ttk.Window()
+app.geometry("720x460+0+0")
 
 MY_URL = ["https://api.thingspeak.com/channels/846408/feeds.json?results=1&timezone=Asia%2FSeoul",
             "https://api.thingspeak.com/channels/908037/feeds.json?results=1&timezone=Asia%2FSeoul",
