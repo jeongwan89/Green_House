@@ -1,5 +1,6 @@
 import sys
 import urllib.request
+import ssl
 import json
 from pprint import pprint
 
@@ -19,7 +20,8 @@ MY_URL = ["https://api.thingspeak.com/channels/846408/feeds.json?results=1&timez
 GREEN_HOUSE = []
 
 for my_url_str in MY_URL:
-    TS = urllib.request.urlopen(my_url_str)
+    context = ssl._create_unverified_context()
+    TS = urllib.request.urlopen(my_url_str, context=context)
     GREEN_HOUSE.append(json.loads(TS.read()))
     pprint(GREEN_HOUSE[-1])
     a = GREEN_HOUSE[-1]['channel']['name']
@@ -45,7 +47,8 @@ def read_thing_speak() :
     i = 0
 
     for my_url_str in MY_URL:
-        TS = urllib.request.urlopen(my_url_str)
+        context = ssl._create_unverified_context()
+        TS = urllib.request.urlopen(my_url_str, context=context)
         GREEN_HOUSE[i] = json.loads(TS.read())
         pprint(GREEN_HOUSE[i])
         a = GREEN_HOUSE[i]['channel']['name']
