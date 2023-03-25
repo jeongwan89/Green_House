@@ -23,7 +23,7 @@
   define의 정의를 고쳐서 컴파일하는 일을 컴파일 인자를 고쳐 컴파일한다고 하겠다.
   #define구문의 정의는 Esp01_DHT22_MQTT_01 ~ xx (100개)로 하고 각 define의 인자를 정의하는 것으로 한다.
 */
-#define Esp01_DHT22_MQTT_02
+#define Esp01_DHT22_MQTT_03
 
 #ifdef Esp01_DHT22_MQTT_01
 #define CLIENT_NAME   "Green_House_Temp_RH_Monitor_01"
