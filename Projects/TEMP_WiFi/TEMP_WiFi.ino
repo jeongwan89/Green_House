@@ -127,7 +127,7 @@ boolean error;
 
 
 // Variables to be used with timers----------------------------------------------
-unsigned long writeTimingSeconds = 17; // ==> Define Sample time in seconds to send data
+unsigned long writeTimingSeconds = 17; // ==> Define Sample time in seconds to send data. ThingSpeak에 보내는 시간정의
 unsigned long startWriteTiming = 0;
 unsigned long elapsedWriteTime = 0;
 
@@ -368,7 +368,7 @@ void setup() {
     lcd.print("Resetting ESP01");
     lcd.setCursor(0, 1);
     lcd.print("MH-Z19 warming:");
-    delay(3000);
+    //delay(3000);
     lcd.setCursor(7,1);// lcd.print(mhz19_pwm->getStatus()); lcd.print("        ");
     
     EspHardwareReset(); //Reset do Modulo WiFi
@@ -378,7 +378,7 @@ void setup() {
     delay (1000);
 
     //ESP-01모듈 리셋------------------------------------------------
-    while (!sendATcommand("AT+RST", "ready", 3)) {
+    while (!sendATcommand("AT+RST", "ready", 4)) {
         Serial.println("**Error during reset ESP-01...**");
         lcd.clear();
         lcd.setCursor(0, 0);
@@ -433,6 +433,7 @@ void loop(){
     elapsedWriteTime = millis()-startWriteTiming; 
     elapsedReadingTimeCO2 = millis()-lastReadTimingCO2;
     readSensors();
+    delay(1000); //센서를 읽고 나서 쉬는 시간이 필요하다. 루프 타임동안 읽을 필요는 없다!
     
     if (elapsedWriteTime > (writeTimingSeconds*1000)) 
     {

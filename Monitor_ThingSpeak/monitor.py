@@ -11,6 +11,7 @@ sys.setrecursionlimit = 2500
 
 GAP_SEC = 15000 # time delay in millisecond
 app = ttk.Window()
+app.geometry("800x410+0+0")
 
 MY_URL = ["https://api.thingspeak.com/channels/846408/feeds.json?results=1&timezone=Asia%2FSeoul",
             "https://api.thingspeak.com/channels/908037/feeds.json?results=1&timezone=Asia%2FSeoul",
@@ -119,6 +120,7 @@ def soil_temp_change(*args):
     amountusedvar의 값이 조건부 구조로 판별되면, bootstyle을 조절한다.
     meter1.amountused.trace함수에 연결되어 있다. 
     아마 이 함수에 연결된 파라메터가 heat_change(*args)에 전달 되는 것 같다.
+    
     '''
     global SOIL_TEMP_GAUGE
 
