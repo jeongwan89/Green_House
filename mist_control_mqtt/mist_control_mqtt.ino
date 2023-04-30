@@ -41,7 +41,7 @@ unsigned long wateringStart;
 unsigned long lastWateringTime;
 
 /*************************************************************
-    loop()에서 필요한 함수를 정의하는 곳
+    필요한 함수를 정의하는 곳
 **************************************************************/
 //print any message received for subscribed topic
 void callback(char* topic, byte* payload, unsigned int length) {
