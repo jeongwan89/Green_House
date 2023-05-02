@@ -20,6 +20,11 @@ IPAddress server(192, 168, 0, 24);  //mqtt에서 필요한 서버 IP
 WiFiEspClient espClient;            // ─┬─ 이것과 아래 2개는 쌍으로 작동한다.
 PubSubClient client(espClient);     //  └─ PubSubClient.h에서 필요한 것임
 
+// MQTT authentification
+#define MQTTID "arduinoControl"
+#define MQTTUSER "farmmain"
+#define MQTTPASS "eerrtt"
+
 #define GH1_V 8 //arduino pin 8
 #define GH2_V 7 //arduino pin 7
 #define GH3_V 6 //arduino pin 6
@@ -83,6 +88,9 @@ void setup()
     Serial.println("You're connected to the network");
     // (∨)연결되었으니 mqtt에 연결되었음을 신고하고, 유언 메세지도 등록한다.
     //  └─ MQTT에 연결이 안되었으니 이런 시도는 무산될 것임. 작동한할 것임으로 시도하지 않음
+    IPAddress ip = WiFi.localIP();
+    Serial.print("IP Address: ");
+    Serial.println(ip);
 
     //connect to MQTT server
     client.setServer(server, 1883);
@@ -91,31 +99,55 @@ void setup()
 /*************************************************************
     loop()에서 필요한 함수를 정의하는 곳
 **************************************************************/
-void reconnect() {
-  // Loop until we're reconnected
-  while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
-    // Attempt to connect, just a name to identify the client
-    if (client.connect("arduinoClient")) {
-      Serial.println("connected");
-      // Once connected, publish an announcement...
-      client.publish("command","hello world");
-      // ... and resubscribe
-      client.subscribe("presence");
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
-      delay(5000);
+void reconnect() 
+/* 
+    일종의 재귀적 용법의 함수 같아 보인다.
+    client.connect()가 한번도 실행되지 않았는데 loop()안에서 reconnect()가 실행되고
+    나서야 그 안의 client.connect()가 실행된다. 
+    장접 : 연결이 끊기면 언제나 이 함수에 들어와서 connect() 실행한다.
+    중요점: publish(const char * topic, const char * payload)
+            subscribe(const char * topic)
+*/
+{
+    // Loop until we're reconnected
+    while (!client.connected()) {
+        Serial.print("Attempting MQTT connection...");
+        // Attempt to connect, just a name to identify the client
+        if (client.connect(MQTTID, MQTTUSER, MQTTPASS)) {
+            Serial.println("connected");
+            // Once connected, publish an announcement...
+            client.publish("command","hello world");
+            // ... and resubscribe
+            client.subscribe("presence");
+        } else {
+            Serial.print("failed, rc=");
+            Serial.print(client.state());
+            Serial.println("try again in 5 seconds");
+            // Wait 5 seconds before retrying
+            delay(5000);
+        }
     }
-  }
 }
  
 void loop()
 {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
+    status = WiFi.status();
+    if ( status != WL_CONNECTED) {
+        while ( status != WL_CONNECTED) {
+            Serial.print("Attempting to connect to WPA SSID: ");
+            Serial.println(ssid);
+            // Connect to WPA/WPA2 network
+            status = WiFi.begin(ssid, pass);
+            delay(500);
+        }
+        Serial.println("Connected to AP");
+        IPAddress ip = WiFi.localIP();
+  
+        Serial.print("IP Address: ");
+        Serial.println(ip);
+    }
+    if (!client.connected()) {
+        reconnect();
+    }
+    client.loop();
 }
