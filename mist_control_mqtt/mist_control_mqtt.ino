@@ -130,7 +130,15 @@ void reconnect()
 }
  
 void loop()
+/*
+    두 구역으로 나눈다.
+    1구역 : loop()중에 연결이 확실한지 처리한다. 
+            reconnect()에 MQTT topic을 늘 재정의한다.
+    2구역 : pocket이 있다. 이 포켓은 programmed watering을 실행하는 곳이다.
+            이 포켓에 들어가기 위한 전역변수들을 정의해야 한다.
+*/
 {
+    //1구역
     status = WiFi.status();
     if ( status != WL_CONNECTED) {
         while ( status != WL_CONNECTED) {
@@ -150,4 +158,6 @@ void loop()
         reconnect();
     }
     client.loop();
+    //2구역
+    
 }
