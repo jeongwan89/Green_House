@@ -21,29 +21,9 @@ WiFiEspClient espClient;            // ─┬─ 이것과 아래 2개는 쌍으
 PubSubClient client(espClient);     //  └─ PubSubClient.h에서 필요한 것임
 
 // MQTT authentification
-#define MQTTID "mistcontrol"
+#define MQTTID "arduinoControl"
 #define MQTTUSER "farmmain"
 #define MQTTPASS "eerrtt"
-
-#define GH1_V 8 //arduino pin 8
-#define GH2_V 7 //arduino pin 7
-#define GH3_V 6 //arduino pin 6
-#define GH4_V 5 //arduino pin 5
-#define MT_S 4  //arduino pin 4
-
-/*************************************************************
-    MQTT argument. Blynk를 썼을 때 virtual button으로 사용하였던 것을
-        MQTT 서버로 바꾸고, 거기서 -m message로 받을 인수로 쓴다.
-        MQTT client 프로그램을 여기에 대응하도록 짜야 한다. 
-*************************************************************/
-int wateringTimeSec;    //1회 관수시간 sec
-int periodMin;          //4동 전체 관주하며 돌아오는 관주 주기시간 min
-bool GH[5] = {false}; //온실 각동의 밸브 ex GH[1]은 1동의 valve 상태
-bool MT = false;          //Motor 기동 스위치 on여부 수동일때만 고려
-bool isAutoMode=false;  // isAutoMode에서는 MT상관 없이 자동모드 실행
-bool prevAutoMode=false;     // prevAutoMode는 수동/자동 버튼의 이전 상태를 기억함.
-unsigned long wateringStart;
-unsigned long lastWateringTime;
 
 /*************************************************************
     필요한 함수를 정의하는 곳
@@ -57,30 +37,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
   }
   Serial.println();
-  if (topic == "Argument/WRS/mistcontrol/auto") {
-    isAutoMode = (bool) payload;
-    Serial.print(topic); Serial.print(" : "); Serial.println(isAutoMode);}
-  else if(topic == "Argument/WRS/mistcontrol/freq") {
-    periodMin = (int) payload;
-    Serial.print(topic); Serial.print(" : "); Serial.println(periodMin);}
-  else if(topic == "Argument/WRS/mistcontrol/dura") {
-    wateringTimeSec = (int) payload;
-    Serial.print(topic); Serial.print(" : "); Serial.println(wateringTimeSec);}
-  else if(topic == "Argument/WRS/mistcontrol/motor") {
-    MT = (bool) payload;
-    Serial.print(topic); Serial.print(" : "); Serial.println(MT);}
-  else if(topic == "Argument/WRS/mistcontrol/GH1") {
-    GH[1] = (bool) payload;
-    Serial.print(topic); Serial.print(" : "); Serial.println(GH[1]);}
-  else if(topic == "Argument/WRS/mistcontrol/GH2") {
-    GH[2] = (bool) payload;
-    Serial.print(topic); Serial.print(" : "); Serial.println(GH[2]);}
-  else if(topic == "Argument/WRS/mistcontrol/GH3") {
-    GH[3] = (bool) payload;
-    Serial.print(topic); Serial.print(" : "); Serial.println(GH[3]);}
-  else if(topic == "Argument/WRS/mistcontrol/GH4") {
-    GH[4] = (bool) payload;
-    Serial.print(topic); Serial.print(" : "); Serial.println(GH[4]);}
 }
 
 void setup()
@@ -119,29 +75,6 @@ void setup()
     //connect to MQTT server
     client.setServer(server, 1883);
     client.setCallback(callback);
-
-/*
-    while (!client.connected()) {
-        Serial.println("Connecting to MQTT...");
- 
-        if (client.connect(MQTTID, MQTTUSER, MQTTPASS)) {
-            Serial.println("connected " + String(client.state()));
-        } 
-        else {
-            Serial.print("failed with state ");
-            Serial.print(client.state());
-            delay(2000);
-        }
-    }
-    client.subscribe("Argument/WRS/mistcontrol/auto");
-    client.subscribe("Argument/WRS/mistcontrol/freq");
-    client.subscribe("Argument/WRS/mistcontrol/dura");
-    client.subscribe("Argument/WRS/mistcontrol/motor");
-    client.subscribe("Argument/WRS/mistcontrol/GH1");
-    client.subscribe("Argument/WRS/mistcontrol/GH2");
-    client.subscribe("Argument/WRS/mistcontrol/GH3");
-    client.subscribe("Argument/WRS/mistcontrol/GH4");
-*/
 }
 /*************************************************************
     loop()에서 필요한 함수를 정의하는 곳
@@ -163,27 +96,9 @@ void reconnect()
         if (client.connect(MQTTID, MQTTUSER, MQTTPASS)) {
             Serial.println("connected");
             // Once connected, publish an announcement...
-            //client.publish("command","hello world");
+            client.publish("command","hello world");
             // ... and resubscribe
-            //client.subscribe("presence");
-            client.subscribe("Argument/WRS/mistcontrol/auto");
-            client.subscribe("Argument/WRS/mistcontrol/freq");
-            client.subscribe("Argument/WRS/mistcontrol/dura");
-            client.subscribe("Argument/WRS/mistcontrol/motor");
-            client.subscribe("Argument/WRS/mistcontrol/GH1");
-            client.subscribe("Argument/WRS/mistcontrol/GH2");
-            client.subscribe("Argument/WRS/mistcontrol/GH3");
-            client.subscribe("Argument/WRS/mistcontrol/GH4");
-            // debug
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/auto");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/freq");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/auto");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/motor");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/GH1");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/GH2");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/GH3");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/GH4");
-            // debug
+            client.subscribe("presence");
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
@@ -193,16 +108,12 @@ void reconnect()
         }
     }
 }
-
+ 
 void loop()
 /*
     두 구역으로 나눈다.
     1구역 : loop()중에 연결이 확실한지 처리한다. 
             reconnect()에 MQTT topic을 늘 재정의한다.
-            mistcontrol 특성상 언제나 mqtt 서버에 연결될 수는 없다. 
-            서버에서 떨어지면 즉시 연결하는 정책을 감수해야하겠다.
-                서버에서 떨어졌을 때, 명령이 오는지 안오는지 알 방법이 없으므로
-                늘 서버에 붙어 있는 것이 낫다.
     2구역 : pocket이 있다. 이 포켓은 programmed watering을 실행하는 곳이다.
             이 포켓에 들어가기 위한 전역변수들을 정의해야 한다.
 */
