@@ -4,7 +4,7 @@
         Pubsubclient.h
         SoftwareSerial.h
 **************************************************************/
-#include <WiFiEsp.h>            //https://github.com/bportaluri/WiFiEsp
+#include <WiFiEspAT.h>          //https://github.com/JAndrassy/WiFiEspAT
 #include <PubSubClient.h>       //https://github.com/knolleary/pubsubclient
 #include <SoftwareSerial.h>
 
@@ -17,7 +17,7 @@ char ssid[] = "FarmMain5G";
 char pass[] = "wweerrtt";
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 IPAddress server(192, 168, 0, 24);  //mqtt에서 필요한 서버 IP
-WiFiEspClient espClient;            // ─┬─ 이것과 아래 2개는 쌍으로 작동한다.
+WiFiClient espClient;            // ─┬─ 이것과 아래 2개는 쌍으로 작동한다.
 PubSubClient client(espClient);     //  └─ PubSubClient.h에서 필요한 것임
 
 // MQTT authentification
