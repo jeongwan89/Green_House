@@ -92,6 +92,7 @@ void automode(){  //수동 또는 누르면 자동
   //debug
   //Serial.println("Now exit automode()");
   //debug
+  prevAutoMode = isAutoMode;
 }
 //print any message received for subscribed topic
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -273,7 +274,6 @@ void reconnect()
             //client.publish("command","hello world");
             // ... and resubscribe
             //client.subscribe("presence");
-            client.subscribe("Argument/WRS/mistcontrol/auto");
             client.subscribe("Argument/WRS/mistcontrol/freq");
             client.subscribe("Argument/WRS/mistcontrol/dura");
             client.subscribe("Argument/WRS/mistcontrol/motor");
@@ -281,6 +281,7 @@ void reconnect()
             client.subscribe("Argument/WRS/mistcontrol/GH2");
             client.subscribe("Argument/WRS/mistcontrol/GH3");
             client.subscribe("Argument/WRS/mistcontrol/GH4");
+            client.subscribe("Argument/WRS/mistcontrol/auto");
             // debug
                 Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/auto");
                 Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/freq");
