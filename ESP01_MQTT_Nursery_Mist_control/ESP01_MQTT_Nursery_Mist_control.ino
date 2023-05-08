@@ -7,7 +7,7 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-#define LED_PIN 1
+#define LED_PIN 2
 #define MOTOR_PIN 0
 
 // Update these with values suitable for your network.
@@ -15,17 +15,14 @@ const char* ssid = "FarmMain5G";
 const char* password = "wweerrtt";
 const char* mqtt_server = "192.168.0.24";
 
+char message[256]; //MQTT message를 여기에 복사해 놓고 쓰겠다.
+int dura;   //1회당 관수 시간 (초)
+int peri;   //관수 주기(분) mqtt period에서 따온다
+int motor;  //수동일 때 모터 기동
+int isAuto; //자동 관수이냐?
+long lastwatering; // 마지막 관수한 시간이 필요하다. millis()값을 저장할 것임
 WiFiClient espClient;
 PubSubClient client(espClient);
-
-void setup()
-{
-    pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
-    Serial.begin(115200);
-    setup_wifi();
-    client.setServer(mqtt_server, 1883);
-    client.setCallback(callback);
-}
 
 void setup_wifi() {
 
@@ -54,16 +51,29 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print("] ");
     for (int i = 0; i < length; i++) {
         Serial.print((char)payload[i]);
+        message[i] = payload[i];
+        message[i+1] = NULL;
     }
     Serial.println();
-
-    // Switch on the LED if an 1 was received as first character
-    if ((char)payload[0] == '1') {
-        digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-        // but actually the LED is on; this is because
-        // it is acive low on the ESP-01)
-    } else {
-        digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+    //topic의 내용을 분석하고 그에 알맞은 처리를 담당한다.
+    if(strcmp(topic, "Argument/NR/mist/dura") == 0) {
+        dura = atoi(message);
+        //debug
+        //Serial.printf("the content of message is %s\n", message);
+        //Serial.printf("int value of dura is : %i\n", dura);
+    } else if(strcmp(topic, "Argument/NR/mist/period") == 0) {
+        peri = atoi(message);
+        //debug
+        //Serial.printf("int value of period is : %i\n", peri);
+    } else if(strcmp(topic, "Argument/NR/mist/motor") == 0) {
+        motor = atoi(message);
+        //debug
+        //Serial.printf("int value of motor is : %i\n", motor);
+    } else if(strcmp(topic, "Argument/NR/mist/auto") == 0) {
+        isAuto = atoi(message);
+        if (isAuto) lastwatering = millis();
+        //debug
+        //Serial.printf("int value of isAuto is : %i\n", isAuto);
     }
 
 }
@@ -73,20 +83,41 @@ void reconnect() {
     while (!client.connected()) {
         Serial.print("Attempting MQTT connection...");
         // Attempt to connect
-        if (client.connect("ESP8266Client")) {
-        Serial.println("connected");
-        // Once connected, publish an announcement...
-        client.publish("outTopic", "hello world");
-        // ... and resubscribe
-        client.subscribe("inTopic");
+        if (client.connect("ESP8266_NR_mistcontrol", "farmmain", "eerrtt")) {
+            Serial.println("connected");
+            // Once connected, publish an announcement...
+            client.subscribe("Argument/NR/mist/dura");
+            client.subscribe("Argument/NR/mist/period");
+            client.subscribe("Argument/NR/mist/motor");
+            client.subscribe("Argument/NR/mist/auto");
         } else {
-        Serial.print("failed, rc=");
-        Serial.print(client.state());
-        Serial.println(" try again in 5 seconds");
-        // Wait 5 seconds before retrying
-        delay(5000);
+            Serial.print("failed, rc=");
+            Serial.print(client.state());
+            Serial.println(" try again in 5 seconds");
+            // Wait 5 seconds before retrying
+            delay(5000);
         }
     }
+}
+
+void motorOn(void){ //esp01 relay 모듈을 쓸 때, 신호가 부신호로 잡히기 때문에 
+    digitalWrite(MOTOR_PIN, LOW);
+    digitalWrite(LED_BUILTIN, HIGH);
+}
+
+void motorOff(void){
+    digitalWrite(MOTOR_PIN, HIGH);
+    digitalWrite(LED_BUILTIN, LOW);
+}
+
+void setup()
+{
+    pinMode(LED_BUILTIN, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+    pinMode(MOTOR_PIN, OUTPUT);
+    Serial.begin(115200);
+    setup_wifi();
+    client.setServer(mqtt_server, 1883);
+    client.setCallback(callback);
 }
 
 void loop()
@@ -97,12 +128,29 @@ void loop()
     client.loop();
 
     long now = millis();
-    if (now - lastMsg > 2000) {
-        lastMsg = now;
-        ++value;
-        snprintf (msg, 75, "hello world #%ld", value);
-        Serial.print("Publish message: ");
-        Serial.println(msg);
-        client.publish("outTopic", msg);
+
+    //자동인가?
+    if (isAuto == 1) {
+        //관수 주기 안에 있나?
+        if ((now - lastwatering) <= (peri * 60000)) {
+            if ((now - lastwatering) <= (dura * 1000)) {
+                motorOn();
+            } 
+            else {
+                motorOff();
+            }
+        } 
+        else {
+            lastwatering = millis();
+        }
+    }
+    //자동이 아니다 => 수동이다.
+    else {
+        if (motor == 1) {
+            motorOn();
+        }
+        else {
+            motorOff();
+        }
     }
 }
