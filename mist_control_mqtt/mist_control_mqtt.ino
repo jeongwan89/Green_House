@@ -83,7 +83,7 @@ void automode(){  //수동 또는 누르면 자동
       } //조건부를 거치고 나면 whatGH[]의 인수는 관수해야할 동수를 나타낸다.
     }
   } 
-  else {
+  else { //수동모드일때 LED 끄고 다음 callback을 기다린다.
     //debug
     //Serial.print("isAutomode is :"); Serial.println(isAutoMode);
     digitalWrite(LED_BUILTIN, LOW);
