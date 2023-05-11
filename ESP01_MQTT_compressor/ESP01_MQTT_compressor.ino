@@ -79,15 +79,12 @@ void reconnect() {
     while (!client.connected()) {
         Serial.print("Attempting MQTT connection...");
         // Attempt to connect
-        if (client.connect("ESP8266_NR_mistcontrol", "farmmain", "eerrtt",
-                            "Lastwill/FM/mist/status", 0, 1, "offline")) {
+        if (client.connect("ESP8266_FM_comp", "farmmain", "eerrtt",
+                            "Lastwill/FM/comp/status", 0, 1, "offline")) {
             Serial.println("connected");
             // Once connected, publish an announcement...
             client.subscribe("Actuator/FM/comp/motor");
-            client.publish("Lastwill/FM/mist/status", "online", 1);
-            //client.subscribe("Argument/NR/mist/period");
-            //client.subscribe("Argument/NR/mist/motor");
-            //client.subscribe("Argument/NR/mist/auto");
+            client.publish("Lastwill/FM/comp/status", "online", 1);
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
@@ -114,5 +111,6 @@ void loop()
         reconnect();
     }
     client.loop();
+    delay(500);
     // loop()안에서 해결해야할 코드는 아래에 입력
 }
