@@ -57,6 +57,8 @@ void wifiConnect(void)
 /* setup() 안에서 작동한다. 이전에 반드시 정의 되어야할 것이 있는데, 
     ESP01이 SoftwareSerial로 정의되어 있어야 하고(EspSerial),
     WiFi 쉴드 변수와 ESP01모뎀의 객체의 레퍼런스를 연결해 주어야 한다.
+    SoftwareSerial EspSerial(Rx, Tx);
+    WiFiclient espClient;
 */
     EspSerial.begin(ESP8266_BAUD);
     WiFi.init(&EspSerial);
