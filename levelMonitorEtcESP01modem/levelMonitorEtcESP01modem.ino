@@ -20,7 +20,7 @@ void setup(void){
 
     byte numDigits = 4;
     byte digitPins[] = {4, 5, 6, 9};
-    byte segmentPins[] = {10, 11, 12, 14, 15, 16, 17, 19};
+    byte segmentPins[] = {10, 11, 12, 14, 15, 16, 17};
     bool resistorsOnSegments = true; // 'false' means resistors are on digit pins
     byte hardwareConfig = COMMON_ANODE; // See README.md for options
     bool updateWithDelays = false; // Default. Recommended
