@@ -26,7 +26,8 @@ void loop(void){
     }
     client.loop();
 //파트2
-    unsigned long duration, distance;
+    unsigned long duration;
+    unsigned int distance;
     //초음파 스피커에 펄스를 준다. 0.01초
     digitalWrite(TRIG, HIGH);
     delay(10);
@@ -37,10 +38,12 @@ void loop(void){
     //핀의 상태가 HIGH가 되는 순간부터 음파가 되돌아와 수신되면 Echo핀이 다시 LOW상태가 됩니다. 
     //이때 HIGH 상태에서 LOW상태로 변경되기 까지의 시간을 리턴해주는것 입니다.
     duration = pulseIn(ECHO, HIGH);
-    distance = (unsigned long) ((34000*duration)/1000000)/2;
+    distance = (unsigned int) ((34000*duration)/1000000)/2;
 
     Serial.print(distance);
     Serial.println("cm");
 
     delay(100);
+
+    display7Seg(distance);
 }
