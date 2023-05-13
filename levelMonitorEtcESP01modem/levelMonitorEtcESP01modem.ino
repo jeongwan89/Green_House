@@ -1,4 +1,6 @@
 #include "header.h"
+#include "SevSeg.h"
+SevSeg sevseg;
 
 void setup(void){
     Serial.begin(115200);
@@ -14,6 +16,17 @@ void setup(void){
 
     pinMode(TRIG, OUTPUT);
     pinMode(ECHO, INPUT);
+
+    byte numDigits = 4;
+    byte digitPins[] = {4, 5, 6, 9};
+    byte segmentPins[] = {10, 11, 12, 14, 15, 16, 17, 18};
+    bool resistorsOnSegments = true; // 'false' means resistors are on digit pins
+    byte hardwareConfig = COMMON_ANODE; // See README.md for options
+    bool updateWithDelays = false; // Default. Recommended
+    bool leadingZeros = false; // Use 'true' if you'd like to keep the leading zeros
+    
+    sevseg.begin(hardwareConfig, numDigits, digitPins, segmentPins, resistorsOnSegments, updateWithDelays, leadingZeros);
+    sevseg.setBrightness(90);
 }
 
 void loop(void){
@@ -45,5 +58,6 @@ void loop(void){
 
     delay(100);
 
-    display7Seg(distance);
+    sevseg.setNumber(distance, 0);
+    sevseg.refreshDisplay();
 }
