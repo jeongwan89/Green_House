@@ -13,7 +13,7 @@ int status = WL_IDLE_STATUS;
 IPAddress server(192, 168, 0, 24);
 
 SoftwareSerial EspSerial(8, 7); //Rx, Tx
-WiFiClient espClient;
+WiFiClient espClient;   //wifiespAT에서 정의됨
 PubSubClient client(espClient);
 
 #define MQTTID "levelMonitor"
@@ -25,6 +25,11 @@ PubSubClient client(espClient);
 #define TRIG 2
 #define ECHO 3
 
+/*
+    이 콜백에서는 따로 payload뿐만 아니라 str[256]에서 카피를 받아쓴다.
+    payload마지막에 NULL이 있는지 없는지는 모르겠지만,
+    str에는 마지막에 NULL이 있어서 string으로 쓸수 있다.
+*/
 void callback(char* topic, byte* payload, unsigned int length) {
     char str[256];
     int conv;
@@ -49,7 +54,7 @@ void reconnect(void) {
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
-            Serial.print("\t try again in 5 seconds");
+            Serial.print("\t try again in 5 seconds\n");
             delay(5000);
         }
     }
@@ -61,9 +66,6 @@ void wifiConnect(void)
     ESP01이 SoftwareSerial로 정의되어 있어야 하고(EspSerial),
     WiFi 쉴드 변수와 ESP01모뎀의 객체의 레퍼런스를 연결해 주어야 한다.
 */
-    EspSerial.begin(ESP8266_BAUD);
-    WiFi.init(&EspSerial);
-
     if(WiFi.status() == WL_NO_SHIELD) {
         Serial.println("WiFi shield not present");
         while(true);
