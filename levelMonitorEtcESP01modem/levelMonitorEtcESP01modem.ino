@@ -9,7 +9,7 @@ void setup(void){
     WiFi.init(&EspSerial);
 
     //debug
-    Serial.print("the value of WL_NO_SHIELD is :"); Serial.println(WiFi.status());
+    //Serial.print("the value of WL_NO_SHIELD is :"); Serial.println(WiFi.status());
     wifiConnect();
 
     client.setServer(server, 1883);
@@ -17,31 +17,35 @@ void setup(void){
 
     pinMode(TRIG, OUTPUT);
     pinMode(ECHO, INPUT);
-
+/*
     byte numDigits = 4;
     byte digitPins[] = {4, 5, 6, 9};
     byte segmentPins[] = {10, 11, 12, 14, 15, 16, 17};
-    bool resistorsOnSegments = true; // 'false' means resistors are on digit pins
+    bool resistorsOnSegments = false; // 'false' means resistors are on digit pins
     byte hardwareConfig = COMMON_ANODE; // See README.md for options
-    bool updateWithDelays = false; // Default. Recommended
+    bool updateWithDelays = true; // Default. Recommended
     bool leadingZeros = false; // Use 'true' if you'd like to keep the leading zeros
     
-    sevseg.begin(hardwareConfig, numDigits, digitPins, segmentPins, resistorsOnSegments, updateWithDelays, leadingZeros);
+    sevseg.begin(hardwareConfig, numDigits, digitPins, segmentPins, resistorsOnSegments, 
+                 updateWithDelays, leadingZeros);
     sevseg.setBrightness(90);
+*/
 }
 
-void loop(void){
+void loop(void)
+{
+    static unsigned long lastPub = millis();
+    unsigned long now;
 //파트1
-    if (WiFi.status() != WL_CONNECTED) {
-        wifiConnect();
-    }
     if (!client.connected()) {
         reconnect();
     }
     client.loop();
+
 //파트2
     unsigned long duration;
     unsigned int distance;
+    int averageDistance;
     //초음파 스피커에 펄스를 준다. 0.01초
     digitalWrite(TRIG, HIGH);
     delay(10);
@@ -54,11 +58,19 @@ void loop(void){
     duration = pulseIn(ECHO, HIGH);
     distance = (unsigned int) ((34000*duration)/1000000)/2;
 
-    Serial.print(distance);
+    //sevseg.setNumber(distance, 0);
+    //sevseg.refreshDisplay();
+
+    averageDistance = avrDistance(distance);
+    Serial.print(averageDistance);
     Serial.println("cm");
 
-    delay(100);
-
-    sevseg.setNumber(distance, 0);
-    sevseg.refreshDisplay();
+//파트3 : MQTT에 publish하는 프로그램이다. 정해진 시간에 한번씩 쓰는 것인데, 14초에 하나씩 쓰도록 한다.
+    now = millis();
+    if((now-lastPub) > 14500) { // 마지막 publish한 것이 14.5초가 넘었다
+        char buffer[128];
+        itoa(averageDistance, buffer, 10);
+        client.publish("Sensor/FM/fertank/level", buffer);
+        lastPub = millis();
+    }
 }

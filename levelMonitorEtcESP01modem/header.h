@@ -3,7 +3,7 @@
 #include <SoftwareSerial.h>
 
 #include <stdlib.h>
-
+#include <stdio.h>
 #define ESP8266_BAUD 57600
 
 char ssid[] = "FarmMain5G";
@@ -49,7 +49,7 @@ void reconnect(void) {
         Serial.print("Attempting MQTT connection...");
         if(client.connect(MQTTID,MQTTUSER,MQTTPASS,WILLTOPIC, 0, 1, WILLMSG)) {
             Serial.print("connected");
-            client.publish(WILLTOPIC, "on line");
+            client.publish(WILLTOPIC, "on line", 1);
             // client.subscribe("...");
         } else {
             Serial.print("failed, rc=");
@@ -84,4 +84,20 @@ void wifiConnect(void)
     Serial.println("Your're connected to the networtk");
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
+}
+
+int sumDist = 0;
+int avrDistance(unsigned int distance)
+{
+    static unsigned int arrDistance[128] = {0,};
+    static int index = 0;
+
+    if(index == 128) index=0;
+    arrDistance[index] = distance;
+    sumDist = sumDist + arrDistance[index] - arrDistance[(index == (128-1) ? 0 : index+1)];
+    index ++;
+    //Serial.print("index :"); Serial.println(index);
+    //Serial.print("arrDistance["); Serial.print(index); Serial.print("] = "); Serial.println(arrDistance[(index == 0 ? 127 : index-1)]);
+    //Serial.println(sumDist);
+    return (int) (sumDist/127);
 }
