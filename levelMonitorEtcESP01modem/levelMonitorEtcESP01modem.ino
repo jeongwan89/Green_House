@@ -69,7 +69,7 @@ void loop(void)
     now = millis();
     if((now-lastPub) > 14500) { // 마지막 publish한 것이 14.5초가 넘었다
         char buffer[128];
-        itoa(averageDistance, buffer, 10);
+        itoa(volumePerc(averageDistance), buffer, 10);
         client.publish("Sensor/FM/fertank/level", buffer);
         lastPub = millis();
     }
