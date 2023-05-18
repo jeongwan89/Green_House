@@ -103,6 +103,7 @@ int avrDistance(unsigned int distance)
 }
 
 // 사각 탱크의 남은 용적을 구한다. 일단 100세티로 계산하고 거리를 받아서 %로 환산해서 리턴한다.
-int volumePerc(int dist){
+int volumePerc(int dist)
+{
     return ((-1.25)*dist + 112.5);
 }
