@@ -3,6 +3,8 @@
         WiFiESP.h
         Pubsubclient.h
         SoftwareSerial.h
+
+        stdlib.h
 **************************************************************/
 #include <WiFiEspAT.h>          //https://github.com/JAndrassy/WiFiEspAT
 #include <PubSubClient.h>       //https://github.com/knolleary/pubsubclient
