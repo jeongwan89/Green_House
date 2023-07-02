@@ -1,5 +1,5 @@
 #include "header.h"
-#include "SevSeg.h"
+#include <SevSeg.h>
 
 SevSeg sevseg;
 
