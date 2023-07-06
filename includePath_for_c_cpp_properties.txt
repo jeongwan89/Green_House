@@ -3,6 +3,9 @@
                 "C:\\Program Files (x86)\\Arduino\\libraries\\**",
                 "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\libraries\\**",
                 "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+                "C:\\Users\\jeong\\OneDrive\\문서\\Arduino\\libraries\\PubSubClient\\src",
+                "C:\\Users\\jeong\\OneDrive\\문서\\Arduino\\libraries\\**",
+                "C:\\Users\\jeong\\Documents\\Arduino\\libraries\\PubSubClient\\src",
                 // esp8266
                 "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\libraries\\ESP8266WiFi\\src",
                 "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\libraries\\**",
@@ -17,7 +20,6 @@
                 "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.1.0-gcc10.3-e5f9fec\\lib\\gcc\\xtensa-lx106-elf\\10.3.0\\include-fixed",
                 "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.1.0-gcc10.3-e5f9fec\\xtensa-lx106-elf\\include",
                 // user include
-                "E:\\arduino\\libraries\\PubSubClient\\src",
                 "E:\\arduino\\libraries\\WiFiEspAT\\src",
                 "${workspaceFolder}/**"
             ],
