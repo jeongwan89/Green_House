@@ -35,6 +35,19 @@ LG gram 에서의 settting
             "intelliSenseMode": "windows-gcc-x64"
 
 OPTIFLEX에서의 settting
+            "compilerPath": "/home/kjw/.arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/xtensa-lx106-elf-g++",
+            "compilerArgs": [
+                "-U__STRICT_ANSI__",
+                "-free",
+                "-fipa-pta",
+                "-Werror=return-type",
+                "-mlongcalls",
+                "-mtext-section-literals",
+                "-fno-rtti",
+                "-falign-functions=4",
+                "-std=gnu++17"
+            ],
+            "intelliSenseMode": "gcc-x64",
             "defines" : [
                 "USBCON",
                 
