@@ -33,3 +33,9 @@ LG gram 에서의 settting
             "cStandard": "c11",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "windows-gcc-x64"
+
+OPTIFLEX에서의 settting
+            "defines" : [
+                "USBCON",
+                
+            ]
