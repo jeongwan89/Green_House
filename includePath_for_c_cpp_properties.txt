@@ -26,3 +26,10 @@
             "forcedInclude": [
                 "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\cores\\esp8266\\Arduino.h"
             ],
+
+
+LG gram 에서의 settting
+            "compilerPath": "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\bin\\avr-g++",
+            "cStandard": "c11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "windows-gcc-x64"
