@@ -39,3 +39,5 @@ OPTIFLEX에서의 settting
                 "USBCON",
                 
             ]
+    다음의 Error는 언제나 발생한다.
+    [Error] Failed to read or write IntelliSense configuration: {}
