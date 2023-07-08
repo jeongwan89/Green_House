@@ -1,3 +1,5 @@
+#include <PubSubClient.h>
+
 /*************************************************************************
  * blynk server가 폐쇄되어서 MQTT로 이전하는 프로그램
  * farmmain.iptime.org:1883
@@ -6,8 +8,7 @@
 **************************************************************************/
 
 #include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-#define LED_PIN 2
+#define LED_PIN 1
 #define MOTOR_PIN 0
 
 // Update these with values suitable for your network.
