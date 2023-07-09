@@ -25,53 +25,53 @@
 #define Esp07_HM100_MQTT_02
 
 #ifdef Esp07_HM100_MQTT_01
-#define CLIENT_NAME   "Green_House_HM100_Monitor_01"
+#define CLIENT_NAME         "Green_House_HM100_Monitor_01"
 #define MQTT_PUB_TEMP_DRAIN "Sensor/GH1/Rear/Temp_Drain"        //GH1 = Green House (온실) 1동
-#define MQTT_PUB_EC  "Sensor/GH1/Rear/EC"
-#define MQTT_PUB_PH  "Sensor/GH1/Rear/PH"
-#define SENSOR_STATUS "Sensor/GH1/Rear/Stat"
-#define TEMP_DRAIN_CAL  0
-#define EC_CAL   0
+#define MQTT_PUB_EC         "Sensor/GH1/Rear/EC"
+#define MQTT_PUB_PH         "Sensor/GH1/Rear/PH"
+#define SENSOR_STATUS       "Sensor/GH1/Rear/Stat"
+#define TEMP_DRAIN_CAL      0
+#define EC_CAL              0
 #endif
 
 #ifdef Esp07_HM100_MQTT_02
-#define CLIENT_NAME   "Green_House_HM100_Monitor_02"
+#define CLIENT_NAME         "Green_House_HM100_Monitor_02"
 #define MQTT_PUB_TEMP_DRAIN "Sensor/GH2/Rear/Temp_Drain"
-#define MQTT_PUB_EC  "Sensor/GH2/Rear/EC"
-#define MQTT_PUB_PH  "Sensor/GH2/Rear/PH"
-#define SENSOR_STATUS "Sensor/GH2/Rear/Stat"
-#define TEMP_DRAIN_CAL  0
-#define EC_CAL   0
+#define MQTT_PUB_EC         "Sensor/GH2/Rear/EC"
+#define MQTT_PUB_PH         "Sensor/GH2/Rear/PH"
+#define SENSOR_STATUS       "Sensor/GH2/Rear/Stat"
+#define TEMP_DRAIN_CAL      0
+#define EC_CAL              0
 #endif
 
 #ifdef Esp07_HM100_MQTT_03
-#define CLIENT_NAME   "Green_House_HM100_Monitor_03"
+#define CLIENT_NAME         "Green_House_HM100_Monitor_03"
 #define MQTT_PUB_TEMP_DRAIN "Sensor/GH3/Rear/Temp_Drain"
-#define MQTT_PUB_EC  "Sensor/GH3/Rear/EC"
-#define MQTT_PUB_PH  "Sensor/GH3/Rear/PH"
-#define SENSOR_STATUS "Sensor/GH3/Rear/Stat"
-#define TEMP_DRAIN_CAL  0
-#define EC_CAL   0
+#define MQTT_PUB_EC         "Sensor/GH3/Rear/EC"
+#define MQTT_PUB_PH         "Sensor/GH3/Rear/PH"
+#define SENSOR_STATUS       "Sensor/GH3/Rear/Stat"
+#define TEMP_DRAIN_CAL      0
+#define EC_CAL              0
 #endif
 
 #ifdef Esp07_HM100_MQTT_04
-#define CLIENT_NAME   "Green_House_HM100_Monitor_04"
+#define CLIENT_NAME         "Green_House_HM100_Monitor_04"
 #define MQTT_PUB_TEMP_DRAIN "Sensor/GH4/Rear/Temp_Drain"
-#define MQTT_PUB_EC  "Sensor/GH4/Rear/EC"
-#define MQTT_PUB_PH  "Sensor/GH4/Rear/PH"
-#define SENSOR_STATUS "Sensor/GH4/Rear/Stat"
-#define TEMP_DRAIN_CAL  0
-#define EC_CAL   0
+#define MQTT_PUB_EC         "Sensor/GH4/Rear/EC"
+#define MQTT_PUB_PH         "Sensor/GH4/Rear/PH"
+#define SENSOR_STATUS       "Sensor/GH4/Rear/Stat"
+#define TEMP_DRAIN_CAL      0
+#define EC_CAL              0
 #endif
 
 #ifdef Esp07_HM100_MQTT_05
-#define CLIENT_NAME   "NR_House_HM100_Monitor_05"
+#define CLIENT_NAME         "NR_House_HM100_Monitor_05"
 #define MQTT_PUB_TEMP_DRAIN "Sensor/NR1/Rear/Temp_Drain"          //NR1 = Nursery Green House (육묘장) 1동
-#define MQTT_PUB_EC  "Sensor/NR1/Rear/EC"
-#define MQTT_PUB_PH  "Sensor/NR1/Rear/PH"
-#define SENSOR_STATUS "Sensor/NR1/Rear/Stat"
-#define TEMP_DRAIN_CAL  0
-#define EC_CAL   0
+#define MQTT_PUB_EC         "Sensor/NR1/Rear/EC"
+#define MQTT_PUB_PH         "Sensor/NR1/Rear/PH"
+#define SENSOR_STATUS       "Sensor/NR1/Rear/Stat"
+#define TEMP_DRAIN_CAL      0
+#define EC_CAL              0
 #endif
 
 #include <EspMQTTClient.h>
@@ -89,23 +89,23 @@
 
 #ifdef TEST
 EspMQTTClient client(
-  "FarmMain5G",
-  "wweerrtt",
-  "192.168.0.24",  // MQTT Broker server ip
-  "farmmain",   // Can be omitted if not needed
-  "eerrtt",   // Can be omitted if not needed
-  CLIENT_NAME,     // Client name that uniquely identify your device
-  1883              // The MQTT port, default to 1883. this line can be omitted
+    "FarmMain5G",
+    "wweerrtt",
+    "192.168.0.24",  // MQTT Broker server ip
+    "farmmain",   // Can be omitted if not needed
+    "eerrtt",   // Can be omitted if not needed
+    CLIENT_NAME,     // Client name that uniquely identify your device
+    1883              // The MQTT port, default to 1883. this line can be omitted
 );
 #elif
 EspMQTTClient client(
-  "FarmMain5G",
-  "wweerrtt",
-  "192.168.0.33",  // MQTT Broker server ip
-  "farmmain",   // Can be omitted if not needed
-  "eerrtt",   // Can be omitted if not needed
-  CLIENT_NAME,     // Client name that uniquely identify your device
-  1883              // The MQTT port, default to 1883. this line can be omitted
+    "FarmMain5G",
+    "wweerrtt",
+    "192.168.0.33",  // MQTT Broker server ip
+    "farmmain",   // Can be omitted if not needed
+    "eerrtt",   // Can be omitted if not needed
+    CLIENT_NAME,     // Client name that uniquely identify your device
+    1883              // The MQTT port, default to 1883. this line can be omitted
 );
 #endif
 
@@ -137,147 +137,147 @@ byte  requestData[9]={
 // WARNING : YOU MUST IMPLEMENT IT IF YOU USE EspMQTTClient
 void onConnectionEstablished()
 {
-  client.publish(SENSOR_STATUS, (String)"On Line", true); 
-  // You can activate the retain flag by setting the third parameter to true
-  //아래 코드는 그 이전 프로젝트에서 받은 코드이다.
-  //Relay 작동을 하지 않는 프로그램이어서, MQTT-> Actuator 서브스크라이브를 하지 않게 되었다.
-  //그래서 남은 코드의 흔적을 아래에 둔다.
-  /*
-  client.subscribe("Actuator/HM/Rear/Heater",[](const String & payload){
-    if(payload == "1"){
-      digitalWrite(RELAY1, HIGH); 
-    } else {
-      digitalWrite(RELAY1, LOW);
-    }
-  });
-  client.subscribe("Actuator/HM/Rear/Fuel",[](const String & payload){
-    if(payload == "1"){
-      digitalWrite(RELAY2, HIGH);
-    } else {
-      digitalWrite(RELAY2, LOW);
-    }
-  });
-  */
+    client.publish(SENSOR_STATUS, (String)"On Line", true); 
+    // You can activate the retain flag by setting the third parameter to true
+    //아래 코드는 그 이전 프로젝트에서 받은 코드이다.
+    //Relay 작동을 하지 않는 프로그램이어서, MQTT-> Actuator 서브스크라이브를 하지 않게 되었다.
+    //그래서 남은 코드의 흔적을 아래에 둔다.
+    /*
+    client.subscribe("Actuator/HM/Rear/Heater",[](const String & payload){
+        if(payload == "1"){
+        digitalWrite(RELAY1, HIGH); 
+        } else {
+        digitalWrite(RELAY1, LOW);
+        }
+    });
+    client.subscribe("Actuator/HM/Rear/Fuel",[](const String & payload){
+        if(payload == "1"){
+        digitalWrite(RELAY2, HIGH);
+        } else {
+        digitalWrite(RELAY2, LOW);
+        }
+    });
+    */
 /*
-  // Execute delayed instructions
-  // 아래 코드는 예제에서 소개된 코드로 지정된 시간뒤에 어떤 동작을 하는 코드이다.
-  client.executeDelayed(5 * 1000, []() {
-    client.publish("mytopic/wildcardtest/test123", "This is a message sent 5 seconds later");
-  });
+    // Execute delayed instructions
+    // 아래 코드는 예제에서 소개된 코드로 지정된 시간뒤에 어떤 동작을 하는 코드이다.
+    client.executeDelayed(5 * 1000, []() {
+        client.publish("mytopic/wildcardtest/test123", "This is a message sent 5 seconds later");
+    });
 */
 }
 
     
 void DemandData(void)
 {
-  char mP[5];
-  CHIP485_SEL_TX;
+    char mP[5];
+    CHIP485_SEL_TX;
 
-  //이후에 SoftwareSerial rs485에 byte requestData 써 넣는 루틴
-  //rs485.write(requestData,8);
-  //한 바이트씩 보내기
-  for (int i=0; i<8; i++){
-   rs485.write(requestData[i]);
-  }
+    //이후에 SoftwareSerial rs485에 byte requestData 써 넣는 루틴
+    //rs485.write(requestData,8);
+    //한 바이트씩 보내기
+    for (int i=0; i<8; i++){
+    rs485.write(requestData[i]);
+    }
 
-  Serial.print("Demand Data to HM-100 sending:");
-  for(int i=0; i<8; i++){
-    sprintf(mP, "0x%02x ", requestData[i]);
-    Serial.print(mP);
-  }
-  Serial.println();
+    Serial.print("Demand Data to HM-100 sending:");
+    for(int i=0; i<8; i++){
+        sprintf(mP, "0x%02x ", requestData[i]);
+        Serial.print(mP);
+    }
+    Serial.println();
 
-  CHIP485_SEL_RX;
+    CHIP485_SEL_RX;
 }
 
 int ReadData(void){
-  int index =0;
-  char mP[5];
-  CHIP485_SEL_RX;
+    int index =0;
+    char mP[5];
+    CHIP485_SEL_RX;
 
-  index = rs485.available();
-  if(index >0){
-    Serial.print("Received Data:");
-    for(int i=0; i<index; i++){
-       Data[i] = rs485.read();
-       sprintf(mP, "0x%02x ", Data[i]);
-       Serial.print(mP);
+    index = rs485.available();
+    if(index >0){
+        Serial.print("Received Data:");
+        for(int i=0; i<index; i++){
+        Data[i] = rs485.read();
+        sprintf(mP, "0x%02x ", Data[i]);
+        Serial.print(mP);
+        }
+        Serial.print("\t"); Serial.println(index);
     }
-    Serial.print("\t"); Serial.println(index);
-  }
-  CHIP485_SEL_RX;
-  return index;
+    CHIP485_SEL_RX;
+    return index;
 }
 
 void Parsing(void){
 
-  EC = (float)((int)Data[3]*256+(int)Data[4])/100;
-  pH = (float)((int)Data[5]*256+(int)Data[6])/100;
-  temp_drain = (float)((int)Data[7]*256+(int)Data[8])/10;
+    EC = (float)((int)Data[3]*256+(int)Data[4])/100;
+    pH = (float)((int)Data[5]*256+(int)Data[6])/100;
+    temp_drain = (float)((int)Data[7]*256+(int)Data[8])/10;
 
-  for(int i=0; i<16; i++){
-      Data[i] = 0x00;
-  }
-  //참고로 pH, temp, EC는 hm-100의 단위 select에 따라 달라진다.
-  Serial.print("pH = "); Serial.print(pH); Serial.print('\t');
-  Serial.print("tp = "); Serial.print(temp_drain); Serial.print('\t');
-  Serial.print("EC = "); Serial.println(EC);
-  }
+    for(int i=0; i<16; i++){
+        Data[i] = 0x00;
+    }
+    //참고로 pH, temp, EC는 hm-100의 단위 select에 따라 달라진다.
+    Serial.print("pH = "); Serial.print(pH); Serial.print('\t');
+    Serial.print("tp = "); Serial.print(temp_drain); Serial.print('\t');
+    Serial.print("EC = "); Serial.println(EC);
+}
 
 void setup()
 {
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(SSerialTxControl, OUTPUT);
+    pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(SSerialTxControl, OUTPUT);
 
-  Serial.begin(115200);
-  rs485.begin(19200);
- 
-  CHIP485_SEL_RX;
+    Serial.begin(115200);
+    rs485.begin(19200);
+    
+    CHIP485_SEL_RX;
 
-  // Optional functionalities of EspMQTTClient
-  // Enable debugging messages sent to serial output
-  client.enableDebuggingMessages(); 
-  
-  // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. 
-  //These can be overridded with enableHTTPWebUpdater("user", "password").
-  client.enableHTTPWebUpdater(); 
-  
-  // Enable OTA (Over The Air) updates. 
-  //Password defaults to MQTTPassword. Port is the default OTA port. 
-  //Can be overridden with enableOTA("password", port).
-  client.enableOTA(); 
+    // Optional functionalities of EspMQTTClient
+    // Enable debugging messages sent to serial output
+    client.enableDebuggingMessages(); 
+    
+    // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. 
+    //These can be overridded with enableHTTPWebUpdater("user", "password").
+    client.enableHTTPWebUpdater(); 
+    
+    // Enable OTA (Over The Air) updates. 
+    //Password defaults to MQTTPassword. Port is the default OTA port. 
+    //Can be overridden with enableOTA("password", port).
+    client.enableOTA(); 
 
-  // You can activate the retain flag by setting the third parameter to true
-  client.enableLastWillMessage(SENSOR_STATUS, "Fail",true);  
+    // You can activate the retain flag by setting the third parameter to true
+    client.enableLastWillMessage(SENSOR_STATUS, "Fail",true);  
 
-  //refresh_time마다 읽기 위한 초기화 작업
-  last_refreshed_time = millis();
+    //refresh_time마다 읽기 위한 초기화 작업
+    last_refreshed_time = millis();
 }
 
 void loop()
 {
-  client.loop();
-  if((millis()-last_refreshed_time) > REFRESH_TIME*1000) {
-    DemandData();
-    delay(100);
-    if(ReadData()!=15) return;
-    Parsing();
-    delay(100);        
+    client.loop();
+    if((millis()-last_refreshed_time) > REFRESH_TIME*1000) {
+        DemandData();
+        delay(100);
+        if(ReadData()!=15) return;
+        Parsing();
+        delay(100);        
 
-    //Read data and store it to variables hum and temp
-    // hum = dht.readHumidity() + HUM_CAL;
-    
-    // //Print temp_media and humidity values to serial monitor
-    // Serial.print("Humidity: ");
-    // Serial.print(hum);
-    // Serial.println(" %");
-    // client.publish(MQTT_PUB_EC, (String) EC, true);
+        //Read data and store it to variables hum and temp
+        // hum = dht.readHumidity() + HUM_CAL;
+        
+        // //Print temp_media and humidity values to serial monitor
+        // Serial.print("Humidity: ");
+        // Serial.print(hum);
+        // Serial.println(" %");
+        // client.publish(MQTT_PUB_EC, (String) EC, true);
 
-    client.publish(MQTT_PUB_PH, (String) pH, true);
-    client.publish(MQTT_PUB_TEMP_DRAIN, (String) temp_drain, true);
-    client.publish(MQTT_PUB_EC, (String) EC, true);
+        client.publish(MQTT_PUB_PH, (String) pH, true);
+        client.publish(MQTT_PUB_TEMP_DRAIN, (String) temp_drain, true);
+        client.publish(MQTT_PUB_EC, (String) EC, true);
 
-    last_refreshed_time = millis(); 
-  }
+        last_refreshed_time = millis(); 
+    }
 }
 
