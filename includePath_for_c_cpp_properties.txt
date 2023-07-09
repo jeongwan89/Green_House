@@ -1,0 +1,56 @@
+            "name": "Arduino",
+            "includePath": [
+                "C:\\Program Files (x86)\\Arduino\\libraries\\**",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\libraries\\**",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\cores\\arduino",
+                "C:\\Users\\jeong\\OneDrive\\문서\\Arduino\\libraries\\PubSubClient\\src",
+                "C:\\Users\\jeong\\OneDrive\\문서\\Arduino\\libraries\\**",
+                "C:\\Users\\jeong\\Documents\\Arduino\\libraries\\PubSubClient\\src",
+                // esp8266
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\libraries\\ESP8266WiFi\\src",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\libraries\\**",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\tools\\sdk\\include",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\tools\\sdk\\lwip2/include",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\cores\\esp8266",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\variants/generic",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.1.0-gcc10.3-e5f9fec\\xtensa-lx106-elf\\include\\c++\\10.3.0",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.1.0-gcc10.3-e5f9fec\\xtensa-lx106-elf\\include\\c++\\10.3.0\\xtensa-lx106-elf",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.1.0-gcc10.3-e5f9fec\\xtensa-lx106-elf\\include\\c++\\10.3.0\\backward",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.1.0-gcc10.3-e5f9fec\\lib\\gcc\\xtensa-lx106-elf\\10.3.0\\include",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.1.0-gcc10.3-e5f9fec\\lib\\gcc\\xtensa-lx106-elf\\10.3.0\\include-fixed",
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\xtensa-lx106-elf-gcc\\3.1.0-gcc10.3-e5f9fec\\xtensa-lx106-elf\\include",
+                // user include
+                "E:\\arduino\\libraries\\WiFiEspAT\\src",
+                "${workspaceFolder}/**"
+            ],
+            "forcedInclude": [
+                "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.2\\cores\\esp8266\\Arduino.h"
+            ],
+
+
+LG gram 에서의 settting
+            "compilerPath": "C:\\Users\\jeong\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\bin\\avr-g++",
+            "cStandard": "c11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "windows-gcc-x64"
+
+OPTIFLEX에서의 settting
+            "compilerPath": "/home/kjw/.arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/xtensa-lx106-elf-g++",
+            "compilerArgs": [
+                "-U__STRICT_ANSI__",
+                "-free",
+                "-fipa-pta",
+                "-Werror=return-type",
+                "-mlongcalls",
+                "-mtext-section-literals",
+                "-fno-rtti",
+                "-falign-functions=4",
+                "-std=gnu++17"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "defines" : [
+                "USBCON",
+                
+            ]
+    다음의 Error는 언제나 발생한다.
+    [Error] Failed to read or write IntelliSense configuration: {}

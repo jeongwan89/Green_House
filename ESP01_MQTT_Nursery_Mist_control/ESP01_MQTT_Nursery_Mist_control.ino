@@ -1,13 +1,14 @@
+#include <PubSubClient.h>
+
 /*************************************************************************
  * blynk server가 폐쇄되어서 MQTT로 이전하는 프로그램
  * farmmain.iptime.org:1883
  * 192.168.0.24:1883
  * MCU는 ESP01 + 릴레이로 연결되어 있는 것으로 한다.
 **************************************************************************/
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
 
-#define LED_PIN 2
+#include <ESP8266WiFi.h>
+#define LED_PIN 1
 #define MOTOR_PIN 0
 
 // Update these with values suitable for your network.
@@ -91,7 +92,7 @@ void reconnect() {
             client.subscribe("Argument/NR/mist/period");
             client.subscribe("Argument/NR/mist/motor");
             client.subscribe("Argument/NR/mist/auto");
-            client.publish("Lastwill/NR/mist/status", "online");
+            client.publish("Lastwill/NR/mist/status", "online", 1);
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
