@@ -127,7 +127,6 @@ byte  requestData[9]={
         0x03,   //Function
         0x00,   //Address high byte
         0x68,   //Address low byte
-        0x00,   //Data high byte
         0x03,   //Data low byte
         0x84,   //CRC low byte
         0x17    //CRC high byte
