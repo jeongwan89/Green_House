@@ -82,7 +82,7 @@
 #define CHIP485_SEL_TX digitalWrite(SSerialTxControl,HIGH)  //Transmission
 #define CHIP485_SEL_RX digitalWrite(SSerialTxControl,LOW)   //Receive
 
-#define REFRESH_TIME 10  //sec REFRESH_TIME 마다 온도/습도를 읽어서 MQTT에 올리기 위한 인터벌 시간
+#define REFRESH_TIME 10  //sec(초단위) REFRESH_TIME 마다 온도/습도를 읽어서 MQTT에 올리기 위한 인터벌 시간
 
 //wifi연결 환경이 달라짐에 따른 compile변수의 교정
 #define TEST  //작업실 환경에서 TEST를 염두에 두고 농장 환경에서는 #ifndef TEST를 사용한다.
