@@ -1,5 +1,5 @@
 /*
-  SimpleMQTTClient.ino
+  //SimpleMQTTClient.ino
   The purpose of this exemple is to illustrate a simple handling of MQTT and Wifi connection.
   Once it connects successfully to a Wifi network and a MQTT broker, it subscribe to a topic and send a message to it.
   It will also send a message delayed 5 seconds later.
@@ -30,6 +30,8 @@
 #define MQTT_PUB_EC         "Sensor/GH1/Rear/EC"
 #define MQTT_PUB_PH         "Sensor/GH1/Rear/PH"
 #define SENSOR_STATUS       "Sensor/GH1/Rear/Stat"
+#define MQTT_PUB_AIR_TEMP   "Sensor/GH1/Rear/Air_Temp"
+#define MQTT_PUB_HUM        "Sensor/GH1/Rear/Hum"
 #define TEMP_DRAIN_CAL      0
 #define EC_CAL              0
 #endif
@@ -40,6 +42,8 @@
 #define MQTT_PUB_EC         "Sensor/GH2/Rear/EC"
 #define MQTT_PUB_PH         "Sensor/GH2/Rear/PH"
 #define SENSOR_STATUS       "Sensor/GH2/Rear/Stat"
+#define MQTT_PUB_AIR_TEMP   "Sensor/GH2/Rear/Air_Temp"
+#define MQTT_PUB_HUM        "Sensor/GH2/Rear/Hum"
 #define TEMP_DRAIN_CAL      0
 #define EC_CAL              0
 #endif
@@ -50,6 +54,8 @@
 #define MQTT_PUB_EC         "Sensor/GH3/Rear/EC"
 #define MQTT_PUB_PH         "Sensor/GH3/Rear/PH"
 #define SENSOR_STATUS       "Sensor/GH3/Rear/Stat"
+#define MQTT_PUB_AIR_TEMP   "Sensor/GH3/Rear/Air_Temp"
+#define MQTT_PUB_HUM        "Sensor/GH3/Rear/Hum"
 #define TEMP_DRAIN_CAL      0
 #define EC_CAL              0
 #endif
@@ -60,6 +66,8 @@
 #define MQTT_PUB_EC         "Sensor/GH4/Rear/EC"
 #define MQTT_PUB_PH         "Sensor/GH4/Rear/PH"
 #define SENSOR_STATUS       "Sensor/GH4/Rear/Stat"
+#define MQTT_PUB_AIR_TEMP   "Sensor/GH4/Rear/Air_Temp"
+#define MQTT_PUB_HUM        "Sensor/GH4/Rear/Hum"
 #define TEMP_DRAIN_CAL      0
 #define EC_CAL              0
 #endif
@@ -70,6 +78,8 @@
 #define MQTT_PUB_EC         "Sensor/NR1/Rear/EC"
 #define MQTT_PUB_PH         "Sensor/NR1/Rear/PH"
 #define SENSOR_STATUS       "Sensor/NR1/Rear/Stat"
+#define MQTT_PUB_AIR_TEMP   "Sensor/NR1/Rear/Air_Temp"
+#define MQTT_PUB_HUM        "Sensor/NR1/Rear/Hum"
 #define TEMP_DRAIN_CAL      0
 #define EC_CAL              0
 #endif
@@ -108,6 +118,14 @@ EspMQTTClient client(
     1883              // The MQTT port, default to 1883. this line can be omitted
 );
 #endif
+
+//DHT22추가
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
+#define DHTPIN 2     // Digital pin connected to the DHT sensor 
+#define DHTTYPE DHT22     // DHT 22 (AM2302)
+DHT_Unified dht(DHTPIN, DHTTYPE);
 
 //Variables
 int chk;
@@ -251,6 +269,30 @@ void setup()
 
     //refresh_time마다 읽기 위한 초기화 작업
     last_refreshed_time = millis();
+
+    //DHT22 추가행
+    sensor_t sensor;
+    dht.temperature().getSensor(&sensor);
+    Serial.println(F("------------------------------------"));
+    Serial.println(F("Temperature Sensor"));
+    Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
+    Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
+    Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
+    Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("°C"));
+    Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("°C"));
+    Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("°C"));
+    Serial.println(F("------------------------------------"));
+    // Print humidity sensor details.
+    dht.humidity().getSensor(&sensor);
+    Serial.println(F("Humidity Sensor"));
+    Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
+    Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
+    Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
+    Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("%"));
+    Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("%"));
+    Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("%"));
+    Serial.println(F("------------------------------------"));
+    //DHT22 끝
 }
 
 void loop()
@@ -263,18 +305,34 @@ void loop()
         Parsing();
         delay(100);        
 
-        //Read data and store it to variables hum and temp
-        // hum = dht.readHumidity() + HUM_CAL;
-        
-        // //Print temp_media and humidity values to serial monitor
-        // Serial.print("Humidity: ");
-        // Serial.print(hum);
-        // Serial.println(" %");
-        // client.publish(MQTT_PUB_EC, (String) EC, true);
-
         client.publish(MQTT_PUB_PH, (String) pH, true);
         client.publish(MQTT_PUB_TEMP_DRAIN, (String) temp_drain, true);
         client.publish(MQTT_PUB_EC, (String) EC, true);
+
+        //DHT22 추가
+        sensors_event_t event;
+        dht.temperature().getEvent(&event);
+        if (isnan(event.temperature)) {
+            Serial.println(F("Error reading temperature!"));
+        }
+        else {
+            Serial.print(F("Temperature: "));
+            Serial.print(event.temperature);
+            Serial.println(F("°C"));
+            client.publish(MQTT_PUB_AIR_TEMP, (String) event.temperature, true);
+        }
+        // Get humidity event and print its value.
+        dht.humidity().getEvent(&event);
+        if (isnan(event.relative_humidity)) {
+            Serial.println(F("Error reading humidity!"));
+        }
+        else {
+            Serial.print(F("Humidity: "));
+            Serial.print(event.relative_humidity);
+            Serial.println(F("%"));
+            client.publish(MQTT_PUB_HUM, (String) event.relative_humidity, true);
+        }
+        //DHT22 끝
 
         last_refreshed_time = millis(); 
     }
