@@ -25,63 +25,59 @@
 #define Esp07_HM100_MQTT_02
 
 #ifdef Esp07_HM100_MQTT_01
-#define CLIENT_NAME         "Green_House_HM100_Monitor_01"
-#define MQTT_PUB_TEMP_DRAIN "Sensor/GH1/Rear/Temp_Drain"        //GH1 = Green House (온실) 1동
-#define MQTT_PUB_EC         "Sensor/GH1/Rear/EC"
-#define MQTT_PUB_PH         "Sensor/GH1/Rear/PH"
-#define SENSOR_STATUS       "Sensor/GH1/Rear/Stat"
-#define MQTT_PUB_AIR_TEMP   "Sensor/GH1/Rear/Air_Temp"
-#define MQTT_PUB_HUM        "Sensor/GH1/Rear/Hum"
-#define TEMP_DRAIN_CAL      0
-#define EC_CAL              0
-#endif
+    #define CLIENT_NAME         "Green_House_HM100_Monitor_01"
+    #define MQTT_PUB_TEMP_DRAIN "Sensor/GH1/Rear/Temp_Drain"        //GH1 = Green House (온실) 1동
+    #define MQTT_PUB_EC         "Sensor/GH1/Rear/EC"
+    #define MQTT_PUB_PH         "Sensor/GH1/Rear/PH"
+    #define SENSOR_STATUS       "Sensor/GH1/Rear/Stat"
+    #define MQTT_PUB_AIR_TEMP   "Sensor/GH1/Rear/Air_Temp"
+    #define MQTT_PUB_HUM        "Sensor/GH1/Rear/Hum"
+    #define TEMP_DRAIN_CAL      0
+    #define EC_CAL              0
 
-#ifdef Esp07_HM100_MQTT_02
-#define CLIENT_NAME         "Green_House_HM100_Monitor_02"
-#define MQTT_PUB_TEMP_DRAIN "Sensor/GH2/Rear/Temp_Drain"
-#define MQTT_PUB_EC         "Sensor/GH2/Rear/EC"
-#define MQTT_PUB_PH         "Sensor/GH2/Rear/PH"
-#define SENSOR_STATUS       "Sensor/GH2/Rear/Stat"
-#define MQTT_PUB_AIR_TEMP   "Sensor/GH2/Rear/Air_Temp"
-#define MQTT_PUB_HUM        "Sensor/GH2/Rear/Hum"
-#define TEMP_DRAIN_CAL      0
-#define EC_CAL              0
-#endif
+#elif defined(Esp07_HM100_MQTT_02)
+    #define CLIENT_NAME         "Green_House_HM100_Monitor_02"
+    #define MQTT_PUB_TEMP_DRAIN "Sensor/GH2/Rear/Temp_Drain"
+    #define MQTT_PUB_EC         "Sensor/GH2/Rear/EC"
+    #define MQTT_PUB_PH         "Sensor/GH2/Rear/PH"
+    #define SENSOR_STATUS       "Sensor/GH2/Rear/Stat"
+    #define MQTT_PUB_AIR_TEMP   "Sensor/GH2/Rear/Air_Temp"
+    #define MQTT_PUB_HUM        "Sensor/GH2/Rear/Hum"
+    #define TEMP_DRAIN_CAL      0
+    #define EC_CAL              0
 
-#ifdef Esp07_HM100_MQTT_03
-#define CLIENT_NAME         "Green_House_HM100_Monitor_03"
-#define MQTT_PUB_TEMP_DRAIN "Sensor/GH3/Rear/Temp_Drain"
-#define MQTT_PUB_EC         "Sensor/GH3/Rear/EC"
-#define MQTT_PUB_PH         "Sensor/GH3/Rear/PH"
-#define SENSOR_STATUS       "Sensor/GH3/Rear/Stat"
-#define MQTT_PUB_AIR_TEMP   "Sensor/GH3/Rear/Air_Temp"
-#define MQTT_PUB_HUM        "Sensor/GH3/Rear/Hum"
-#define TEMP_DRAIN_CAL      0
-#define EC_CAL              0
-#endif
+#elif defined(Esp07_HM100_MQTT_03)
+    #define CLIENT_NAME         "Green_House_HM100_Monitor_03"
+    #define MQTT_PUB_TEMP_DRAIN "Sensor/GH3/Rear/Temp_Drain"
+    #define MQTT_PUB_EC         "Sensor/GH3/Rear/EC"
+    #define MQTT_PUB_PH         "Sensor/GH3/Rear/PH"
+    #define SENSOR_STATUS       "Sensor/GH3/Rear/Stat"
+    #define MQTT_PUB_AIR_TEMP   "Sensor/GH3/Rear/Air_Temp"
+    #define MQTT_PUB_HUM        "Sensor/GH3/Rear/Hum"
+    #define TEMP_DRAIN_CAL      0
+    #define EC_CAL              0
 
-#ifdef Esp07_HM100_MQTT_04
-#define CLIENT_NAME         "Green_House_HM100_Monitor_04"
-#define MQTT_PUB_TEMP_DRAIN "Sensor/GH4/Rear/Temp_Drain"
-#define MQTT_PUB_EC         "Sensor/GH4/Rear/EC"
-#define MQTT_PUB_PH         "Sensor/GH4/Rear/PH"
-#define SENSOR_STATUS       "Sensor/GH4/Rear/Stat"
-#define MQTT_PUB_AIR_TEMP   "Sensor/GH4/Rear/Air_Temp"
-#define MQTT_PUB_HUM        "Sensor/GH4/Rear/Hum"
-#define TEMP_DRAIN_CAL      0
-#define EC_CAL              0
-#endif
+#elif defined(Esp07_HM100_MQTT_04)
+    #define CLIENT_NAME         "Green_House_HM100_Monitor_04"
+    #define MQTT_PUB_TEMP_DRAIN "Sensor/GH4/Rear/Temp_Drain"
+    #define MQTT_PUB_EC         "Sensor/GH4/Rear/EC"
+    #define MQTT_PUB_PH         "Sensor/GH4/Rear/PH"
+    #define SENSOR_STATUS       "Sensor/GH4/Rear/Stat"
+    #define MQTT_PUB_AIR_TEMP   "Sensor/GH4/Rear/Air_Temp"
+    #define MQTT_PUB_HUM        "Sensor/GH4/Rear/Hum"
+    #define TEMP_DRAIN_CAL      0
+    #define EC_CAL              0
 
-#ifdef Esp07_HM100_MQTT_05
-#define CLIENT_NAME         "NR_House_HM100_Monitor_05"
-#define MQTT_PUB_TEMP_DRAIN "Sensor/NR1/Rear/Temp_Drain"          //NR1 = Nursery Green House (육묘장) 1동
-#define MQTT_PUB_EC         "Sensor/NR1/Rear/EC"
-#define MQTT_PUB_PH         "Sensor/NR1/Rear/PH"
-#define SENSOR_STATUS       "Sensor/NR1/Rear/Stat"
-#define MQTT_PUB_AIR_TEMP   "Sensor/NR1/Rear/Air_Temp"
-#define MQTT_PUB_HUM        "Sensor/NR1/Rear/Hum"
-#define TEMP_DRAIN_CAL      0
-#define EC_CAL              0
+#elif defined(Esp07_HM100_MQTT_05)
+    #define CLIENT_NAME         "NR_House_HM100_Monitor_05"
+    #define MQTT_PUB_TEMP_DRAIN "Sensor/NR1/Rear/Temp_Drain"          //NR1 = Nursery Green House (육묘장) 1동
+    #define MQTT_PUB_EC         "Sensor/NR1/Rear/EC"
+    #define MQTT_PUB_PH         "Sensor/NR1/Rear/PH"
+    #define SENSOR_STATUS       "Sensor/NR1/Rear/Stat"
+    #define MQTT_PUB_AIR_TEMP   "Sensor/NR1/Rear/Air_Temp"
+    #define MQTT_PUB_HUM        "Sensor/NR1/Rear/Hum"
+    #define TEMP_DRAIN_CAL      0
+    #define EC_CAL              0
 #endif
 
 #include <EspMQTTClient.h>
@@ -107,7 +103,7 @@ EspMQTTClient client(
     CLIENT_NAME,     // Client name that uniquely identify your device
     1883              // The MQTT port, default to 1883. this line can be omitted
 );
-#elif
+#else
 EspMQTTClient client(
     "FarmMain5G",
     "wweerrtt",
