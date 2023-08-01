@@ -109,6 +109,16 @@ EspMQTTClient client(
 );
 #endif
 
+// DHT22 센서 추가
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
+
+#define DHTPIN 2     // Digital pin connected to the DHT sensor 
+#define DHTTYPE    DHT22     // DHT 22 (AM2302)
+DHT_Unified dht(DHTPIN, DHTTYPE);
+
+
 //Variables
 int chk;
 float EC;
@@ -231,7 +241,29 @@ void setup()
 
   Serial.begin(115200);
   rs485.begin(19200);
- 
+  dht.begin();
+  sensor_t sensor;
+  dht.temperature().getSensor(&sensor);
+  Serial.println(F("------------------------------------"));
+  Serial.println(F("Temperature Sensor"));
+  Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
+  Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
+  Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
+  Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("°C"));
+  Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("°C"));
+  Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("°C"));
+  Serial.println(F("------------------------------------"));
+  dht.humidity().getSensor(&sensor);
+  Serial.println(F("Humidity Sensor"));
+  Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
+  Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
+  Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
+  Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("%"));
+  Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("%"));
+  Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("%"));
+  Serial.println(F("------------------------------------"));
+
+
   CHIP485_SEL_RX;
 
   // Optional functionalities of EspMQTTClient
@@ -263,16 +295,26 @@ void loop()
     if(ReadData()!=15) return;
     Parsing();
     delay(100);        
-
-    //Read data and store it to variables hum and temp
-    // hum = dht.readHumidity() + HUM_CAL;
-    
-    // //Print temp_media and humidity values to serial monitor
-    // Serial.print("Humidity: ");
-    // Serial.print(hum);
-    // Serial.println(" %");
-    // client.publish(MQTT_PUB_EC, (String) EC, true);
-
+    sensors_event_t event;
+    dht.temperature().getEvent(&event);
+    if (isnan(event.temperature)) {
+      Serial.println(F("Error reading temperature!"));
+    }
+    else {
+      Serial.print(F("Temperature: "));
+      Serial.print(event.temperature);
+      Serial.println(F("°C"));
+    }
+    // Get humidity event and print its value.
+    dht.humidity().getEvent(&event);
+    if (isnan(event.relative_humidity)) {
+      Serial.println(F("Error reading humidity!"));
+    }
+    else {
+      Serial.print(F("Humidity: "));
+      Serial.print(event.relative_humidity);
+      Serial.println(F("%"));
+    }
     client.publish(MQTT_PUB_PH, (String) pH, true);
     client.publish(MQTT_PUB_TEMP_DRAIN, (String) temp_drain, true);
     client.publish(MQTT_PUB_EC, (String) EC, true);
@@ -280,4 +322,3 @@ void loop()
     last_refreshed_time = millis(); 
   }
 }
-
