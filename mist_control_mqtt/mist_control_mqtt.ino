@@ -56,45 +56,45 @@ unsigned long lastWateringTime;
 int whatGH[5] = {0}; //어떤 온실을 관수하는가?
 int NoGH; //관수해야할 온실의 동수는 몇동인가?
 void automode(){  //수동 또는 누르면 자동
-  NoGH = 0;
-  //debug
-  //Serial.println("Now entered automode()");
-  //debug
-  if(isAutoMode) {
+    NoGH = 0;
     //debug
-    //Serial.print("isAutomode is :"); Serial.println(isAutoMode);
-    digitalWrite(LED_BUILTIN, HIGH);
+    //Serial.println("Now entered automode()");
     //debug
-    wateringStart = millis(); //자동 버튼이 눌러지면 wateringStart를 초기화
-    digitalWrite(GH1_V, LOW);
-    digitalWrite(GH2_V, LOW);
-    digitalWrite(GH3_V, LOW);
-    digitalWrite(GH4_V, LOW);
-    digitalWrite(MT_S, LOW);
-    int j = 1;  //whatGH[]의 인수로 쓰임. 
-    for(int i = 1; i <= 4; i++){
-      // whatGH[i]는 순차적으로 해야하는 관수동을 인수로 집어넣은 배열이다.
-      // whatGH[i]의 인수가 0이면 i-1에서 관수가 끝이나는 의미이다.
-      // whatGH[i]의 인수가 0이 아니라면, 그 인수가 지금 관수하는 동의 번호이다.
-      // whatGH[i]의 인수와 i의 수자가 인수를 확인하며 관수해야 한다.
-      if(GH[i] == true) { 
-        whatGH[j] = i;
-        j++;
-        whatGH[j] = 0;
-        NoGH++;
-      } //조건부를 거치고 나면 whatGH[]의 인수는 관수해야할 동수를 나타낸다.
+    if(isAutoMode) {
+        //debug
+        //Serial.print("isAutomode is :"); Serial.println(isAutoMode);
+        digitalWrite(LED_BUILTIN, HIGH);
+        //debug
+        wateringStart = millis(); //자동 버튼이 눌러지면 wateringStart를 초기화
+        digitalWrite(GH1_V, LOW);
+        digitalWrite(GH2_V, LOW);
+        digitalWrite(GH3_V, LOW);
+        digitalWrite(GH4_V, LOW);
+        digitalWrite(MT_S, LOW);
+        int j = 1;  //whatGH[]의 인수로 쓰임. 
+        for(int i = 1; i <= 4; i++){
+          // whatGH[i]는 순차적으로 해야하는 관수동을 인수로 집어넣은 배열이다.
+          // whatGH[i]의 인수가 0이면 i-1에서 관수가 끝이나는 의미이다.
+          // whatGH[i]의 인수가 0이 아니라면, 그 인수가 지금 관수하는 동의 번호이다.
+          // whatGH[i]의 인수와 i의 수자가 인수를 확인하며 관수해야 한다.
+          if(GH[i] == true) { 
+            whatGH[j] = i;
+            j++;
+            whatGH[j] = 0;
+            NoGH++;
+          } //조건부를 거치고 나면 whatGH[]의 인수는 관수해야할 동수를 나타낸다.
+        }
+    } 
+    else { //수동모드일때 LED 끄고 다음 callback을 기다린다.
+      //debug
+      //Serial.print("isAutomode is :"); Serial.println(isAutoMode);
+      digitalWrite(LED_BUILTIN, LOW);
+      //debug
     }
-  } 
-  else { //수동모드일때 LED 끄고 다음 callback을 기다린다.
     //debug
-    //Serial.print("isAutomode is :"); Serial.println(isAutoMode);
-    digitalWrite(LED_BUILTIN, LOW);
+    //Serial.println("Now exit automode()");
     //debug
-  }
-  //debug
-  //Serial.println("Now exit automode()");
-  //debug
-  prevAutoMode = isAutoMode;
+    prevAutoMode = isAutoMode;
 }
 //print any message received for subscribed topic
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -357,13 +357,13 @@ void loop()
         return;
         }
         // (자동모드이며) 관수 주기, 개별관수 시간 그리고 관수 동수가 조건에 일치할 때만 다음의 조건식 안으로 들어간다.
-        if((unsigned long)(millis()-wateringStart) <= (unsigned long)(periodMin * 60000)){
+        if((unsigned long)(millis()-wateringStart) <= (unsigned long)((unsigned long)periodMin * (unsigned long)60000)){
         //debug
         //Serial.print("millis()-wateringStart : periodMin\t"); Serial.print (millis()-wateringStart); 
         //Serial.print (" :-> compared value "); Serial.println( (unsigned long)(periodMin * 60000));
         //whatGH[]와 (int)NoGH를 이용해서 루프 관수를 시작하는 process. 이 배열과 변수는 BLYNK_WRITE(V7)에 정의되어 있다.
         int argWhatGH;
-        argWhatGH = (int)((millis()-wateringStart)/(wateringTimeSec*1000))+1;
+        argWhatGH = (int)((millis()-wateringStart)/((unsigned long)wateringTimeSec*(unsigned long)1000))+1;
         //계산한 값이 전체 관수해야할 온실 총수를 초과할 경우 관수는 종료하고 관수 주기만큼 기다린다.
         if(argWhatGH <= NoGH) { 
             wateringThisGH(whatGH[argWhatGH]);
