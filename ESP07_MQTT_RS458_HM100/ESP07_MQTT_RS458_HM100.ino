@@ -111,7 +111,7 @@ long lastReconnectAttempt = 0;
 //loop()에서 시간 간격당 실행시키기 위한 변수선언
 unsigned long last_refreshed_time;
 
-SoftwareSerial rs485(6,7); //RX-RO TX-DI
+SoftwareSerial rs485(12,13); //RX-RO TX-DI
 unsigned char Data[16];
 byte  requestData[9]={
         0x01,   //Device ID

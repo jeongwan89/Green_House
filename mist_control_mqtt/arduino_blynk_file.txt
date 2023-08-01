@@ -25,7 +25,7 @@
     It's very tricky to get it working. Please read this article:
     http://help.blynk.cc/hardware-and-libraries/arduino/esp8266-with-at-firmware
 
-  Change WiFi ssid, pass, and Blynk auth token to run :
+  Change WiFi ssid, pass, and Blynk auth token to run :)
   Feel free to apply it to any other example. It's simple!
  *************************************************************/
 
