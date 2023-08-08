@@ -12,7 +12,6 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-#define LED_PIN 2
 #define LED_LIGHT_PIN 0 //esp01 relay module에서 모터 신호는 negative signal
 
 #ifdef TEST //프로그램 개발하는 곳의 환경 요건
@@ -33,7 +32,7 @@
 #define MQTTPASS    "eerrtt"
 
 char message[256]; //MQTT message를 여기에 복사해 놓고 쓰겠다.
-int motor;  //motor의 상태를 받아온다. 1이면 motorOn(), 0이면 motorOff()
+int led;  //LED의 상태를 받아온다. 1이면 lightOn(), 0이면 lightOff()
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -61,12 +60,12 @@ void setup_wifi() {
 
 void lightOn(void) {
     digitalWrite(LED_LIGHT_PIN, LOW);
-    digitalWrite(LED_BUILTIN, HIGH);
+    //digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void lightOff(void) {
     digitalWrite(LED_LIGHT_PIN, HIGH);
-    digitalWrite(LED_BUILTIN, LOW);
+    //digitalWrite(LED_BUILTIN, LOW);
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -81,8 +80,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println();
     //topic의 내용을 분석하고 그에 알맞은 처리를 담당한다.
     if(strcmp(topic, LEDLIGHT) == 0) {
-        motor = atoi(message);
-        if (motor) lightOn();
+        led = atoi(message);
+        if (led) lightOn();
         else lightOff();
          //debug
         //Serial.printf("the content of message is %s\n", message);
@@ -112,7 +111,7 @@ void reconnect() {
 
 void setup()
 {
-    pinMode(LED_BUILTIN, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+    //pinMode(LED_BUILTIN, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
     pinMode(LED_LIGHT_PIN, OUTPUT);
     Serial.begin(115200);
     setup_wifi();
