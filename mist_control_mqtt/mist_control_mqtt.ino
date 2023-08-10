@@ -34,6 +34,15 @@ PubSubClient client(espClient);     //  └─ PubSubClient.h에서 필요한 �
 #define GH4_V 5 //arduino pin 5
 #define MT_S 4  //arduino pin 4
 
+#define M_FREQ      "Argument/WRS/mistcontrol/freq"
+#define M_DURA      "Argument/WRS/mistcontrol/dura"
+#define M_MOTOR     "Argument/WRS/mistcontrol/motor"
+#define M_GH1       "Argument/WRS/mistcontrol/GH1"
+#define M_GH2       "Argument/WRS/mistcontrol/GH2"
+#define M_GH3       "Argument/WRS/mistcontrol/GH3"
+#define M_GH4       "Argument/WRS/mistcontrol/GH4"
+#define M_AUTO      "Argument/WRS/mistcontrol/auto"
+#define M_STAT_MOTOR    "Status/WRS/mistcontrol/motor"
 /*************************************************************
     MQTT argument. Blynk를 썼을 때 virtual button으로 사용하였던 것을
         MQTT 서버로 바꾸고, 거기서 -m message로 받을 인수로 쓴다.
@@ -47,7 +56,7 @@ bool isAutoMode=false;  // isAutoMode에서는 MT상관 없이 자동모드 실�
 bool prevAutoMode=false;     // prevAutoMode는 수동/자동 버튼의 이전 상태를 기억함.
 unsigned long wateringStart;
 unsigned long lastWateringTime;
-
+int preStatMotor=0, statMotor;
 /*************************************************************
     필요한 함수를 정의하는 곳
 **************************************************************/
@@ -109,7 +118,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
         str[i+1] = NULL;
     }
     Serial.println();
-    if (strcmp(topic, "Argument/WRS/mistcontrol/auto") == 0) {
+    if (strcmp(topic, M_AUTO) == 0) {
         conv = atoi(str);
         isAutoMode = (bool) conv;
         //isAutoMode = (bool) payload;
@@ -120,26 +129,38 @@ void callback(char* topic, byte* payload, unsigned int length) {
         //자동이 눌러졌을 때 필요한 process가 있으므로 함수로 넘겨 사용
         automode();
         }
-    else if(strcmp(topic,"Argument/WRS/mistcontrol/freq") == 0)
+    //WoRkShop == WRS
+    else if(strcmp(topic,M_FREQ) == 0)
         periodMin = atoi(str);
-    else if(strcmp(topic, "Argument/WRS/mistcontrol/dura") == 0)
+    else if(strcmp(topic, M_DURA) == 0)
         wateringTimeSec = atoi(str);
-    else if(strcmp(topic, "Argument/WRS/mistcontrol/motor") == 0)
+    else if(strcmp(topic, M_MOTOR) == 0)
         MT = atoi(str);
-    else if(strcmp(topic, "Argument/WRS/mistcontrol/GH1") == 0)
+    else if(strcmp(topic, M_GH1) == 0)
         GH[1] = atoi(str);
-    else if(strcmp(topic, "Argument/WRS/mistcontrol/GH2") == 0)
+    else if(strcmp(topic, M_GH2) == 0)
         GH[2] = atoi(str);
-    else if(strcmp(topic, "Argument/WRS/mistcontrol/GH3") == 0)
+    else if(strcmp(topic, M_GH3) == 0)
         GH[3] = atoi(str);
-    else if(strcmp(topic, "Argument/WRS/mistcontrol/GH4") == 0)
+    else if(strcmp(topic, M_GH4) == 0)
         GH[4] = atoi(str);
+    else if(strcmp(topic, M_STAT_MOTOR) == 0)
+        statMotor = atoi(str);
 }
+
 void MotorOn(){
     digitalWrite(MT_S, HIGH); // MT_S는 모터에 연결된 핀 번호
+    if(preStatMotor == 0){
+        client.publish(M_STAT_MOTOR, "on", 1);
+        preStatMotor = 1;
+    }
 }
 void MotorOff(){
     digitalWrite(MT_S, LOW);
+    if(preStatMotor == 1){
+        client.publish(M_STAT_MOTOR, "off", 1);
+        preStatMotor = 0;
+    }
 }
 //각 동마다 관수. 
 void wateringThisGH(int thisGH) 
@@ -217,6 +238,8 @@ void setup()
     client.setServer(server, 1883);
     client.setCallback(callback);
 
+
+
 /* reconnect()가 loop()에서 의도치 않게 연결되지 않을 때, 미리 setup()에서 구독함수를
     정의하고 시작하는 프로시져를 생각했는데, 이것은 abondant 코드임 나중에 삭제해도 되나
     들였던 공을 생각해서 남겨둔다.
@@ -232,14 +255,14 @@ void setup()
             delay(2000);
         }
     }
-    client.subscribe("Argument/WRS/mistcontrol/auto");
-    client.subscribe("Argument/WRS/mistcontrol/freq");
-    client.subscribe("Argument/WRS/mistcontrol/dura");
-    client.subscribe("Argument/WRS/mistcontrol/motor");
-    client.subscribe("Argument/WRS/mistcontrol/GH1");
-    client.subscribe("Argument/WRS/mistcontrol/GH2");
-    client.subscribe("Argument/WRS/mistcontrol/GH3");
-    client.subscribe("Argument/WRS/mistcontrol/GH4");
+    client.subscribe(M_AUTO);
+    client.subscribe(M_FREQ);
+    client.subscribe(M_DURA);
+    client.subscribe(M_MOTOR);
+    client.subscribe(M_GH1);
+    client.subscribe(M_GH2);
+    client.subscribe(M_GH3);
+    client.subscribe(M_GH4);
 */
 /*************************************************************
     pin모드 초기화(setup() 속에 있다.)
@@ -276,23 +299,22 @@ void reconnect()
             //client.publish("command","hello world");
             // ... and resubscribe
             //client.subscribe("presence");
-            client.subscribe("Argument/WRS/mistcontrol/freq");
-            client.subscribe("Argument/WRS/mistcontrol/dura");
-            client.subscribe("Argument/WRS/mistcontrol/motor");
-            client.subscribe("Argument/WRS/mistcontrol/GH1");
-            client.subscribe("Argument/WRS/mistcontrol/GH2");
-            client.subscribe("Argument/WRS/mistcontrol/GH3");
-            client.subscribe("Argument/WRS/mistcontrol/GH4");
-            client.subscribe("Argument/WRS/mistcontrol/auto");
+            client.subscribe(M_FREQ);
+            client.subscribe(M_DURA);
+            client.subscribe(M_MOTOR);
+            client.subscribe(M_GH1);
+            client.subscribe(M_GH2);
+            client.subscribe(M_GH3);
+            client.subscribe(M_GH4);
+            client.subscribe(M_AUTO);
             // debug
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/auto");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/freq");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/auto");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/motor");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/GH1");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/GH2");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/GH3");
-                Serial.print("subscribe"); Serial.print(" : "); Serial.println("Argument/WRS/mistcontrol/GH4");
+                Serial.print("subscribe"); Serial.print(" : "); Serial.println(M_AUTO);
+                Serial.print("subscribe"); Serial.print(" : "); Serial.println(M_FREQ);
+                Serial.print("subscribe"); Serial.print(" : "); Serial.println(M_MOTOR);
+                Serial.print("subscribe"); Serial.print(" : "); Serial.println(M_GH1);
+                Serial.print("subscribe"); Serial.print(" : "); Serial.println(M_GH2);
+                Serial.print("subscribe"); Serial.print(" : "); Serial.println(M_GH3);
+                Serial.print("subscribe"); Serial.print(" : "); Serial.println(M_GH4);
             // debug
         } else {
             Serial.print("failed, rc=");
