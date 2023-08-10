@@ -1,19 +1,27 @@
-#define CLK 3    // 2번핀을 CLK에 연결 S1
-#define DT 2     // 3번핀을 DT에 연결 S2
-#define SW 4
+// 자외선 램프 작동 프로그램
+
+// incremental encoder program
+#define CLK 3 	// 2번핀을 CLK에 연결 S1
+#define DT 2 	// 3번핀을 DT에 연결 S2
+#define SW 4	// incremental encoder의 누름 스위치. 누르면 LOW
 #define BUILTIN_LED 13
 int counter = 0;   // 카운팅 저장용 변수
 int currentStateCLK;     // 현재 CLK의 상태 저장용 변수
 int lastStateCLK;         // 이전 CLK의 상태 저장용 변수
 String currentDir ="";     // 현재 방향 출력용 문자열 변수
 
+
+// 4 digits 7 segments LED display driver part
+// [] 여기에 코드를 넣어야 한다.
+
+// 이 함수가 호출되면 다이얼 counter을 0으로 reset
 void resetCounter(){
 	counter = 0;
 	Serial.print("reset counter : "); Serial.println(counter);
 }
 
 void setup() {
-	
+
 	// 엔코더 핀을 입력으로 설정
 	pinMode(CLK, INPUT);
 	pinMode(DT, INPUT);
@@ -32,10 +40,9 @@ void setup() {
 }
 
 void loop() {
-	//버튼이 눌리면 LED를 켜고 다시 누르면 LED가 꺼지고
-	static int switchStat, prevSwitchStat=1;
-	static bool LEDstat = false;
-	static unsigned long tPressed, tReleased;
+	static int switchStat, prevSwitchStat=1;	// loop()안에서 두 변수의 상태가 할당된다. prevSwitchStat는 loop()떠나기 직전에 switchStat의 값으로 할당된다.
+	static bool LEDstat = false; 				// LEDstat는 바로 점등상태로 연결된다
+	static unsigned long tPressed, tReleased;	// 다이얼 버튼이 눌러진 시간, 헤제된 시간 : 이를 결정하기 위해 조건이 필요하다
 	switchStat = digitalRead(SW);
 	if(switchStat == LOW && prevSwitchStat == HIGH){ // PRESSED
 		LEDstat = !LEDstat;
@@ -72,7 +79,9 @@ void loop() {
 
 }
 
-void updateEncoder(){   // 인터럽트 발생시 실행되는 함수
+// 인터럽트 발생시 실행되는 함수
+void updateEncoder(){   
+
 	// CLK의 현재 상태를 읽어서 
 	currentStateCLK = digitalRead(CLK);
 
