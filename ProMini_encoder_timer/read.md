@@ -10,3 +10,11 @@
 8/10    [] SW 스위치 모니터링 loop()에 넣고 BUILT_IN_LED사용
         [] 1초 이상 눌렀을 때, resetCount() 실행하기
         [] 프로그램 주석작업
+8/18    [] Maxim7219칩을 가진 8자리 7세그먼트 부품 도착
+8/19    [] 7 세그먼트 LED 프로그램 삽입
+            └─ 프로그램 시현 정도만 채택하였음
+
+PrintSeg(int arg)
+PrintTimeSeg(int nCounter)
+SetZero(void)
+SetInit(void)

@@ -1,4 +1,5 @@
 // 자외선 램프 작동 프로그램
+#include <math.h>
 
 // incremental encoder program
 #define CLK 3 	// 2번핀을 CLK에 연결 S1
@@ -9,7 +10,7 @@
 #define DIN7219 12	
 #define CLK7219 11
 #define CS7219	10
-int counter = 0;   // 카운팅 저장용 변수
+int counter = 90;   // 카운팅 저장용 변수
 int currentStateCLK;     // 현재 CLK의 상태 저장용 변수
 int lastStateCLK;         // 이전 CLK의 상태 저장용 변수
 String currentDir ="";     // 현재 방향 출력용 문자열 변수
@@ -28,10 +29,57 @@ void shift(byte send_to_address, byte send_this_data)
   digitalWrite(CS7219, HIGH);
 }
 
+void SetZero(void){
+	counter = 0; //약간 오지랍 같은 느낌의 처리이다.
+	shift(8,0);
+	shift(7,0);
+	shift(6,10);
+	shift(5,0);
+	shift(4,0);
+	shift(3,10);
+	shift(2,0);
+	shift(1,0);
+}
+// 7 segments LED에 출력하는 프로그램
+//char* arg는 출력할 수를 표현한다. 특수 문자도 포함할 수 있다.
+//int size_t는 arg[]의 수를 가진다. 0이면 Null, 한 자리라면 1
+void PrintSeg(int counter){
+	if (counter < 0) counter = 0;
+	int digit;
+	for(i=7; i >= 0; i--){
+		digit = (int) (counter / pow(10, i));
+		shift(i+1, digit);
+		counter -= (int) digit * pow(10, i);
+	}
+}
+
+// nCounter를 인수로 받아서 60진법 표시로 바꾸어 보낸다.
+// mm-ss-ds 형태로 보낸다.
+void PrintTimeSeg(int nCounter){
+	//nCounter의 범위는 0~3599가 의미 있는 수 이고 이것 밖에 있는 것은 취급하지 않는 것으로 한다.
+	if(nCounter > 3600 || nCounter < 0){
+		SetZero();
+		return;
+	}
+	int sMin, sSec;
+	sMin = nCounter / 60;
+	sSec = nCounter % 60;
+
+	shift(8, sMin/10);
+	shift(7, sMin%10);
+	shift(6, 10);
+	shift(5, sSec/10);
+	shift(4, sSec%10);
+	shift(3, 10);
+	shift(2, 0);
+	shift(1, 0);
+}
 // 이 함수가 호출되면 다이얼 counter을 0으로 reset
 void resetCounter(){
 	counter = 0;
 	Serial.print("reset counter : "); Serial.println(counter);
+	// [] 여기에 7세그먼트 표시를 위한 코드가 필요하다.
+	SetZero();
 }
 
 void setup() {
@@ -65,6 +113,9 @@ void setup() {
 	// 인터럽트 0번은 2번핀과 연결되어 있고 1번은 3번 핀과 연결되어 있음
 	attachInterrupt(0, updateEncoder, CHANGE);
 	attachInterrupt(1, updateEncoder, CHANGE);
+	
+	//7segment 초기화
+	PrintTimeSeg(counter);
 }
 
 void loop() {
@@ -107,25 +158,6 @@ void loop() {
 
 	// 8 digits 7 segments LED of max7219
 	//Data transfer
-	shift(0x08, 0x00); //digit 7 (leftmost digit) data
-	shift(0x07, 0x01);
-	shift(0x06, 0x02);
-	shift(0x05, 0x03);
-	shift(0x04, 0x04);
-	shift(0x03, 0x05);
-	shift(0x02, 0x06);
-	shift(0x01, 0x07); //digit 0 (rightmost digit) data
-	delay(1000);
-	shift(0x08, 0xf7); //digit 7 (leftmost digit) data
-	shift(0x07, 0xf6);
-	shift(0x06, 0xf5);
-	shift(0x05, 0xf4);
-	shift(0x04, 0xf3);
-	shift(0x03, 0xf2);
-	shift(0x02, 0xf1);
-	shift(0x01, 0xf0); //digit 0 (rightmost digit) data
-	delay(1000);
-
 }
 
 // 인터럽트 발생시 실행되는 함수
@@ -148,6 +180,10 @@ void updateEncoder(){
 		Serial.println(currentDir);               // 회전방향 출력
 		Serial.print("Counter: ");
 		Serial.println(counter);              // 카운팅 출력
+
+		//7seg에 출력
+		PrintTimeSeg(counter);
+
 	}
 
 	// 마지막 상태 변수 저장
