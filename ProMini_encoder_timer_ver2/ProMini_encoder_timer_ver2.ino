@@ -2,8 +2,8 @@
 #include <math.h>
 
 // incremental encoder program
-#define CLK 3 	// 2번핀을 CLK에 연결 S1
-#define DT 2 	// 3번핀을 DT에 연결 S2
+#define CLK 2 	// 2번핀을 CLK에 연결 S1
+#define DT 3 	// 3번핀을 DT에 연결 S2
 #define SW 4	// incremental encoder의 누름 스위치. 누르면 LOW
 #define RELAY 9
 #define BUILTIN_LED 13
