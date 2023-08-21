@@ -1,5 +1,7 @@
 # 자외선 노광기
 
+version 2는 PCB 때문에 CS 와 CLK이 바꾸었다. 이 두 핀만 바뀌면 Through hole이 없어도 되기 때문이다.
+
 자외선 노광기를 위한 타이머 구성
     [v] 로터리 인코더 {CLK:2, DT:3}. interupt 회로에 사용
     [v]  4 digits 7 segments display
