@@ -1,0 +1,46 @@
+#include <iostream>
+
+using namespace std;
+
+class Greet {
+public:
+    void operator()() {
+        cout << "hallo!" << endl;
+    }
+    void operator()(const char* str) {
+        cout << str << endl;
+    }
+};
+
+void func(Greet& greet) {
+    greet();
+}
+
+int main()
+{   Greet greet;
+    func(greet);
+    return 0;
+}
+======================================================================
+#include <iostream>
+
+using namespace std;
+
+class Greet {
+public:
+    void operator()() {
+        cout << "hallo!" << endl;
+    }
+    void operator()(const char* str) {
+        cout << str << endl;
+    }
+};
+
+int main()
+{
+    Greet greet;
+    greet();
+    greet("안녕!"); // 와아!
+
+    return 0;
+}

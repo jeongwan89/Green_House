@@ -1,0 +1,33 @@
+                    <-1                 raw->       
+                    <-0                 Gnd->
+                    <-Reset             Reset->
+                    <-Gnd               Vcc->
+            TRIG    <-2                 17/A3->
+            ECHO    <-3                 16/A2->
+                    <-4                 15/A1->
+     LEVEL_LIMIT    <-5                 14/A0->
+                    <-6                 13->    LED_BUILTIN
+SoftwareSerial TX   <-7                 12->
+SoftwareSerial RX   <-8                 11->    TM1637DIO
+                    <-9                 10->    TM1637CLK
+                                        19/A5->
+                                        18/A4->
+                                        A7->
+                                        A6->
+
+                    ┌─────────────────────────────┐
+                    │                             │
+                    ┤   1                  raw    ├
+                    ┤   0                  Gnd    ├
+                    ┤   Reset              Reset  ├
+                    ┤   Gnd                Vcc    ├
+                    ┤   2                  17/A3  ├
+                    ┤   3                  16/A2  ├
+                    ┤   4                  15/A1  ├
+                    ┤   5                  14/A0  ├
+                    ┤   6                  13     ├
+                    ┤   7                  12     ├
+                    ┤   8                  11     ├
+                    ┤   9                  10     ├
+                    │     19/A5  18/A4  A7   A6   │
+                    └───────┬──────┬─────┬────┬───┘

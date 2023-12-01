@@ -1,0 +1,20 @@
+# 스케치 노트
+
+class: PeriodicMthdInLoop
+    멤버 변수
+        t_anchor    : 생성할 때의 시간
+        t_current   : 루프 탈출할 때 millis()로 현재 머신타임로 업데이트
+        f_mthd      : 해당 시간 해야할 일에 대한 함수 포인터
+        t_period    : 반복되는 주기에 대한 인수
+        t_duration  : 반복되는 주기 중 지속되는 시간에 대한 인수
+        fptr_dr     : 반복되는 주기 중 지속되는 시간 동안 해야할 일에 대한 함수
+        fptr_dflt    : 반복되는 주기 중 지속되지 않는 시간 동안에 해야할 일에 대한 함수
+    멤버 함수
+        생성자(void) : 생성될 때, t_anchor, t_current를 머신 시각으로 초기화
+        생성자(ul_period, ul_duration, f_fptr1, f_fptr2) : t_period(ul_period), t_duration(ul_duration), fptr_dr(f_fptr1), fptr_dflt(f_fptr2)
+            ul_period   : 반복되는 주기에 대한 인수
+            ul_duration : 반복되는 주기 중 지속되는 시간에 대한 인수
+            f_fptr1     : 반복되는 주기 중 지속되는 시간 동안 해야할 일에 대한 함수
+            f_fptr2     : 반복되는 주기 중 지속되지 않는 시간 동안에 해야할 일에 대한 함수
+
+[] 디폴트 생성자일 경우, 다른 곳에서 주기, 지속시간, 할 함수, 안할 함수에 대한 인수를  다시 받는(재정의) 멤버함수가 필요하다.
