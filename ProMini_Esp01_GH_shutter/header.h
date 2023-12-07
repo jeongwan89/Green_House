@@ -68,7 +68,7 @@ PubSubClient client(espClient);
 // ProMini와 연결된 핀을 인수로 받는다.
 //      Relay가 두 개가 있으므로, pin이 2개 필요하다.
 //      결선을 반대로 할 수 있으니까 작동을 반전시킬 flag가 필요하다. -> invDir
-class Shutter : public Adafruit_INA219
+class Shutter //: public Adafruit_INA219
 {
     public:
         // 아래 두 bool값은 모터의 상태를 알기위한 flag이다. 
@@ -83,7 +83,8 @@ class Shutter : public Adafruit_INA219
         bool invDir = false;    // 방향 flag 늘 배선을 반대로 할 수 있으니까 방향을 MQTT로 받아서 작동을 반전시킨다.
     public:
         // constructor. Only one
-        Shutter(uint8_t mtrPin, uint8_t upDrPin, uint8_t currAddr=0x40) : motorPin(mtrPin), upDirPin(upDrPin) {
+        Shutter(uint8_t mtrPin, uint8_t upDrPin, uint8_t currAddr=0x40) : motorPin(mtrPin), upDirPin(upDrPin) 
+        {
             Adafruit_INA219 ina219(currAddr); //address는 아래 참조
             // A1       A0          inr219 address
             // open     open        0x40
@@ -95,7 +96,8 @@ class Shutter : public Adafruit_INA219
         }
         
         // 모터를 스톱한다. 방향 flag는 손대지 않는다.
-        void Stop(void) {
+        void Stop(void) 
+        {
             digitalWrite(motorPin, 0);
             motor = false;
         }
@@ -109,7 +111,8 @@ class Shutter : public Adafruit_INA219
         //  연산의 결과는 xor이므로 비트연산자 ^ (exclusive OR)을 사용한다.
 
         // window를 올린다.
-        void Up(void) {
+        void Up(void) 
+        {
             digitalWrite(upDirPin, HIGH ^ invDir);
             digitalWrite(motorPin, HIGH);
             upDir = true;
@@ -117,7 +120,8 @@ class Shutter : public Adafruit_INA219
         }
 
         // window를 내린다.
-        void Down(void) {
+        void Down(void) 
+        {
             digitalWrite(upDirPin, LOW ^ invDir);
             digitalWrite(motorPin, HIGH);
             upDir = false;
