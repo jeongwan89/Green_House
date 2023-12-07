@@ -42,17 +42,23 @@ SoftwareSerial EspSerial(10, 11); //Rx, Tx
 WiFiClient espClient;   //wifiespAT에서 정의됨
 PubSubClient client(espClient);
 // 탱크 번호 정의
-#define LEVEL_TANK_A
+#define GH_SHUTTER_1
 
 // MQTT 메세지 등 정의
-#ifdef LEVEL_TANK_A
-#define CLIENT_NAME     "LevelMonitor_TankA"  //혹시나 싶어 쓴것. EspMQTTClient.h에 연동
-#define MQTT_PUB_LEVEL  "Sensor/FM/FerTankA/Level" //FM 작업동, fertankA 혼합통A
-#define MQTT_PUB_ERROR  "Error/FerTankA/Status" // 혼합통 A의 저수위 경고를 본다.
-#define MQTTID          "levelMonitorAtank"
+#ifdef GH_SHUTTER_1
+#define CLIENT_NAME     "iGH_SHUTTER_1"  //혹시나 싶어 쓴것. EspMQTTClient.h에 연동
+#define MQTT_PUB_W1_CURR "Sensor/GH1/MTR_CURR/W1" //하우스1동 서편 1중
+#define MQTT_PUB_W2_CURR "Sensor/GH1/MTR_CURR/W2" //하우스1동 서편 2중
+#define MQTT_PUB_E1_CURR "Sensor/GH1/MTR_CURR/E1" //하우스1동 동편 1중
+#define MQTT_PUB_W2_CURR "Sensor/GH1/MTR_CURR/E2" //하우스1동 동편 2중
+#define MQTT_PUB_ERROR  "Error/GH1/MTR_CURR/Status" // 혼합통 A의 저수위 경고를 본다.
+#define MQTTID          "id_GH_SHUTTER_1"
 #define MQTTUSER        "farmmain"
 #define MQTTPASS        "eerrtt"
-#define WILLTOPIC       "Lastwill/FM/FerTankA/Status"
+#define WILLTOPIC_W1    "Lastwill/GH1/MTR_CURR/W1/Status"
+#define WILLTOPIC_W2    "Lastwill/GH1/MTR_CURR/W2/Status"
+#define WILLTOPIC_E1    "Lastwill/GH1/MTR_CURR/E1/Status"
+#define WILLTOPIC_E2    "Lastwill/GH1/MTR_CURR/E2/Status"
 #define WILLMSG         "off line"
 #endif
 
@@ -62,7 +68,8 @@ PubSubClient client(espClient);
 // ProMini와 연결된 핀을 인수로 받는다.
 //      Relay가 두 개가 있으므로, pin이 2개 필요하다.
 //      결선을 반대로 할 수 있으니까 작동을 반전시킬 flag가 필요하다. -> invDir
-class Shutter {
+class Shutter : public Adafruit_INA219
+{
     public:
         // 아래 두 bool값은 모터의 상태를 알기위한 flag이다. 
         // 객체가 되었을 때, 작동하는지 방향 설정을 어떻게 되었는지에 대한 정보를 제공한다.
