@@ -50,7 +50,7 @@ PubSubClient client(espClient);
 #define MQTT_PUB_W1_CURR "Sensor/GH1/MTR_CURR/W1" //하우스1동 서편 1중
 #define MQTT_PUB_W2_CURR "Sensor/GH1/MTR_CURR/W2" //하우스1동 서편 2중
 #define MQTT_PUB_E1_CURR "Sensor/GH1/MTR_CURR/E1" //하우스1동 동편 1중
-#define MQTT_PUB_W2_CURR "Sensor/GH1/MTR_CURR/E2" //하우스1동 동편 2중
+#define MQTT_PUB_E2_CURR "Sensor/GH1/MTR_CURR/E2" //하우스1동 동편 2중
 #define MQTT_PUB_ERROR  "Error/GH1/MTR_CURR/Status" // 혼합통 A의 저수위 경고를 본다.
 #define MQTTID          "id_GH_SHUTTER_1"
 #define MQTTUSER        "farmmain"
