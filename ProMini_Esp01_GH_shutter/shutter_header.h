@@ -74,7 +74,7 @@ PubSubClient client(espClient);
 #define MQTT_E1_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/E1" // 모터 over current이냐? 리미트에 걸렸나?
 #define MQTT_E2_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/E2"
 #define MQTT_W1_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/W1"
-#define MTQQ_W2_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/W2"
+#define MQTT_W2_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/W2"
 #define MQTTUSER        "farmmain"
 #define MQTTPASS        "eerrtt"
 #define WILLTOPIC       "Lastwill/GH1/MTR_CURR/Status"
@@ -119,7 +119,7 @@ class Shutter : public Adafruit_INA219
         }
         
         // 모터를 스톱한다. 방향 flag는 손대지 않는다.
-        void Stop(void) 
+        void stop(void) 
         {
             digitalWrite(motorPin, 0);
             motor = false;
