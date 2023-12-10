@@ -1,3 +1,4 @@
+#include <string.h>
 #include "shutter_header.h"
 #include "shutter.h"
 // 루프 밖에서 정의 부분
@@ -39,13 +40,15 @@ void loop(void)
 
 void pubMotorState(void)
 {
+    client.publish(MQTT_PUB_E1_CURR, to_string(E1_curr));
 
 }
-
+/// @brief 하우스 모터를 INA219를 통해서 전류와 상태를 스캔한다.
+/// @param  void
 void scanMotorState(void)
 {
-    W1_curr = W1.getCurrent_mA();
-    W2_curr = W2.getCurrent_mA();
     E1_curr = E1.getCurrent_mA();
     E2_curr = E2.getCurrent_mA();
+    W1_curr = W1.getCurrent_mA();
+    W2_curr = W2.getCurrent_mA();
 }
