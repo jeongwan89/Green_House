@@ -62,12 +62,19 @@ PubSubClient client(espClient);
 // MQTT 메세지 등 정의
 #ifdef GH_SHUTTER_1
 #define CLIENT_NAME     "iGH_SHUTTER_1"  //혹시나 싶어 쓴것. EspMQTTClient.h에 연동
-#define MQTT_PUB_W1_CURR "Sensor/GH1/MTR_CURR/W1" //하우스1동 서편 1중
-#define MQTT_PUB_W2_CURR "Sensor/GH1/MTR_CURR/W2" //하우스1동 서편 2중
+#define MQTTID          "id_MTR_CTRL_GH1_MQTT"
 #define MQTT_PUB_E1_CURR "Sensor/GH1/MTR_CURR/E1" //하우스1동 동편 1중
 #define MQTT_PUB_E2_CURR "Sensor/GH1/MTR_CURR/E2" //하우스1동 동편 2중
-#define MQTT_PUB_ERROR  "Error/GH1/MTR_CURR/Status" // 혼합통 A의 저수위 경고를 본다.
-#define MQTTID          "id_GH_SHUTTER_1"
+#define MQTT_PUB_W1_CURR "Sensor/GH1/MTR_CURR/W1" //하우스1동 서편 1중
+#define MQTT_PUB_W2_CURR "Sensor/GH1/MTR_CURR/W2" //하우스1동 서편 2중
+#define MQTT_SUB_E1_CMD "Command/GH1/MTR/W1" // 하우스1동 동편 1중 동작 명령
+#define MQTT_SUB_E2_CMD "Command/GH1/MTR/W2" // 하우스1동 동편 2중 동작 명령
+#define MQTT_SUB_W1_CMD "Command/GH1/MTR/E1" // 하우스1동 서편 1중 동작 명령
+#define MQTT_SUB_W2_CMD "Command/GH1/MTR/E2" // 하우스1동 서편 2중 동작 명령
+#define MQTT_E1_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/E1" // 모터 over current이냐? 리미트에 걸렸나?
+#define MQTT_E2_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/E2"
+#define MQTT_W1_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/W1"
+#define MTQQ_W2_MTR_CURR_ERROR  "Error/GH1/MTR_CURR/W2"
 #define MQTTUSER        "farmmain"
 #define MQTTPASS        "eerrtt"
 #define WILLTOPIC       "Lastwill/GH1/MTR_CURR/Status"
@@ -299,6 +306,10 @@ void reconnect(void) {
             Serial.print("connected");
             client.publish(WILLTOPIC, "on line", 1);
             // client.subscribe("...");
+            client.subscribe(MQTT_SUB_E1_CMD);
+            client.subscribe(MQTT_SUB_E2_CMD);
+            client.subscribe(MQTT_SUB_W1_CMD);
+            client.subscribe(MQTT_SUB_W2_CMD);
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
