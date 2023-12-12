@@ -3,11 +3,12 @@
 #include "shutter.h"
 // 루프 밖에서 정의 부분
 // W1 (1중 서편), W2 (2중 동편), E1(1중 동편), E2(2중 동편)
-Shutter W1(2, 3, 0x40), W2(4, 5, 0x41), E1(6, 7, 0x43), E2(8, 9, 0x44);
+extern class Shutter W1, W2, E1, E2; // shutter_header.h에 정의/선언되어 있다.
 float W1_curr, W2_curr, E1_curr, E2_curr; // scanMotorState에서 mA단위로 get!
 
 // 주기적으로 실행하는 process에 대한 class 선언
 RaiseTimeEventInLoop each5sec;  // 하는 일 : MQTT에 모터 상태 보고
+// TODO: 뭔가 할일이 없다. FIXME: 도 할 일이 없다.
 RaiseTimeEventInLoop each1sec;  // 하는 일 : 온실 모터 상태 확인
 void setup(void)
 {
@@ -20,6 +21,13 @@ void setup(void)
     client.setCallback(callback);
 
     pinMode(LED_BUILTIN, OUTPUT); 
+    pinMode(ESP01_RESET, OUTPUT);
+
+    // ESP01 modem 리세트. 하드웨어로 wiring
+    digitalWrite(ESP01_RESET, LOW);
+    delay(100);
+    digitalWrite(ESP01_RESET, HIGH);
+    delay(500);
 }
 
 void loop(void)
@@ -67,19 +75,19 @@ void scanMotorState(void)
     W1_curr = W1.getCurrent_mA();
     W2_curr = W2.getCurrent_mA();
     if(E1_curr > 3000) {
-        E1.stop();
+        E1.Stop();
         client.publish(MQTT_E1_MTR_CURR_ERROR, "OVER_CURRENT");
     }
     if(E2_curr > 3000) {
-        E2.stop();
+        E2.Stop();
         client.publish(MQTT_E2_MTR_CURR_ERROR, "OVER_CURRENT");
     }
     if(W1_curr > 3000) {
-        W1.stop();
+        W1.Stop();
         client.publish(MQTT_W1_MTR_CURR_ERROR, "OVER_CURRENT");
     }
     if(W2_curr > 3000) {
-        W2.stop();
+        W2.Stop();
         client.publish(MQTT_W2_MTR_CURR_ERROR, "OVER_CURRENT");
     }
 }

@@ -48,15 +48,22 @@ char ssid[] = "FarmMain5G";
 char pass[] = "wweerrtt";
 int status = WL_IDLE_STATUS;
 
+// pin 선언부
+#define SOFTSERIAL_RX 10
+#define SOFTSERIAL_TX 11
+#define ESP01_RESET 
+
 // wifi 연결 선언과 mqtt 연결 객체 선언
-
 IPAddress server(192, 168, 0, 24);
+// 아래 선언은 ESP01 모뎀을 SoftwareSerial로 연결한다는 의미인데,
+// setup()에 가서, 소프트시리얼을 baud 레이트로 시작하고 난뒤,
+// 이 소프트시리얼 객체를 class WiFiClass의 인스탄스 WiFi의 레퍼런스로 넘긴다.
+SoftwareSerial EspSerial(SOFTSERIAL_RX, SOFTSERIAL_TX); //Rx, Tx
 
-SoftwareSerial EspSerial(10, 11); //Rx, Tx
 WiFiClient espClient;   //wifiespAT에서 정의됨
 PubSubClient client(espClient);
 
-// 탱크 번호 정의, 어떤 액체 탱크이지요?
+// 온실 각동의 정의 예) 온실 1동 측창들 : GH_SHUTTER_1
 #define GH_SHUTTER_1
 
 // MQTT 메세지 등 정의
@@ -81,7 +88,8 @@ PubSubClient client(espClient);
 #define WILLMSG         "off line"
 #endif
 
-// Shutter 클래스
+//=============================================================================
+// Shutter 
 // 모터의 작동을 결정한다.
 // 모터의 방향을 결정한다.
 // ProMini와 연결된 핀을 인수로 받는다.
@@ -119,7 +127,7 @@ class Shutter : public Adafruit_INA219
         }
         
         // 모터를 스톱한다. 방향 flag는 손대지 않는다.
-        void stop(void) 
+        void Stop(void) 
         {
             digitalWrite(motorPin, 0);
             motor = false;
@@ -151,7 +159,12 @@ class Shutter : public Adafruit_INA219
             motor = true;
         }
 };
+//위에 있는 클래스 정의에 따른 instance 선언
+Shutter W1(2, 3, 0x40), W2(4, 5, 0x41), E1(6, 7, 0x43), E2(8, 9, 0x44);
 
+
+
+//=============================================================================
 // RaiseTimeEventInLoop 클래스
 // 목적: loop()의 실행에 상관없이 주기로 정해진 시간에
 //      인자로 받은 함수를 한번 실행한다. 
@@ -264,9 +277,12 @@ void wifiConnect(void)
     
     WiFi.begin(ssid, pass);
 
+    int cnt = 0;
     while(WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
+        if (cnt > 5) resetFunc();
+        cnt++;
     }
 
     Serial.println("Your're connected to the networtk");
@@ -275,6 +291,7 @@ void wifiConnect(void)
 }
 
 /*
+@brief    
     MQTT subscribe 함수이다.
     이 콜백에서는 따로 payload뿐만 아니라 str[256]에서 카피를 받아쓴다.
     payload마지막에 NULL이 있는지 없는지는 모르겠지만,
@@ -282,8 +299,7 @@ void wifiConnect(void)
 */
 void callback(char* topic, byte* payload, unsigned int length) {
     char str[256];
-    int conv;
-    Serial.print("Message arrived []");
+    Serial.print("Message arrived [");
     Serial.print(topic);
     Serial.print("]");
     for(int i = 0; i < length; i++){
@@ -292,6 +308,24 @@ void callback(char* topic, byte* payload, unsigned int length) {
         str[i+1] = NULL;
     }
     // 이하 특별한 topic message에 대한 처리 루틴이 있어야한다.
+    // FIXME:
+    if (!strcmp(topic, MQTT_SUB_E1_CMD)) {
+        if (!strcmp((char*) payload, "up"))         E1.Up();
+        else if (!strcmp((char*) payload, "down"))  E1.Down();
+        else E1.Stop();
+    } else if (topic == MQTT_SUB_E2_CMD) {
+        if (!strcmp((char*) payload, "up"))         E2.Up();
+        else if (!strcmp((char*) payload, "down"))  E2.Down();
+        else E2.Stop();
+    } else if (topic == MQTT_SUB_W1_CMD) {
+        if (!strcmp((char*) payload, "up"))         W1.Up();
+        else if (!strcmp((char*) payload, "down"))  W1.Down();
+        else W1.Stop();
+    } else if (topic == MQTT_SUB_W2_CMD) {
+        if (!strcmp((char*) payload, "up"))         W2.Up();
+        else if (!strcmp((char*) payload, "down"))  W2.Down();
+        else W2.Stop();
+    }    
 }
 
 /**
@@ -306,6 +340,7 @@ void reconnect(void) {
             Serial.print("connected");
             client.publish(WILLTOPIC, "on line", 1);
             // client.subscribe("...");
+            // FIXME:
             client.subscribe(MQTT_SUB_E1_CMD);
             client.subscribe(MQTT_SUB_E2_CMD);
             client.subscribe(MQTT_SUB_W1_CMD);
