@@ -51,7 +51,7 @@ int status = WL_IDLE_STATUS;
 // pin 선언부
 #define SOFTSERIAL_RX 10
 #define SOFTSERIAL_TX 11
-#define ESP01_RESET 
+#define ESP01_RESET 13
 
 // wifi 연결 선언과 mqtt 연결 객체 선언
 IPAddress server(192, 168, 0, 24);
