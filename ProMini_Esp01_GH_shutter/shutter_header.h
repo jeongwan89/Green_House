@@ -63,7 +63,7 @@ SoftwareSerial EspSerial(SOFTSERIAL_RX, SOFTSERIAL_TX); //Rx, Tx
 WiFiClient espClient;   //wifiespAT에서 정의됨
 PubSubClient client(espClient);
 
-// 온실 각동의 정의 예) 온실 1동 측창들 : GH_SHUTTER_1
+// 온실 각동의 정의 (예) 온실 1동 측창들 : GH_SHUTTER_1
 #define GH_SHUTTER_1
 
 // MQTT 메세지 등 정의
