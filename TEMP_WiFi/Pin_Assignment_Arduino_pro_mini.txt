@@ -1,0 +1,16 @@
+                <-1         raw->   
+                <-0         Gnd->
+                <-Reset     Reset->
+                <-Gnd       Vcc->
+                <-2         17/A3->
+CO2_PWM         <-3         16/A2->  LCD_rs
+DS18B20         <-4         15/A1->  LDR(Light)
+DHT22           <-5         14/A0->  soilHumPIN
+ESP-01 RX       <-6         13->     LCD_d7
+ESP-01 TX       <-7         12->     LCD_d6
+ESP-01 Reset    <-8         11->     LCD_d5
+LCD_en          <-9         10->     LCD_d4
+                19/A5->
+                18/A4->
+                A7->
+                A6->v 
