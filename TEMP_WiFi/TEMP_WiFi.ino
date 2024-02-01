@@ -7,26 +7,26 @@
     ---------------------------------------------------------------------------------------
 */
 
-#define GH2
+#define GH1
 #ifdef GH1
     #define WRITEKEY    "TT36OUSUL4MCBWZG"
     #define CORRECTION_AIRTEMP  0
-    #define CORRECTION_AIRHUM   0
-    #define CORRECTION_SOILTEMP 0
+    #define CORRECTION_AIRHUM   -8
+    #define CORRECTION_SOILTEMP 1
 #endif
 
 #ifdef GH2
     #define WRITEKEY    "SGE75DH6HSE2LRRJ"
-    #define CORRECTION_AIRTEMP  0
-    #define CORRECTION_AIRHUM   0
-    #define CORRECTION_SOILTEMP 0.5
+    #define CORRECTION_AIRTEMP  -1
+    #define CORRECTION_AIRHUM   3
+    #define CORRECTION_SOILTEMP 0
 #endif
 
 #ifdef GH3
     #define WRITEKEY    "1H0JQ4NC5IP09387"
     #define CORRECTION_AIRTEMP  0
     #define CORRECTION_AIRHUM   0
-    #define CORRECTION_SOILTEMP -1
+    #define CORRECTION_SOILTEMP 2
 #endif
 
 #ifdef GH4
