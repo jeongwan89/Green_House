@@ -43,11 +43,11 @@
 #define HUM_CAL   0
 #endif
 
-#ifdef Esp01_DHT22_MQTT_03
+#ifdef Esp01_DHT22_MQTT_03`
 #define CLIENT_NAME   "Green_House_Temp_RH_Monitor_03"
 #define MQTT_PUB_TEMP "Sensor/GH3/Center/Temp"
-#define MQTT_PUB_HUM  "Sensor/GH3/Center/Hum"
-#define SENSOR_STATUS "Sensor/GH3/Center/Stat"
+#define MQTT_PUB_HUM  "Sensor/GH3/`Center`/Hum"
+#define SENSOR_STATUS "`Sensor/GH3/Center/Stat"
 #define TEMP_CAL  -1.3
 #define HUM_CAL   4.4
 #endif
