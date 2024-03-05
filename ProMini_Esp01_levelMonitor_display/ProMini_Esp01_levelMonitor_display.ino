@@ -44,6 +44,8 @@ void loop(void)
     averageDistance = avrDistance(ultraSonicMeasureDistance(TRIG, ECHO));
     display.showNumberDec(volumeRemain(averageDistance), false);
     isChangedDoSomething(& preLimitStat, & currLimitStat);
+    // 공진이 일어나서 0.1초마다 거리 측정하는 것으로 바꿈
+    delay(100);
 // 파트3 : MQTT에 publish하는 프로그램이다. ========================================================
 //  정해진 시간에 한번씩 쓰는 것인데, 14초에 하나씩 쓰도록 한다.
 //  만들어 놓은 class를 이용하여 간단하게 표현한다.
