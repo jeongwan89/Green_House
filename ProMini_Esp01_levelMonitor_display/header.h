@@ -127,7 +127,7 @@ int avrDistance(unsigned int distance)
 // 사각 탱크의 남은 용적을 구한다. 일단 100세티로 계산하고 거리를 받아서 %로 환산해서 리턴한다.
 int volumeRemain(int dist)
 {
-    return (88 - dist); //112.5cm는 물탱크의 깊이
+    return (85 - dist); //112.5cm는 물탱크의 깊이
 }
 
 // 초음파 센서로 거리를 측정한다.
