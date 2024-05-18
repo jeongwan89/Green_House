@@ -1,3 +1,6 @@
+#include <DHT_U.h>
+#include <DHT.h>
+
 /*
   SimpleMQTTClient.ino
   The purpose of this exemple is to illustrate a simple handling of MQTT and Wifi connection.
