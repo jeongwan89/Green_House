@@ -16,7 +16,7 @@ int status = WL_IDLE_STATUS;
 IPAddress server(192, 168, 0, 24);
 
 SoftwareSerial EspSerial(8, 7); //Rx, Tx
-WiFiClient espClient;   //wifiespAT에서 정의됨
+WiFiClient espClient;   //WiFiEspAT에서 정의됨
 PubSubClient client(espClient);
 
 // MQTT 메세지 등 정의
