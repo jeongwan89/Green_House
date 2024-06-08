@@ -16,7 +16,6 @@ void setup()
     WiFi.init(&Serial1, ESP01_RESET);
     Serial.print("Now entering wifiConnect()\n");
     wifiConnect();
-
     client.setServer(server, 1883);
     client.setCallback(callback);
 
