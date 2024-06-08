@@ -214,7 +214,8 @@ void doThis(const char* tpc, const char* msg)
 void doThis(const char* tpc, int msg)
 {
     char buffer[128];
-    itoa(msg, buffer, 10);
+    sprintf(buffer, "%d", msg);
+    // 이 행이 에러가 나서 위의 명령어를 추가했음 itoa(msg, buffer, 10);
     client.publish(tpc, buffer, 1);
 }
 

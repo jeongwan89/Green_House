@@ -1,31 +1,4 @@
-#include <Arduino.h>
-#include <TM1637Display.h>
-
-#define CLK_1 2
-#define DIO_1 3
-#define CLK_2 4
-#define DIO_2 5
-#define CLK_3 6
-#define DIO_3 7
-#define CLK_4 8
-#define DIO_4 9
-#define CLK_5 10
-#define DIO_5 11
-#define CLK_6 12
-#define DIO_6 13
-#define CLK_7 14
-#define DIO_7 15
-#define CLK_8 16
-#define DIO_8 17
-
-#define TEST_DELAY
-
-const uint8_t SEG_DONE[] = {
-	SEG_B | SEG_C | SEG_D | SEG_E | SEG_G,           // d
-	SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F,   // O
-	SEG_C | SEG_E | SEG_G,                           // n
-	SEG_A | SEG_D | SEG_E | SEG_F | SEG_G            // E
-	};
+#include "ProMini_TM1637_mqtt_temp_monitor.h"
 
 TM1637Display display1(CLK_1, DIO_1);
 TM1637Display display2(CLK_2, DIO_2);
@@ -35,7 +8,6 @@ TM1637Display display5(CLK_5, DIO_5);
 TM1637Display display6(CLK_6, DIO_6);
 TM1637Display display7(CLK_7, DIO_7);
 TM1637Display display8(CLK_8, DIO_8);
-int count=0;
 
 void setup()
 {
@@ -57,19 +29,21 @@ void setup()
     display7.showNumberDec(0, false);
     display8.showNumberDec(0, false);
 
+    Serial.begin(115200);
+    EspSerial.begin(ESP8266_BAUD);
+    WiFi.init(&EspSerial);
+
+    wifiConnect();
+
+    client.setServer(server, 1833);
+    client.setCallback(callback);
 }
 
 void loop()
 {
-    if(!(count % 100)) {
-        display1.showNumberDec(1, false);
-        display2.showNumberDec(2, false);
-        display3.showNumberDec(3, false);
-        display4.showNumberDec(4, false);
-        display5.showNumberDec(1, false);
-        display6.showNumberDec(2, false);
-        display7.showNumberDec(3, false);
-        display8.showNumberDec(4, false);
+    Serial.println("We enteded in loop()");
+    if(!client.connected()) {
+        reconnect();
     }
-    count++;
+    client.loop();
 }
