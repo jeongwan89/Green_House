@@ -26,7 +26,7 @@ void setup()
 // the loop function runs over and over again forever
 void loop()
 {
-    blink(1, 200);
+    blink(1, 1000);
     // 파트1 ===================================================================================
     // mqtt 관련 함수를 먼저 refresh하기 위해서이다.
     if (!client.connected())
