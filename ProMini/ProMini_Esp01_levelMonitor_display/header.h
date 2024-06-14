@@ -52,7 +52,7 @@ void (*resetFunc)(void) = 0; //리셋함수는 어드레스가 0부터 시작하
 void callback(char* topic, byte* payload, unsigned int length) {
     char str[256];
     int conv;
-    Serial.print("Message arrived []");
+    Serial.print("Message arrived [");
     Serial.print(topic);
     Serial.print("]");
     for(int i = 0; i < length; i++){
