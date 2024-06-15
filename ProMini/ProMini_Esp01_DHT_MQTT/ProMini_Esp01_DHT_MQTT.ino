@@ -2,7 +2,6 @@
 
 void setup()
 {
-    pinMode(LED_BUILTIN, OUTPUT);
     Serial.begin(115200);
     EspSerial.begin(ESP8266_BAUD);
     WiFi.init(&EspSerial);

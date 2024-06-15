@@ -9,7 +9,7 @@
 #define ESP8266_BAUD 57600
 
 
-#define MQTTID "TempMonitorProto"
+#define MQTTID "Temp_Monitor_Proto"
 #define MQTTUSER "farmmain"
 #define MQTTPASS "eerrtt"
 #define WILLTOPIC "Lastwill/Monitor/Greenhouse/Tempmonitor1"
@@ -54,7 +54,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 // resetFunction
-void (*resetFunc)(void) = 0; //리셋함수는 어드레스가 0부터 시작하는 함수이다.
+void (*resetFunc) (void) = 0; //리셋함수는 어드레스가 0부터 시작하는 함수이다.
 
 /*
     이 콜백에서는 따로 payload뿐만 아니라 str[256]에서 카피를 받아쓴다.
@@ -64,32 +64,33 @@ void (*resetFunc)(void) = 0; //리셋함수는 어드레스가 0부터 시작하
 void callback(char* topic, byte* payload, unsigned int length) {
     char str[256];
     int conv;
-    Serial.print("Message arrived []");
+    Serial.print("Message arrived [");
     Serial.print(topic);
     Serial.print("]");
     for(int i = 0; i < length; i++){
         Serial.print((char) payload[i]);
         str[i] = (char) payload[i];
-        str[i+1] = NULL;
+        str[i+1] = '\0';
     }
     // 이하 특별한 topic message에 대한 처리 루틴이 있어야한다.
 }
 
 
-void reconnect(void) {
+void reconnect(void)
+{
     int errCnt = 0;
     while(!client.connected()) {
-        Serial.print("Attempting MQTT connection...");
-        if(client.connect(MQTTID,MQTTUSER,MQTTPASS,WILLTOPIC, 0, 1, WILLMSG)) {
-            Serial.print("connected");
+        Serial.print("Attempting MQTT conncection...");
+        if(client.connect(MQTTID, MQTTUSER, MQTTPASS, WILLTOPIC, 0, 1, WILLMSG)) {
+            Serial.print("connected!");
             client.publish(WILLTOPIC, "on line", 1);
-            // client.subscribe("...");
+            // client.subscribe("...")
         } else {
-            Serial.print("failed, rc=");
+            Serial.print("Failed, rc=");
             Serial.print(client.state());
-            Serial.print("\t try again in 5 seconds\n");
+            Serial.print("\t try again in 5 second\n");
             delay(5000);
-            if(errCnt > 10) resetFunc();
+            if(errCnt > 5) resetFunc();
             else errCnt++;
         }
     }
@@ -107,17 +108,22 @@ void wifiConnect(void)
         resetFunc();
     }
 
-    Serial.print("\nAttempting to connect to WPA SSID:");
+    Serial.print("Attempting to connect to WPA SSID:");
     Serial.println(ssid);
     
     WiFi.begin(ssid, pass);
 
+    int errCnt = 0;
     while(WiFi.status() != WL_CONNECTED) {
+        if (errCnt > 10) {
+            resetFunc();
+        }
+        errCnt ++;
         delay(500);
         Serial.print(".");
     }
 
-    Serial.println("Your're connected to the networtk");
+    Serial.println("Your're connected to the networtk!");
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
 }

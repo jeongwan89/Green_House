@@ -35,13 +35,12 @@ void setup()
 
     wifiConnect();
 
-    client.setServer(server, 1833);
+    client.setServer(server, 1883);
     client.setCallback(callback);
 }
 
 void loop()
 {
-    Serial.println("We enteded in loop()");
     if(!client.connected()) {
         reconnect();
     }
