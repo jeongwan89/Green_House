@@ -8,7 +8,6 @@
 #include <stdio.h>
 #define ESP8266_BAUD 57600
 
-
 #define MQTTID "Temp_Monitor_Proto"
 #define MQTTUSER "farmmain"
 #define MQTTPASS "eerrtt"
@@ -32,16 +31,15 @@
 #define CLK_8 16
 #define DIO_8 17
 
-#define SOFT_RX 18  //A4
-#define SOFT_TX 19  //A5
+#define SOFT_RX 18 // A4
+#define SOFT_TX 19 // A5
 
 const uint8_t SEG_DONE[] = {
-	SEG_B | SEG_C | SEG_D | SEG_E | SEG_G,           // d
-	SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F,   // O
-	SEG_C | SEG_E | SEG_G,                           // n
-	SEG_A | SEG_D | SEG_E | SEG_F | SEG_G            // E
-	};
-
+    SEG_B | SEG_C | SEG_D | SEG_E | SEG_G,         // d
+    SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F, // O
+    SEG_C | SEG_E | SEG_G,                         // n
+    SEG_A | SEG_D | SEG_E | SEG_F | SEG_G          // E
+};
 
 char ssid[] = "FarmMain5G";
 char pass[] = "wweerrtt";
@@ -49,60 +47,79 @@ int status = WL_IDLE_STATUS;
 
 IPAddress server(192, 168, 0, 24);
 
-SoftwareSerial EspSerial(SOFT_RX, SOFT_TX); //Rx, Tx
+SoftwareSerial EspSerial(SOFT_RX, SOFT_TX); // Rx, Tx
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+TM1637Display display[8] = {
+    TM1637Display(CLK_1, DIO_1),
+    TM1637Display(CLK_2, DIO_2),
+    TM1637Display(CLK_3, DIO_3),
+    TM1637Display(CLK_4, DIO_4),
+    TM1637Display(CLK_5, DIO_5),
+    TM1637Display(CLK_6, DIO_6),
+    TM1637Display(CLK_7, DIO_7),
+    TM1637Display(CLK_8, DIO_8)
+};
+
 // resetFunction
-void (*resetFunc) (void) = 0; //리셋함수는 어드레스가 0부터 시작하는 함수이다.
+void(*resetFunc)(void) = 0; // 리셋함수는 어드레스가 0부터 시작하는 함수이다.
 
 /*
     이 콜백에서는 따로 payload뿐만 아니라 str[256]에서 카피를 받아쓴다.
     payload마지막에 NULL이 있는지 없는지는 모르겠지만,
     str에는 마지막에 NULL이 있어서 string으로 쓸수 있다.
 */
-void callback(char* topic, byte* payload, unsigned int length) {
+void callback(char *topic, byte *payload, unsigned int length)
+{
     char str[256];
     int conv;
     Serial.print("Message arrived [");
     Serial.print(topic);
     Serial.print("]");
-    for(int i = 0; i < length; i++){
-        Serial.print((char) payload[i]);
-        str[i] = (char) payload[i];
-        str[i+1] = '\0';
+    for (int i = 0; i < length; i++)
+    {
+        Serial.print((char)payload[i]);
+        str[i] = (char)payload[i];
+        str[i + 1] = '\0';
     }
     // 이하 특별한 topic message에 대한 처리 루틴이 있어야한다.
 }
 
-
 void reconnect(void)
 {
     int errCnt = 0;
-    while(!client.connected()) {
+    while (!client.connected())
+    {
         Serial.print("Attempting MQTT conncection...");
-        if(client.connect(MQTTID, MQTTUSER, MQTTPASS, WILLTOPIC, 0, 1, WILLMSG)) {
+        if (client.connect(MQTTID, MQTTUSER, MQTTPASS, WILLTOPIC, 0, 1, WILLMSG))
+        {
             Serial.print("connected!");
             client.publish(WILLTOPIC, "on line", 1);
             // client.subscribe("...")
-        } else {
+        }
+        else
+        {
             Serial.print("Failed, rc=");
             Serial.print(client.state());
             Serial.print("\t try again in 5 second\n");
             delay(5000);
-            if(errCnt > 5) resetFunc();
-            else errCnt++;
+            if (errCnt > 5)
+                resetFunc();
+            else
+                errCnt++;
         }
     }
 }
 
-void wifiConnect(void) 
+void wifiConnect(void)
 {
-/* setup() 안에서 작동한다. 이전에 반드시 정의 되어야할 것이 있는데, 
-    ESP01이 SoftwareSerial로 정의되어 있어야 하고(EspSerial),
-    WiFi 쉴드 변수와 ESP01모뎀의 객체의 레퍼런스를 연결해 주어야 한다.
-*/
-    if(WiFi.status() == WL_NO_SHIELD) {
+    /* setup() 안에서 작동한다. 이전에 반드시 정의 되어야할 것이 있는데,
+        ESP01이 SoftwareSerial로 정의되어 있어야 하고(EspSerial),
+        WiFi 쉴드 변수와 ESP01모뎀의 객체의 레퍼런스를 연결해 주어야 한다.
+    */
+    if (WiFi.status() == WL_NO_SHIELD)
+    {
         Serial.println("WiFi shield not present");
         delay(100);
         resetFunc();
@@ -110,15 +127,17 @@ void wifiConnect(void)
 
     Serial.print("Attempting to connect to WPA SSID:");
     Serial.println(ssid);
-    
+
     WiFi.begin(ssid, pass);
 
     int errCnt = 0;
-    while(WiFi.status() != WL_CONNECTED) {
-        if (errCnt > 10) {
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        if (errCnt > 10)
+        {
             resetFunc();
         }
-        errCnt ++;
+        errCnt++;
         delay(500);
         Serial.print(".");
     }
@@ -128,3 +147,11 @@ void wifiConnect(void)
     Serial.println(WiFi.localIP());
 }
 
+void initialDisplay(void)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        display[i].setBrightness(0x07);
+        display[i].showNumberDec(0, false);
+    }
+}
