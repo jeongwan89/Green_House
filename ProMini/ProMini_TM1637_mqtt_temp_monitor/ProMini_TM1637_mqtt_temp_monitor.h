@@ -8,34 +8,27 @@
 #include <stdio.h>
 
 #define TM1637MON
-#include "../AddrMQTT.h"
-// #define ESP8266_BAUD 57600
+#include "/home/kjw/Git/Green_House/ProMini/AddrMQTT.h"
 
-// #define MQTTID "Temp_Monitor_Proto"
-// #define MQTTUSER "farmmain"
-// #define MQTTPASS "eerrtt"
-// #define WILLTOPIC "Lastwill/Monitor/Greenhouse/Tempmonitor1"
-// #define WILLMSG "off line"
+#define CLK_1 2
+#define DIO_1 3
+#define CLK_2 4
+#define DIO_2 5
+#define CLK_3 6
+#define DIO_3 7
+#define CLK_4 8
+#define DIO_4 9
+#define CLK_5 10
+#define DIO_5 11
+#define CLK_6 12
+#define DIO_6 13
+#define CLK_7 14
+#define DIO_7 15
+#define CLK_8 16
+#define DIO_8 17
 
-// #define CLK_1 2
-// #define DIO_1 3
-// #define CLK_2 4
-// #define DIO_2 5
-// #define CLK_3 6
-// #define DIO_3 7
-// #define CLK_4 8
-// #define DIO_4 9
-// #define CLK_5 10
-// #define DIO_5 11
-// #define CLK_6 12
-// #define DIO_6 13
-// #define CLK_7 14
-// #define DIO_7 15
-// #define CLK_8 16
-// #define DIO_8 17
-
-// #define SOFT_RX 18 // A4
-// #define SOFT_TX 19 // A5
+#define SOFT_RX 18 // A4
+#define SOFT_TX 19 // A5
 
 const uint8_t SEG_DONE[] = {
     SEG_B | SEG_C | SEG_D | SEG_E | SEG_G,         // d
@@ -62,11 +55,10 @@ TM1637Display display[8] = {
     TM1637Display(CLK_5, DIO_5),
     TM1637Display(CLK_6, DIO_6),
     TM1637Display(CLK_7, DIO_7),
-    TM1637Display(CLK_8, DIO_8)
-};
+    TM1637Display(CLK_8, DIO_8)};
 
 // resetFunction
-void(*resetFunc)(void) = 0; // 리셋함수는 어드레스가 0부터 시작하는 함수이다.
+void (*resetFunc)(void) = 0; // 리셋함수는 어드레스가 0부터 시작하는 함수이다.
 
 /*
     이 콜백에서는 따로 payload뿐만 아니라 str[256]에서 카피를 받아쓴다.
