@@ -8,6 +8,14 @@
 #define MQTTPASS "eerrtt"
 #define WILLTOPIC "Lastwill/Monitor/Greenhouse/Tempmonitor1"
 #define WILLMSG "off line"
+#define GH1_TEMP "Sensor/GH1/Center/Temp"
+#define GH1_HUM "Sensor/GH1/Center/Hum"
+#define GH2_TEMP "Sensor/GH2/Center/Temp"
+#define GH2_HUM "Sensor/GH2/Center/Hum"
+#define GH3_TEMP "Sensor/GH3/Center/Temp"
+#define GH3_HUM "Sensor/GH3/Center/Hum"
+#define GH4_TEMP "Sensor/GH4/Center/Temp"
+#define GH4_HUM "Sensor/GH4/Center/Hum"
 #undef TM1637Mon
 #endif
 

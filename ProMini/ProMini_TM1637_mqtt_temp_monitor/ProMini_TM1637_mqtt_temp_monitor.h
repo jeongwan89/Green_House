@@ -46,7 +46,8 @@ IPAddress server(192, 168, 0, 24);
 SoftwareSerial EspSerial(SOFT_RX, SOFT_TX); // Rx, Tx
 WiFiClient espClient;
 PubSubClient client(espClient);
-
+// constructor가 initialization이 필수로 되어 있고, 객체 생성뒤에 따로 핀 정의를 할 수 없기 때문에
+// 객채를 일일이 생성하고 이것을 배열로 묶었다.
 TM1637Display display[8] = {
     TM1637Display(CLK_1, DIO_1),
     TM1637Display(CLK_2, DIO_2),
@@ -92,6 +93,14 @@ void reconnect(void)
             Serial.print("connected!");
             client.publish(WILLTOPIC, "on line", 1);
             // client.subscribe("...")
+            client.subscribe(GH1_TEMP);
+            client.subscribe(GH1_HUM);
+            client.subscribe(GH2_TEMP);
+            client.subscribe(GH2_HUM);
+            client.subscribe(GH3_TEMP);
+            client.subscribe(GH3_HUM);
+            client.subscribe(GH4_TEMP);
+            client.subscribe(GH4_HUM);
         }
         else
         {
