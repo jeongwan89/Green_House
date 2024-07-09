@@ -145,4 +145,16 @@
 #define M_AUTO "Argument/WRS/mistcontrol/auto"
 #define M_STAT_MOTOR "Status/WRS/mistcontrol/motor"
 #endif
+
+#ifdef ROOM_TEST
+#define TEMP1 "Sensor/GH1/Center/Temp"
+#define TEMP2 "Sensor/GH2/Center/Temp"
+#define TEMP3 "Sensor/GH3/Center/Temp"
+#define TEMP4 "Sensor/GH4/Center/Temp"
+#define HUM1 "Sensor/GH1/Center/Hum"
+#define HUM2 "Sensor/GH2/Center/Hum"
+#define HUM3 "Sensor/GH3/Center/Hum"
+#define HUM4 "Sensor/GH4/Center/Hum"
+#endif
+
 #endif
