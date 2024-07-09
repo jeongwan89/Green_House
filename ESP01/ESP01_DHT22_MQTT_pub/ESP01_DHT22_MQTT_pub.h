@@ -1,5 +1,8 @@
 #include <EspMQTTClient.h>
 
+#define ROOM_TEST
+#include "AddrMQTT.h"
+
 const char * ssid = "FarmMain5G";
 const char * password = "wweerrtt";
 const char * mqtt_server = "192.168.0.24";

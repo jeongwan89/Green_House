@@ -155,6 +155,7 @@
 #define HUM2 "Sensor/GH2/Center/Hum"
 #define HUM3 "Sensor/GH3/Center/Hum"
 #define HUM4 "Sensor/GH4/Center/Hum"
+#define WILLTOPIC "Lastwill/GH1/Center/Status"
 #endif
 
 #endif
