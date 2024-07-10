@@ -1,4 +1,43 @@
-#include "ESP01_DHT22_MQTT_pub.h"
+#pragma once
+#ifndef SOURCE_H_
+#define SOURCE_H_
+#include <EspMQTTClient.h>
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
+
+#define ROOM_TEST
+#include "/home/kjw/Git/Green_House/mylibraries/AddrMQTT.h"
+
+#define DHTPIN 2
+#define DHTTYPE DHT22
+DHT_Unified dht(DHTPIN, DHTTYPE);
+
+uint32_t delayMS;
+
+const char * ssid = "FarmMain5G";
+const char * password = "wweerrtt";
+const char * mqtt_server = "192.168.0.24";
+const char * mqtt_username = "farmmain";
+const char * mqtt_password = "eerrtt";
+const char * mqtt_clientname = "Esp01LabMonitorInRoom"; 
+
+EspMQTTClient client(
+    ssid,
+    password,
+    mqtt_server,
+    mqtt_username,
+    mqtt_password,
+    mqtt_clientname,
+    1883
+);
+
+#include "/home/kjw/Git/Green_House/mylibraries/RaiseEventClass.h"
+RaiseTimeEventInLoop RaiseEvent_5s;
+
+char message[128];
+
+void (*resetFunc)(void) = 0;
 
 
 // 이 callback 함수는 EspMQTTClient.h에 정의 되어 있다.
@@ -23,3 +62,5 @@ void onConnectionEstablished()
     client.publish("mytopic/wildcardtest/test123", "This is a message sent 5 seconds later");
   });
 }
+
+#endif
