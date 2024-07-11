@@ -8,15 +8,14 @@
 #define MQTTPASS "eerrtt"
 #define WILLTOPIC "Lastwill/Monitor/Greenhouse/Tempmonitor1"
 #define WILLMSG "off line"
-#define GH1_TEMP "Sensor/GH1/Center/Temp"
-#define GH1_HUM "Sensor/GH1/Center/Hum"
-#define GH2_TEMP "Sensor/GH2/Center/Temp"
-#define GH2_HUM "Sensor/GH2/Center/Hum"
-#define GH3_TEMP "Sensor/GH3/Center/Temp"
-#define GH3_HUM "Sensor/GH3/Center/Hum"
-#define GH4_TEMP "Sensor/GH4/Center/Temp"
-#define GH4_HUM "Sensor/GH4/Center/Hum"
-#undef TM1637Mon
+#define TEMP1 "Sensor/GH1/Center/Temp"
+#define TEMP2 "Sensor/GH2/Center/Temp"
+#define TEMP3 "Sensor/GH3/Center/Temp"
+#define TEMP4 "Sensor/GH4/Center/Temp"
+#define HUM1 "Sensor/GH1/Center/Hum"
+#define HUM2 "Sensor/GH2/Center/Hum"
+#define HUM3 "Sensor/GH3/Center/Hum"
+#define HUM4 "Sensor/GH4/Center/Hum"
 #endif
 
 #ifdef GH1_WINDOW
@@ -26,7 +25,6 @@
 #define MQTT_ACT_2_E "Motor/GH1/2/E"
 #define MQTT_ACT_2_W "Motor/GH1/2/W"
 #define WILLTOPIC "Lastwill/Motor/GH1/Status"
-#undef GH1_WINDOW
 #endif
 
 #ifdef GH2_WINDOW
@@ -36,7 +34,6 @@
 #define MQTT_ACT_2_E "Motor/GH2/2/E"
 #define MQTT_ACT_2_W "Motor/GH2/2/W"
 #define WILLTOPIC "Lastwill/Motor/GH2/Status"
-#undef GH2_WINDOWS
 #endif
 
 #ifdef GH3_WINDOW
@@ -46,7 +43,6 @@
 #define MQTT_ACT_2_E "Motor/GH3/2/E"
 #define MQTT_ACT_2_W "Motor/GH3/2/W"
 #define WILLTOPIC "Lastwill/Motor/GH3/Status"
-#undef GH3_WINDOWS
 #endif
 
 #ifdef GH4_WINDOW
@@ -56,7 +52,6 @@
 #define MQTT_ACT_2_E "Motor/GH4/2/E"
 #define MQTT_ACT_2_W "Motor/GH4/2/W"
 #define WILLTOPIC "Lastwill/Motor/GH4/Status"
-#undef GH4_WINDOWS
 #endif
 
 #ifdef NR1_WINDOW
@@ -66,7 +61,6 @@
 #define MQTT_ACT_2_E "Motor/NR1/2/E"
 #define MQTT_ACT_2_W "Motor/NR1/2/W"
 #define WILLTOPIC "Lastwill/Motor/NR1/Status"
-#undef NR1_WINDOW
 #endif
 
 #ifdef GH1_ENV
@@ -74,7 +68,6 @@
 #define TPC_AIRTEMP "Sensor/GH1/Center/AirTemp"
 #define TPC_AIRHUM "Sensor/GH1/Center/AirHum"
 #define WILLTOPIC "Lastwill/GH1/Center/Status"
-#undef GH1_ENV
 #endif
 
 

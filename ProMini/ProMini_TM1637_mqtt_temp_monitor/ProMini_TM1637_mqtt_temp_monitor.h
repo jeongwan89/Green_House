@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 #define TM1637MON
-#include <AddrMQTT.h>
+#include "/home/kjw/Git/Green_House/mylibraries/AddrMQTT.h"
 
 #define CLK_1 2
 #define DIO_1 3
@@ -72,14 +72,60 @@ void callback(char *topic, byte *payload, unsigned int length)
     int conv;
     Serial.print("Message arrived [");
     Serial.print(topic);
-    Serial.print("]");
+    Serial.print("] : ");
     for (int i = 0; i < length; i++)
     {
         Serial.print((char)payload[i]);
         str[i] = (char)payload[i];
         str[i + 1] = '\0';
     }
+    Serial.println();
+
+    double value = atof(str);
+    int ivalue = (value * 10);
+    
     // 이하 특별한 topic message에 대한 처리 루틴이 있어야한다.
+    if(strncmp(topic, TEMP1, strlen(topic))==0)
+    {
+        display[0].showNumberDecEx(ivalue, 0x40, false, 3, 0);
+        Serial.print(topic); Serial.print(" : "); Serial.println(value);
+    }
+    else if(strncmp(topic, TEMP2, strlen(topic))==0)
+    {
+        display[1].showNumberDecEx(ivalue, 0x40, false, 3, 0);
+        Serial.print(topic); Serial.print(" : "); Serial.println(value);
+    }
+    else if(strncmp(topic, TEMP3, strlen(topic))==0)
+    {
+        display[2].showNumberDecEx(ivalue, 0x40, false, 3, 0);
+        Serial.print(topic); Serial.print(" : "); Serial.println(value);
+    }
+    else if(strncmp(topic, TEMP4, strlen(topic))==0)
+    {
+        display[3].showNumberDecEx(ivalue, 0x40, false, 3, 0);
+        Serial.print(topic); Serial.print(" : "); Serial.println(value);
+    }
+    else if(strncmp(topic, HUM1, strlen(topic))==0)
+    {
+        display[4].showNumberDecEx(ivalue, 0x20, false, 4, 0);
+        Serial.print(topic); Serial.print(" : "); Serial.println(value);
+    }
+    else if(strncmp(topic, HUM2, strlen(topic))==0)
+    {
+        display[5].showNumberDecEx(ivalue, 0x20, false, 4, 0);
+        Serial.print(topic); Serial.print(" : "); Serial.println(value);
+    }
+    else if(strncmp(topic, HUM3, strlen(topic))==0)
+    {
+        display[6].showNumberDecEx(ivalue, 0x20, false, 4, 0);
+        Serial.print(topic); Serial.print(" : "); Serial.println(value);
+    }
+    else if(strncmp(topic, HUM4, strlen(topic))==0)
+    {
+        display[7].showNumberDecEx(ivalue, 0x20, false, 4, 0);
+        Serial.print(topic); Serial.print(" : "); Serial.println(value);
+    }
+
 }
 
 void reconnect(void)
@@ -93,14 +139,14 @@ void reconnect(void)
             Serial.print("connected!");
             client.publish(WILLTOPIC, "on line", 1);
             // client.subscribe("...")
-            client.subscribe(GH1_TEMP);
-            client.subscribe(GH1_HUM);
-            client.subscribe(GH2_TEMP);
-            client.subscribe(GH2_HUM);
-            client.subscribe(GH3_TEMP);
-            client.subscribe(GH3_HUM);
-            client.subscribe(GH4_TEMP);
-            client.subscribe(GH4_HUM);
+            client.subscribe(TEMP1);
+            client.subscribe(TEMP2);
+            client.subscribe(TEMP3);
+            client.subscribe(TEMP4);
+            client.subscribe(HUM1);
+            client.subscribe(HUM2);
+            client.subscribe(HUM3);
+            client.subscribe(HUM4);
         }
         else
         {
@@ -157,5 +203,6 @@ void initialDisplay(void)
     {
         display[i].setBrightness(0x07);
         display[i].showNumberDec(0, false);
+        display[i].clear();
     }
 }

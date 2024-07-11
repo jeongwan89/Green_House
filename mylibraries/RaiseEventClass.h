@@ -67,4 +67,5 @@ class PeriodicMthdInLoop {
         int CheckCurrentStat(unsigned long, unsigned long, void (*)(void), void(*)(void));
 };
 
+#include "/home/kjw/Git/Green_House/mylibraries/RaiseEventClass.cpp"
 #endif

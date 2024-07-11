@@ -75,5 +75,5 @@ int PeriodicMthdInLoop::CheckCurrentStat(unsigned long period, unsigned long dur
     t_duration = duration;
     fptr_dr = fptr1;
     fptr_dflt = fptr2;
-    CheckCurrentStat();
+    return CheckCurrentStat();
 }

@@ -12,6 +12,7 @@ void setup()
 
     client.setServer(server, 1883);
     client.setCallback(callback);
+    
 }
 
 void loop()
