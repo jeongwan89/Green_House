@@ -1,6 +1,15 @@
 #ifndef ADDRMQTT
 #define ADDRMQTT
 
+#ifdef PROMINI_7SEG_RCT
+#define MQTTID "PROMINI_7SEG_rct_TimeShow"
+#define MQTTUSER "farmmain"
+#define MQTTPASS "eerrtt"
+#define WILLTOPIC "Lastwill/Monitor/WRS/CLOCK"
+#define WILLMSG "off line"
+#define SHOWTIME "Argument/WRS/CLOCK/Showtime"
+#endif
+
 #ifdef TM1637MON
 #define ESP8266_BAUD 57600
 #define MQTTID "Temp_Monitor_Proto"
