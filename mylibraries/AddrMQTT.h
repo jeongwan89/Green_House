@@ -151,4 +151,9 @@
 #define WILLTOPIC "Lastwill/GH1/Center/Status"
 #endif
 
+#ifdef GARDEN
+#define COMP "Actuator/FM/comp/motor"
+#define WILLTOPIC "Lastwill/RemoCont/Status"
+#endif
+
 #endif
