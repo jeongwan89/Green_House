@@ -26,124 +26,12 @@ const static char *WeekDays[] =
 #include "/home/kjw/Git/Green_House/mylibraries/RaiseEventClass.h"
 RaiseTimeEventInLoop getTime;
 
-// #include <WiFiEspAT.h>
-// #include <PubSubClient.h>
-// #include <SoftwareSerial.h>
-// #define PROMINI_7SEG_RCT
-// #include "/home/kjw/Git/Green_House/mylibraries/AddrMQTT.h"
-// #define SOFT_RX 18
-// #define SOFT_TX 19
-// #define ESP8266_BAUD 57600
-// char ssid[] = "FarmMain5G";
-// char pass[] = "wweerrtt";
-// int status = WL_IDLE_STATUS;
 
-// IPAddress server(192, 168, 0, 24);
-
-// SoftwareSerial EspSerial(SOFT_RX, SOFT_TX); // Rx, Tx
-// WiFiClient espClient;
-// PubSubClient client(espClient);
 
 // resetFunction
 void (*resetFunc)(void) = 0; // 리셋함수는 어드레스가 0부터 시작하는 함수이다.
 void (*showTIMEInSevSeg)(void);
 
-/*
-    이 콜백에서는 따로 payload뿐만 아니라 str[256]에서 카피를 받아쓴다.
-    payload마지막에 NULL이 있는지 없는지는 모르겠지만,
-    str에는 마지막에 NULL이 있어서 string으로 쓸수 있다.
-*/
-// void callback(char *topic, byte *payload, unsigned int length)
-// {
-//     char str[128];
-//     int conv;
-//     Serial.print("Message arrived [");
-//     Serial.print(topic);
-//     Serial.print("] : ");
-//     for (int i = 0; i < length; i++)
-//     {
-//         Serial.print((char)payload[i]);
-//         str[i] = (char)payload[i];
-//         str[i + 1] = '\0';
-//     }
-//     Serial.println();
-
-//     double value = atof(str);
-//     int ivalue = (value * 10);
-
-//     // 이하 특별한 topic message에 대한 처리 루틴이 있어야한다.
-//     if (strcmp(topic, SHOWTIME) == 0)
-//     {
-//         if (strcmp(str, "hour") == 0)
-//             showTIMEInSevSeg = showHourInSevSeg;
-//         else if (strcmp(str, "min") == 0)
-//             showTIMEInSevSeg = showMinInSevSeg;
-//     }
-// }
-
-// void reconnect(void)
-// {
-//     int errCnt = 0;
-//     while (!client.connected())
-//     {
-//         Serial.print("Attempting MQTT conncection...");
-//         if (client.connect(MQTTID, MQTTUSER, MQTTPASS, WILLTOPIC, 0, 1, WILLMSG))
-//         {
-//             Serial.print("connected!");
-//             client.publish(WILLTOPIC, "on line", 1);
-//             client.publish(SHOWTIME, "hour", 1);
-
-//             // client.subscribe("...")
-//             client.subscribe(SHOWTIME);
-//         }
-//         else
-//         {
-//             Serial.print("Failed, rc=");
-//             Serial.print(client.state());
-//             Serial.print("\t try again in 5 second\n");
-//             delay(5000);
-//             if (errCnt > 5)
-//                 resetFunc();
-//             else
-//                 errCnt++;
-//         }
-//     }
-// }
-
-// void wifiConnect(void)
-// {
-//     /* setup() 안에서 작동한다. 이전에 반드시 정의 되어야할 것이 있는데,
-//         ESP01이 SoftwareSerial로 정의되어 있어야 하고(EspSerial),
-//         WiFi 쉴드 변수와 ESP01모뎀의 객체의 레퍼런스를 연결해 주어야 한다.
-//     */
-//     if (WiFi.status() == WL_NO_SHIELD)
-//     {
-//         Serial.println("WiFi shield not present");
-//         delay(100);
-//         resetFunc();
-//     }
-
-//     Serial.print("Attempting to connect to WPA SSID:");
-//     Serial.println(ssid);
-
-//     WiFi.begin(ssid, pass);
-
-//     int errCnt = 0;
-//     while (WiFi.status() != WL_CONNECTED)
-//     {
-//         if (errCnt > 10)
-//         {
-//             resetFunc();
-//         }
-//         errCnt++;
-//         delay(500);
-//         Serial.print(".");
-//     }
-
-//     Serial.println("Your're connected to the networtk!");
-//     Serial.print("IP Address: ");
-//     Serial.println(WiFi.localIP());
-// }
 
 void displayTimeInSerial()
 {
@@ -198,6 +86,17 @@ void showMinInSevSeg()
     sevseg.setNumber(time, 2);
 }
 
+uint8_t parseDigits(char* str, uint8_t count)
+{
+    uint8_t val = 0;
+    while(count-- > 0) val = (val * 10) + (*str++ - '0');
+    return val;
+}
+
+void setupDateAndTime()
+{
+    
+}
 void setup()
 {
     byte numDigits = 4;
@@ -210,11 +109,6 @@ void setup()
     bool disableDecPoint = false;         // Use 'true' if your decimal point doesn't exist or isn't connected
 
     Serial.begin(115200);
-    // EspSerial.begin(ESP8266_BAUD);
-    // WiFi.init(&EspSerial);
-    // wifiConnect();
-    // client.setServer(server, 1883);
-    // client.setCallback(callback);
 
     sevseg.begin(hardwareConfig, numDigits, digitPins, segmentPins, resistorsOnSegments,
                  updateWithDelays, leadingZeros, disableDecPoint);
@@ -241,13 +135,6 @@ void setup()
 
 void loop()
 {
-    // 파트1 =======================================================================
-    // if (!client.connected())
-    // {
-    //     reconnect();
-    // }
-    // client.loop();
-    // 파트2 =======================================================================
     static unsigned long timer = millis();
     static int centiSeconds = 0;
 
@@ -255,4 +142,33 @@ void loop()
     getTime.EachEveryTimeIn(1000, displayTimeInSerial);
     showTIMEInSevSeg();
     sevseg.refreshDisplay(); // Must run repeatedly
+// 파트1 : serial port에서 날짜와 시간을 입력받아 RTC에 다시 setting한다.
+//======================================================================
+    static char buffer[13];
+    static uint8_t char_idx = 0;
+
+    if (char_idx == 13)
+    {
+        // structure to manage date-time
+        Ds1302::DateTime dt;
+
+        dt.year = parseDigits(buffer, 2);
+        dt.month = parseDigits(buffer + 2, 2);
+        dt.day = parseDigits(buffer + 4, 2);
+        dt.dow = parseDigits(buffer + 6, 1);
+        dt.hour = parseDigits(buffer + 7, 2);
+        dt.minute = parseDigits(buffer + 9, 2);
+        dt.second = parseDigits(buffer + 11, 2);
+
+        // set the date and time
+        rtc.setDateTime(&dt);
+
+        char_idx = 0;
+    }
+
+    if (Serial.available())
+    {
+        buffer[char_idx++] = Serial.read();
+    }
+//======================================================================    
 }
