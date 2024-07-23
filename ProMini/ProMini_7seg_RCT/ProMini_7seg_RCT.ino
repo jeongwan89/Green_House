@@ -22,8 +22,14 @@ const static char *WeekDays[] =
         "Friday",
         "Saturday",
         "Sunday"};
-
+#define COMPILE_IN_LG
+#ifdef COMPILE_IN_LINUX
 #include "/home/kjw/Git/Green_House/mylibraries/RaiseEventClass.h"
+#endif
+#ifdef COMPILE_IN_LG
+#include "E:\\Git\\Green_House\\mylibraries\\RaiseEventClass.h"
+#endif
+
 RaiseTimeEventInLoop getTime;
 
 
