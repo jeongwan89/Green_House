@@ -87,22 +87,22 @@ void callback(char *topic, byte *payload, unsigned int length)
     // 이하 특별한 topic message에 대한 처리 루틴이 있어야한다.
     if(strncmp(topic, TEMP1, strlen(topic)) == 0)
     {
-        display[0].showNumberDecEx(ivalue, 0x40, false, 3, 0);
+        display[0].showNumberDecEx(ivalue, 0x20, false, 4, 0);
         Serial.print(topic); Serial.print(" : "); Serial.println(value);
     }
     else if(strncmp(topic, TEMP2, strlen(topic)) == 0)
     {
-        display[1].showNumberDecEx(ivalue, 0x40, false, 3, 0);
+        display[1].showNumberDecEx(ivalue, 0x20, false, 4, 0);
         Serial.print(topic); Serial.print(" : "); Serial.println(value);
     }
     else if(strncmp(topic, TEMP3, strlen(topic)) == 0)
     {
-        display[2].showNumberDecEx(ivalue, 0x40, false, 3, 0);
+        display[2].showNumberDecEx(ivalue, 0x20, false, 4, 0);
         Serial.print(topic); Serial.print(" : "); Serial.println(value);
     }
     else if(strncmp(topic, TEMP4, strlen(topic)) == 0)
     {
-        display[3].showNumberDecEx(ivalue, 0x40, false, 3, 0);
+        display[3].showNumberDecEx(ivalue, 0x20, false, 4, 0);
         Serial.print(topic); Serial.print(" : "); Serial.println(value);
     }
     else if(strncmp(topic, HUM1, strlen(topic)) == 0)
